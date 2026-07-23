@@ -1,0 +1,25 @@
+import { Metadata } from 'next';
+import HomeView from '@/components/HomeView';
+
+export const metadata: Metadata = {
+  title: 'Empowering Uttarakhand through Direct Action',
+  description: 'We strengthen education, healthcare, and opportunity for communities across the Himalayan region—working with people, not around them.',
+  alternates: { canonical: 'https://issafoundation.org/' },
+  openGraph: {
+    type: 'website',
+    url: 'https://issafoundation.org/',
+    title: 'ISSA Foundation - Empowering Uttarakhand through Direct Action',
+    description: 'We strengthen education, healthcare, and opportunity for communities across the Himalayan region.',
+    images: [{ url: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=1200', width: 1200, height: 630, alt: 'Himalayan community landscape' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'ISSA Foundation - Empowering Uttarakhand',
+    description: 'Strengthening education, healthcare, and opportunity for Himalayan communities.',
+    images: ['https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=1200'],
+  },
+};
+
+export default function HomePage() {
+  return <HomeView />;
+}
