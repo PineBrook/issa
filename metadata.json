@@ -1,0 +1,6 @@
+{
+  "name": "ISSA Foundation",
+  "description": "Premium grassroots portal for the ISSA Foundation in Uttarakhand supporting digital classrooms, medical camps, and vocational certification.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
