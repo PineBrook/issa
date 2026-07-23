@@ -1,0 +1,118 @@
+import type { Metadata } from 'next';
+import { Inter, Lora } from 'next/font/google';
+import Navbar from '@/components/Navbar';
+import Footer from '@/components/Footer';
+import BackToTop from '@/components/BackToTop';
+import { ToastProvider } from '@/components/Toast';
+import './globals.css';
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-sans',
+});
+
+const lora = Lora({
+  subsets: ['latin'],
+  style: ['normal', 'italic'],
+  variable: '--font-serif',
+});
+
+export const metadata: Metadata = {
+  metadataBase: new URL('https://issafoundation.org'),
+  title: {
+    default: 'ISSA Foundation - Empowering Uttarakhand through Direct Action',
+    template: '%s | ISSA Foundation',
+  },
+  description: 'A grassroots non-profit committed to strengthening education infrastructure, digital literacy, and clinical healthcare systems across remote Himalayan communities.',
+  keywords: [
+    'ISSA Foundation',
+    'Uttarakhand NGO',
+    'Himalayan Community Development',
+    'CIAS Smart Classrooms',
+    'UttaraCare Hospital',
+    'Rural Healthcare Uttarakhand',
+    'Digital Literacy Pauri Garhwal'
+  ],
+  authors: [{ name: 'ISSA Foundation' }],
+  creator: 'ISSA Foundation',
+  publisher: 'ISSA Foundation',
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en_US',
+    url: 'https://issafoundation.org',
+    siteName: 'ISSA Foundation',
+    title: 'ISSA Foundation - Empowering Uttarakhand through Direct Action',
+    description: 'Strengthening education, healthcare, and opportunity for remote Himalayan communities.',
+    images: [
+      {
+        url: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=1200',
+        width: 1200,
+        height: 630,
+        alt: 'ISSA Foundation Community Action in Uttarakhand',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'ISSA Foundation - Empowering Uttarakhand',
+    description: 'Strengthening education, healthcare, and opportunity for remote Himalayan communities.',
+    images: ['https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=1200'],
+  },
+  alternates: {
+    canonical: 'https://issafoundation.org',
+  },
+  icons: {
+    icon: '/favicon.ico',
+    apple: '/logo.webp',
+  },
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': ['Organization', 'NGO'],
+    name: 'ISSA Foundation',
+    url: 'https://issafoundation.org',
+    logo: 'https://issafoundation.org/logo.webp',
+    description: 'A grassroots non-profit committed to strengthening education, healthcare, and sustainable development across remote Himalayan communities.',
+    telephone: '+91-0135-430-8180',
+    email: 'career.issafoundation@gmail.com',
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Pauri Garhwal',
+      addressRegion: 'Uttarakhand',
+      addressCountry: 'IN',
+    },
+  };
+
+  return (
+    <html lang="en" className={`${inter.variable} ${lora.variable}`}>
+      <head>
+        <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
+      <body className="font-sans text-neutral-800 bg-neutral-50 selection:bg-accent selection:text-primary antialiased flex flex-col min-h-screen" suppressHydrationWarning>
+        <ToastProvider>
+          <Navbar />
+          <BackToTop />
+          <main className="flex-grow animate-fade-in">{children}</main>
+          <Footer />
+        </ToastProvider>
+      </body>
+    </html>
+  );
+}
