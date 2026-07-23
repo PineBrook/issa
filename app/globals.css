@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-serif), ui-serif, Georgia, Cambria, serif;
+  
+  --color-primary: #0D311F; /* Deep organic forest green */
+  --color-primary-dark: #071E13;
+  --color-primary-light: #17452F;
+  --color-accent: #E8B94C; /* Marigold gold accent */
+  --color-accent-dark: #D3A338;
+  --color-marigold: #E8B94C;
+  --color-marigold-dark: #D3A338;
+  --color-terracotta: #C1592C; /* Terracotta tertiary accent */
+  --color-terracotta-dark: #A54921;
+  --color-rust: #C1592C; /* Linked to terracotta for tags/hover/secondary buttons */
+  --color-rust-dark: #A54921;
+  --color-navy: #0F2042; /* Premium dark navy blue for footer/alternative cards */
+  --color-teal-brand: #092822; /* High-contrast dark teal for pillars and custom text */
+  --color-ivory: #F8F4EC; /* Warm ivory background */
+  --color-warm-ivory: #F8F4EC;
+  --color-charcoal: #2B2B28; /* Charcoal text color */
+  --color-neutral-50: #F8F4EC; /* Override neutral-50 with warm ivory */
+  --color-neutral-800: #2B2B28; /* Override neutral-800 with charcoal */
+}
+
+/* Smooth Scrolling and Custom Scrollbars */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom background animations & overlays */
+.hero-gradient {
+  background: linear-gradient(180deg, rgba(13, 49, 31, 0.6) 0%, rgba(13, 49, 31, 0.95) 100%);
+}
+
+.text-stroke-accent {
+  -webkit-text-stroke: 1px rgba(232, 185, 76, 0.3);
+  color: transparent;
+}
