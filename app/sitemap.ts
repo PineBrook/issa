@@ -5,6 +5,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: baseUrl },
     { url: `${baseUrl}/programs` },
+    { url: `${baseUrl}/programs/education` },
+    { url: `${baseUrl}/programs/healthcare` },
+    { url: `${baseUrl}/programs/entrepreneurship` },
     { url: `${baseUrl}/impact` },
     { url: `${baseUrl}/stories` },
     { url: `${baseUrl}/careers` },

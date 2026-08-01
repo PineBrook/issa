@@ -47,7 +47,7 @@ export default function Navbar() {
         className={`fixed z-50 transition-[top,width,padding,margin,background-color,border-color,box-shadow] duration-500 ease-out left-1/2 -translate-x-1/2 text-white ${
           isScrolled 
             ? 'top-4 bg-primary-dark border border-white/20 shadow-[0_12px_40px_0_rgba(7,30,19,0.5)] w-[calc(100%-2rem)] md:w-auto p-1.5 rounded-full' 
-            : 'top-0 bg-primary-dark border-b border-white/10 border-t-0 border-l-0 border-r-0 w-full rounded-none shadow-md px-4 sm:px-6 lg:px-8'
+            : 'top-0 bg-primary-dark border-b border-white/10 border-t-0 border-l-0 border-r-0 w-full rounded-none shadow-md px-6 sm:px-6 lg:px-8'
         }`}
       >
         {isScrolled ? (
@@ -110,23 +110,25 @@ export default function Navbar() {
           </>
         ) : (
           /* Unscrolled Header */
-          <div className="max-w-7xl mx-auto flex items-center justify-between h-20">
+          <div className="max-w-7xl mx-auto flex items-center justify-between h-20 px-4 sm:px-6">
             {/* Left: Logo */}
-            <Link 
-              href="/"
-              onClick={() => setIsOpen(false)}
-              className="cursor-pointer group transition-all duration-300 whitespace-nowrap shrink-0"
-            >
-              <Logo className="h-10 text-accent group-hover:scale-105 transition-transform duration-300" />
-            </Link>
+            <div className="flex-1 flex justify-start">
+              <Link 
+                href="/"
+                onClick={() => setIsOpen(false)}
+                className="cursor-pointer group transition-all duration-300 whitespace-nowrap shrink-0"
+              >
+                <Logo className="h-10 text-accent group-hover:scale-105 transition-transform duration-300" />
+              </Link>
+            </div>
 
-            {/* Right: Links right-aligned */}
-            <div className="hidden md:flex items-center gap-1">
+            {/* Center: Links center-aligned */}
+            <div className="hidden md:flex items-center justify-center gap-1 lg:gap-2">
               {menuItems.map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`text-xs font-medium tracking-wide transition-all duration-300 relative px-4 py-2 rounded-full cursor-pointer ${
+                  className={`text-sm font-medium tracking-wide transition-all duration-300 relative px-4 py-2 rounded-full cursor-pointer ${
                     isActive(item.href) 
                       ? 'bg-accent text-primary font-semibold shadow-sm' 
                       : 'text-neutral-200 hover:text-white hover:bg-white/5'
@@ -135,18 +137,32 @@ export default function Navbar() {
                   {item.label}
                 </Link>
               ))}
+            </div>
 
-              <button
-                id="navbar-search-trigger-unscrolled"
+            {/* Right: Search Box + Search Icon */}
+            <div className="flex-1 hidden md:flex items-center justify-end gap-2">
+              <div 
                 onClick={() => setIsSearchOpen(true)}
-                className="text-neutral-300 hover:text-white hover:bg-white/10 p-2 rounded-full transition-all duration-300 flex items-center justify-center cursor-pointer relative group shrink-0"
-                aria-label="Open search palette"
+                className="flex items-center gap-2 bg-white/10 hover:bg-white/15 border border-white/15 rounded-full px-3 py-1.5 cursor-pointer transition-all duration-300 text-xs text-neutral-300 group"
               >
-                <Search className="w-3.5 h-3.5 text-accent" />
-                <span className="absolute -bottom-8 left-1/2 -translate-x-1/2 scale-0 group-hover:scale-100 bg-[#092215]/95 border border-white/10 text-[9px] font-sans px-1.5 py-0.5 rounded text-neutral-300 transition-all duration-150 whitespace-nowrap shadow-md pointer-events-none z-50">
-                  ⌘ K
-                </span>
-              </button>
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  readOnly
+                  className="bg-transparent text-sm text-white placeholder-neutral-400 focus:outline-none w-28 lg:w-36 cursor-pointer"
+                />
+                <button
+                  id="navbar-search-trigger-unscrolled"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsSearchOpen(true);
+                  }}
+                  className="text-neutral-300 hover:text-white p-1 rounded-full transition-all duration-300 flex items-center justify-center shrink-0"
+                  aria-label="Open search palette"
+                >
+                  <Search className="w-4 h-4 text-accent" />
+                </button>
+              </div>
             </div>
 
             {/* Mobile hamburger / search icon */}

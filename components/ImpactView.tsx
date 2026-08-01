@@ -65,7 +65,7 @@ export default function ImpactView() {
       </section>
 
       {/* METRIC CARD TRIO */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16" id="impact-metrics">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {featuredImpacts.map((imp, idx) => (
             <div key={idx} className="bg-white rounded-3xl p-8 border border-neutral-200/80 shadow-sm flex flex-col justify-between space-y-6">
@@ -86,7 +86,7 @@ export default function ImpactView() {
       </section>
 
       {/* INTERACTIVE GRAPHICAL OVERVIEW */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24" id="impact-milestones">
         <div className="bg-white rounded-3xl border border-neutral-200/80 p-8 sm:p-12 shadow-sm grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           {/* Chart Content on Left */}
           <div className="lg:col-span-7 space-y-6">
@@ -134,7 +134,7 @@ export default function ImpactView() {
           </div>
 
           {/* Core Stats list on Right */}
-          <div className="lg:col-span-5 space-y-8">
+          <div className="lg:col-span-5 space-y-8" id="impact-highlights">
             <span className="text-xs uppercase tracking-widest text-neutral-400 block border-b border-neutral-100 pb-2 font-sans">Key Highlights</span>
 
             <div className="space-y-6">
@@ -173,7 +173,7 @@ export default function ImpactView() {
       </section>
 
       {/* STORY OF THE MONTH (INTERACTIVE) */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24" id="impact-story-month">
         <div className="space-y-3 mb-12">
           <p className="text-xs uppercase tracking-widest text-primary font-sans font-bold font-semibold">Narrative Focus</p>
           <h2 className="text-3xl font-serif font-bold text-primary">Story of the month.</h2>

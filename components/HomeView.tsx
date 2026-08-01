@@ -5,8 +5,24 @@ import Image from 'next/image';
 import Link from 'next/link';
 import BlurImage from './BlurImage';
 import { ArrowRight, BookOpen, Stethoscope, Briefcase, Cpu, CheckCircle2, Calendar } from 'lucide-react';
+import HeroSocialImpactAnimation, { HeroImpactCard, ImpactCategory } from './HeroSocialImpactAnimation';
 
 export default function HomeView() {
+  const [activeHeroTab, setActiveHeroTab] = React.useState<ImpactCategory>('education');
+  const [isHeroPaused, setIsHeroPaused] = React.useState(false);
+
+  React.useEffect(() => {
+    if (isHeroPaused) return;
+    const interval = setInterval(() => {
+      setActiveHeroTab((prev) => {
+        const PILLARS_KEYS: ImpactCategory[] = ['education', 'healthcare', 'entrepreneurship', 'socialwork', 'ecosystem'];
+        const currentIndex = PILLARS_KEYS.indexOf(prev);
+        return PILLARS_KEYS[(currentIndex + 1) % PILLARS_KEYS.length];
+      });
+    }, 6000);
+    return () => clearInterval(interval);
+  }, [isHeroPaused]);
+
   const stories = [
     {
       id: 1,
@@ -26,7 +42,7 @@ export default function HomeView() {
     },
     {
       id: 3,
-      category: 'Skills',
+      category: 'Entrepreneurship',
       date: 'January 2024',
       title: 'Future-proofing youth skills.',
       desc: 'A new cohort completes industry-ready digital and technical certification, linking local Himalayan graduates to remote job opportunities.',
@@ -54,29 +70,19 @@ export default function HomeView() {
 
   return (
     <div className="pt-20 bg-neutral-50" id="home-view">
-      {/* 1. HERO SECTION */}
-      <section className="relative min-h-[90vh] flex items-center text-white overflow-hidden bg-primary-dark" id="home-hero">
-        <Image
-          src="https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=1920"
-          alt="Uttarakhand mountain community background"
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover object-center pointer-events-none"
-          referrerPolicy="no-referrer"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-primary-dark/95 via-primary-dark/80 to-transparent z-10"></div>
-        <div className="absolute inset-0 bg-gradient-to-t from-primary-dark via-transparent to-transparent z-10"></div>
+      {/* 1. HERO SECTION — dynamic social work, NGO, education, primary healthcare & entrepreneurship animation */}
+      <section className="relative min-h-[90vh] flex items-center text-white overflow-hidden bg-primary-dark" id="home-hero" aria-label="Homepage hero">
+        <HeroSocialImpactAnimation activeTab={activeHeroTab} />
 
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full z-20 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-8 space-y-8">
+          <div className="lg:col-span-7 space-y-8 hero-content-enter">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold tracking-tight text-white leading-[1.1]">
               Lasting change starts <br className="hidden sm:inline" />
               <span className="text-accent italic font-normal">close to home.</span>
             </h1>
 
             <p className="text-base sm:text-lg md:text-xl text-neutral-300 max-w-2xl leading-relaxed font-sans font-light">
-              We strengthen education, healthcare, and opportunity for communities across the Himalayan region—working with people, not around them.
+              Strengthening primary healthcare, digital education, youth entrepreneurship, and community governance across Uttarakhand.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4">
@@ -96,19 +102,22 @@ export default function HomeView() {
             </div>
           </div>
 
-          <div className="lg:col-span-4 lg:self-end justify-self-start lg:justify-self-end">
-            <div className="bg-white/10 backdrop-blur-lg border border-white/10 rounded-2xl p-6 max-w-sm shadow-2xl space-y-3">
-              <h3 className="text-accent font-serif italic text-lg font-medium">Restoring trust.</h3>
-              <p className="text-sm text-neutral-300 leading-relaxed">
-                Evidence-led action. Locally sustained. We work hand-in-hand with village authorities to guarantee long-term operational success.
-              </p>
-            </div>
+          <div className="lg:col-span-5 flex justify-center lg:justify-end hero-card-enter">
+            <HeroImpactCard
+              activeTab={activeHeroTab}
+              onSelectTab={(tab) => {
+                setActiveHeroTab(tab);
+                setIsHeroPaused(true);
+              }}
+              isPaused={isHeroPaused}
+              onTogglePause={() => setIsHeroPaused(!isHeroPaused)}
+            />
           </div>
         </div>
       </section>
 
       {/* 2. STATS STRIP */}
-      <section className="bg-white border-b border-neutral-200">
+      <section className="bg-white border-b border-neutral-200" id="home-stats">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4 divide-y md:divide-y-0 md:divide-x divide-neutral-200">
             <div className="text-center pt-4 md:pt-0">
@@ -275,7 +284,7 @@ export default function HomeView() {
                   <Briefcase className="w-6 h-6" />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-lg font-serif font-bold text-primary">Skill Development</h3>
+                  <h3 className="text-lg font-serif font-bold text-primary">Entrepreneurship</h3>
                   <p className="text-xs text-neutral-600 leading-relaxed">
                     Practical digital skills, career coaching, and national-service preparation for youth.
                   </p>
@@ -285,7 +294,7 @@ export default function HomeView() {
                 href="/programs?pillar=entrepreneurship" 
                 className="text-xs font-bold text-primary hover:text-rust transition-colors text-left pt-6 flex items-center gap-1 cursor-pointer"
               >
-                DISCOVER SKILLS <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                DISCOVER ENTREPRENEURSHIP <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
 
@@ -305,7 +314,7 @@ export default function HomeView() {
                 </div>
               </div>
               <Link 
-                href="/programs?pillar=education" 
+                href="https://classes.issafoundation.in" 
                 className="text-xs font-bold text-primary hover:text-rust transition-colors text-left pt-6 flex items-center gap-1 cursor-pointer"
               >
                 DISCOVER INCLUSION <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />

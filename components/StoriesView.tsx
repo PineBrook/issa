@@ -130,6 +130,13 @@ export default function StoriesView() {
           {filteredJournals.map((story) => (
             <article 
               key={story.id}
+              id={
+                story.id === 1 ? 'story-digital-pauri' :
+                story.id === 2 ? 'story-medical-peaks' :
+                story.id === 3 ? 'story-youth-skills' :
+                story.id === 4 ? 'story-water-bodies' :
+                `story-${story.id}`
+              }
               className="bg-white rounded-3xl overflow-hidden border border-neutral-200/60 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between group"
             >
               <div>

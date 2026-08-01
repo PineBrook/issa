@@ -106,7 +106,7 @@ export default function CareersView() {
       </section>
 
       {/* THREE VALUE CARDS */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 grid grid-cols-1 md:grid-cols-3 gap-8">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16 grid grid-cols-1 md:grid-cols-3 gap-8" id="careers-values">
         <div className="bg-white p-8 rounded-3xl border border-neutral-200/80 shadow-sm space-y-4">
           <div className="w-10 h-10 rounded-xl bg-accent/20 text-primary flex items-center justify-center">
             <Heart className="w-5 h-5" />
@@ -142,7 +142,7 @@ export default function CareersView() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
           {/* Left Column: Job Listing */}
-          <div className="lg:col-span-7 space-y-8">
+          <div className="lg:col-span-7 space-y-8" id="careers-openings">
             <div className="space-y-2">
               <p className="text-xs uppercase tracking-widest text-primary font-sans font-bold font-semibold">Open Positions</p>
               <h2 className="text-3xl font-serif font-bold text-primary">Opportunities for Impact.</h2>
@@ -151,7 +151,8 @@ export default function CareersView() {
             <div className="space-y-6">
               {jobs.map((job) => (
                 <div 
-                  key={job.id} 
+                  key={job.id}
+                  id={`job-${job.id}`}
                   className={`bg-white rounded-3xl border p-6 sm:p-8 transition-all duration-300 ${
                     activeJobId === job.id 
                       ? 'border-rust shadow-md ring-1 ring-rust' 

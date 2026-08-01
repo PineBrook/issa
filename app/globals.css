@@ -39,6 +39,143 @@ body {
   background: linear-gradient(180deg, rgba(13, 49, 31, 0.6) 0%, rgba(13, 49, 31, 0.95) 100%);
 }
 
+/* ISSA hero: cinematic Ken Burns + Himalayan atmosphere */
+.hero-ken-burns {
+  animation: hero-ken-burns 32s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+@keyframes hero-ken-burns {
+  0% {
+    transform: scale(1.05) translate(0%, 0%);
+  }
+  50% {
+    transform: scale(1.14) translate(-1.5%, 1%);
+  }
+  100% {
+    transform: scale(1.1) translate(1.2%, -0.8%);
+  }
+}
+
+.hero-mist {
+  background:
+    radial-gradient(ellipse 80% 50% at 20% 70%, rgba(248, 244, 236, 0.12) 0%, transparent 55%),
+    radial-gradient(ellipse 60% 40% at 75% 40%, rgba(232, 185, 76, 0.08) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 35% at 50% 85%, rgba(248, 244, 236, 0.1) 0%, transparent 60%);
+  animation: hero-mist-drift 18s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+
+@keyframes hero-mist-drift {
+  0% {
+    transform: translateX(-2%) translateY(0%);
+    opacity: 0.55;
+  }
+  100% {
+    transform: translateX(3%) translateY(-2%);
+    opacity: 0.9;
+  }
+}
+
+.hero-light-shaft {
+  background: linear-gradient(
+    115deg,
+    transparent 0%,
+    transparent 38%,
+    rgba(232, 185, 76, 0.06) 48%,
+    rgba(248, 244, 236, 0.09) 52%,
+    transparent 62%,
+    transparent 100%
+  );
+  animation: hero-light-sweep 14s ease-in-out infinite;
+  will-change: opacity, transform;
+}
+
+@keyframes hero-light-sweep {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: translateX(-4%) skewX(-6deg);
+  }
+  50% {
+    opacity: 0.85;
+    transform: translateX(6%) skewX(-4deg);
+  }
+}
+
+.hero-particles {
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 28%, rgba(255, 255, 255, 0.45), transparent),
+    radial-gradient(1px 1px at 28% 62%, rgba(232, 185, 76, 0.4), transparent),
+    radial-gradient(1.5px 1.5px at 48% 18%, rgba(255, 255, 255, 0.35), transparent),
+    radial-gradient(1px 1px at 66% 48%, rgba(255, 255, 255, 0.3), transparent),
+    radial-gradient(1.5px 1.5px at 82% 32%, rgba(232, 185, 76, 0.35), transparent),
+    radial-gradient(1px 1px at 18% 78%, rgba(255, 255, 255, 0.25), transparent),
+    radial-gradient(1px 1px at 88% 72%, rgba(255, 255, 255, 0.3), transparent);
+  animation: hero-particles-rise 22s linear infinite;
+  will-change: transform, opacity;
+}
+
+@keyframes hero-particles-rise {
+  0% {
+    transform: translateY(0);
+    opacity: 0.4;
+  }
+  50% {
+    opacity: 0.75;
+  }
+  100% {
+    transform: translateY(-3%);
+    opacity: 0.4;
+  }
+}
+
+.hero-content-enter > * {
+  animation: hero-fade-up 0.9s ease-out both;
+}
+
+.hero-content-enter > *:nth-child(1) {
+  animation-delay: 0.12s;
+}
+
+.hero-content-enter > *:nth-child(2) {
+  animation-delay: 0.28s;
+}
+
+.hero-content-enter > *:nth-child(3) {
+  animation-delay: 0.42s;
+}
+
+.hero-card-enter {
+  animation: hero-fade-up 1s ease-out 0.55s both;
+}
+
+@keyframes hero-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-ken-burns,
+  .hero-mist,
+  .hero-light-shaft,
+  .hero-particles,
+  .hero-content-enter > *,
+  .hero-card-enter {
+    animation: none !important;
+  }
+
+  .hero-ken-burns {
+    transform: scale(1.05);
+  }
+}
+
 .text-stroke-accent {
   -webkit-text-stroke: 1px rgba(232, 185, 76, 0.3);
   color: transparent;

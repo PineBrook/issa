@@ -336,7 +336,7 @@ export default function ProgramsView({ initialPillar = 'education', view = 'deta
               </div>
             </div>
 
-            <div className="space-y-6">
+            <div className="space-y-6" id="program-iedp-offers">
               <h3 className="text-2xl font-serif font-bold text-primary">What We Offer</h3>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[

@@ -120,7 +120,7 @@ export default function ContactView() {
       </section>
 
       {/* OFFICE LOCATIONS CARD GRID */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16" id="contact-offices">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {offices.map((office, idx) => (
             <div key={idx} className="bg-white p-8 rounded-3xl border border-neutral-200/80 shadow-sm flex flex-col justify-between space-y-8">
@@ -248,7 +248,7 @@ export default function ContactView() {
           {/* Right: Working Hours & FAQs Stacked */}
           <div className="lg:col-span-5 space-y-8">
             {/* Hours */}
-            <div className="bg-white p-8 rounded-3xl border border-neutral-200/80 shadow-sm space-y-6">
+            <div className="bg-white p-8 rounded-3xl border border-neutral-200/80 shadow-sm space-y-6" id="contact-hours">
               <div>
                 <h3 className="text-lg font-serif font-bold text-primary">Office Hours</h3>
                 <p className="text-xs text-neutral-500 font-sans mt-1">Our coordinators are available in the field during these IST hours.</p>
@@ -274,7 +274,7 @@ export default function ContactView() {
             </div>
 
             {/* Official Social Media Channels */}
-            <div className="bg-white p-8 rounded-3xl border border-neutral-200/80 shadow-sm space-y-4">
+            <div className="bg-white p-8 rounded-3xl border border-neutral-200/80 shadow-sm space-y-4" id="contact-social">
               <div>
                 <h3 className="text-lg font-serif font-bold text-primary">Official Channels</h3>
                 <p className="text-xs text-neutral-500 font-sans mt-1">Follow our field dispatches and educational video series across official platforms.</p>
@@ -338,7 +338,7 @@ export default function ContactView() {
             </div>
 
             {/* Compact FAQ Accordion */}
-            <div className="space-y-4">
+            <div className="space-y-4" id="contact-faq">
               <h3 className="text-sm font-sans uppercase tracking-wider text-primary font-bold pl-1">Operational Q&A</h3>
               <div className="space-y-3">
                 {faqs.map((faq, idx) => (
