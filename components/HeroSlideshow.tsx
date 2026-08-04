@@ -176,7 +176,7 @@ export default function HeroSlideshow({
         className="absolute inset-0 z-[2] pointer-events-none"
         style={{
           background:
-            'linear-gradient(90deg, rgba(18,16,14,0.85) 0%, rgba(18,16,14,0.55) 45%, transparent 85%)',
+            'linear-gradient(180deg, rgba(18,16,14,0.55) 100%)',
         }}
       />
       <div
@@ -243,7 +243,7 @@ export default function HeroSlideshow({
       </div>
 
       {/* Progress dots & Pause/Play control */}
-      <div className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 z-30 flex items-center gap-3 bg-black/60 backdrop-blur-md px-4 py-2 rounded-full border border-white/15 shadow-lg">
+      <div className="absolute bottom-6 sm:bottom-8 left-1/2 -translate-x-1/2 z-30 flex items-center gap-3 bg-black/20 backdrop-blur-md px-4 py-2 rounded-full border border-white/15 shadow-lg">
         <button
           type="button"
           onClick={onTogglePause}
