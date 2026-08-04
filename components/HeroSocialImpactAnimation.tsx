@@ -39,7 +39,7 @@ export const PILLARS: PillarInfo[] = [
     accentColor: '#F59E0B', // Warm Amber
     glowColor: 'rgba(245, 158, 11, 0.4)',
     metrics: [
-      { value: '4 Pillars', label: 'Interconnected' },
+      { value: '3 Pillars', label: 'Interconnected' },
       { value: 'Sustainable', label: 'Village Autonomy' }
     ],
     highlights: ['Synergistic Impact', 'Community Ownership', 'Scalable NGO Model'],
@@ -182,7 +182,7 @@ export function HeroImpactCard({
   const metric = currentPillar.metrics[0];
 
   return (
-    <div className="bg-[#1a1714]/75 backdrop-blur-xl border border-white/15 rounded-2xl p-6 shadow-2xl text-white w-full max-w-lg">
+    <div className="bg-white/10 backdrop-blur-md border border-white/25 rounded-2xl p-6 shadow-2xl text-white w-full max-w-lg">
       <AnimatePresence mode="wait">
         <motion.div
           key={currentPillar.id}

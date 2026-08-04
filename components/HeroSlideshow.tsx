@@ -171,19 +171,19 @@ export default function HeroSlideshow({
         );
       })}
 
-      {/* 2. Soft photo grade — keeps images readable while guaranteeing high text contrast */}
+      {/* 2. Targeted Left Scrim — guarantees AAA text contrast behind copy without darkening the whole image or corners */}
       <div
         className="absolute inset-0 z-[2] pointer-events-none"
         style={{
           background:
-            'linear-gradient(105deg, rgba(18,16,14,0.82) 0%, rgba(18,16,14,0.5) 55%, rgba(18,16,14,0.2) 100%)',
+            'linear-gradient(90deg, rgba(18,16,14,0.85) 0%, rgba(18,16,14,0.55) 45%, transparent 85%)',
         }}
       />
       <div
         className="absolute inset-0 z-[2] pointer-events-none"
         style={{
           background:
-            'linear-gradient(to top, rgba(18,16,14,0.85) 0%, transparent 50%, rgba(18,16,14,0.3) 100%)',
+            'linear-gradient(to top, rgba(18,16,14,0.6) 0%, transparent 35%)',
         }}
       />
 
@@ -201,7 +201,7 @@ export default function HeroSlideshow({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="space-y-6 sm:space-y-8"
+              className="space-y-6 sm:space-y-8 drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]"
             >
               <span className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-accent font-semibold">
                 <span className="w-8 h-px bg-accent" aria-hidden="true" />
@@ -252,7 +252,6 @@ export default function HeroSlideshow({
           className="flex items-center gap-1.5 text-xs text-white/90 hover:text-white bg-white/10 hover:bg-white/20 border border-white/20 px-3 py-1.5 rounded-full transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
         >
           {isPaused ? <Play className="w-3.5 h-3.5 text-accent" /> : <Pause className="w-3.5 h-3.5 text-white/90" />}
-          <span className="font-medium">{isPaused ? 'Play' : 'Pause'}</span>
         </button>
 
         <div className="flex items-center gap-1.5" role="tablist" aria-label="Hero slide selection">
