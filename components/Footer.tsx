@@ -15,7 +15,7 @@ export default function Footer() {
           {/* Logo and Tagline */}
           <div className="md:col-span-4 space-y-4">
             <Logo className="w-9 h-9 text-accent" />
-            <p className="text-xs text-neutral-400 leading-relaxed max-w-xs font-sans">
+            <p className="text-sm text-neutral-300 leading-relaxed max-w-xs font-sans">
               A grassroots non-profit committed to strengthening educational infrastructure, digital literacy, and clinical care systems across remote Himalayan communities.
             </p>
             <div className="flex items-center gap-3 pt-2">
@@ -23,39 +23,39 @@ export default function Footer() {
                 href="https://www.youtube.com/@ISSAClasses" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-neutral-400 hover:text-accent hover:border-accent hover:bg-accent/10 transition-all duration-300"
+                className="w-9 h-9 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-neutral-200 hover:text-accent hover:border-accent hover:bg-accent/10 transition-all duration-300"
                 aria-label="YouTube"
                 id="footer-social-youtube"
               >
-                <Youtube className="w-4 h-4" />
+                <Youtube className="w-4.5 h-4.5" />
               </a>
               <a 
                 href="https://www.facebook.com/people/ISSA-Foundation/61582300538326/" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-neutral-400 hover:text-accent hover:border-accent hover:bg-accent/10 transition-all duration-300"
+                className="w-9 h-9 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-neutral-200 hover:text-accent hover:border-accent hover:bg-accent/10 transition-all duration-300"
                 aria-label="Facebook"
                 id="footer-social-facebook"
               >
-                <Facebook className="w-4 h-4" />
+                <Facebook className="w-4.5 h-4.5" />
               </a>
               <a 
                 href="https://www.instagram.com/issa.foundation/" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="w-8 h-8 rounded-full bg-white/5 border border-white/10 flex items-center justify-center text-neutral-400 hover:text-accent hover:border-accent hover:bg-accent/10 transition-all duration-300"
+                className="w-9 h-9 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-neutral-200 hover:text-accent hover:border-accent hover:bg-accent/10 transition-all duration-300"
                 aria-label="Instagram"
                 id="footer-social-instagram"
               >
-                <Instagram className="w-4 h-4" />
+                <Instagram className="w-4.5 h-4.5" />
               </a>
             </div>
           </div>
 
           {/* Quick Links */}
           <div className="md:col-span-2 space-y-4">
-            <p className="text-xs font-sans uppercase tracking-wider text-white font-bold">Quick Links</p>
-            <ul className="space-y-2 text-xs">
+            <p className="text-sm font-sans uppercase tracking-wider text-white font-bold">Quick Links</p>
+            <ul className="space-y-2.5 text-sm text-neutral-300 font-medium">
               <li>
                 <Link href="/" className="hover:text-accent transition-colors">
                   About Our Work
@@ -81,8 +81,8 @@ export default function Footer() {
 
           {/* Support Links */}
           <div className="md:col-span-2 space-y-4">
-            <p className="text-xs font-sans uppercase tracking-wider text-white font-bold">Governance & Legal</p>
-            <ul className="space-y-2 text-xs">
+            <p className="text-sm font-sans uppercase tracking-wider text-white font-bold">Governance & Legal</p>
+            <ul className="space-y-2.5 text-sm text-neutral-300 font-medium">
               <li>
                 <Link href="/careers" className="hover:text-accent transition-colors">
                   Join Our Team
@@ -109,21 +109,21 @@ export default function Footer() {
           {/* Sourcing Hotline & Newsletter */}
           <div className="md:col-span-4 space-y-6">
             <Newsletter />
-            <div className="pt-4 border-t border-white/5 space-y-2">
-              <h5 className="text-[10px] font-sans uppercase tracking-widest text-neutral-400">Operations Support</h5>
-              <p className="text-[11px] text-neutral-400 leading-relaxed font-sans">
-                For regional partnerships or administrative inquiries, reach our hotline:
+            <div className="pt-4 border-t border-white/10 space-y-2">
+              <h5 className="text-xs font-sans uppercase tracking-wider text-white font-bold">Operations & Offices</h5>
+              <p className="text-xs text-neutral-300 font-sans">
+                <strong className="text-white">Head Office:</strong> Pauri Garhwal | <strong className="text-white">Regional Office:</strong> Dehradun
               </p>
-              <div className="flex flex-wrap items-baseline gap-x-3">
-                <p className="text-lg font-serif text-accent font-bold">0135 430 8180</p>
-                <p className="text-[10px] text-neutral-400 font-sans">career.issafoundation@gmail.com</p>
+              <div className="flex flex-wrap items-baseline gap-x-3 pt-1">
+                <p className="text-xl font-serif text-accent font-bold">0135 430 8180</p>
+                <p className="text-xs text-neutral-300 font-sans font-medium">career.issafoundation@gmail.com</p>
               </div>
             </div>
           </div>
         </div>
-        <div className="pt-8 border-t border-white/5 grid grid-cols-1 md:grid-cols-3 items-center gap-4 text-xs font-sans text-neutral-400">
+        <div className="pt-8 border-t border-white/10 grid grid-cols-1 md:grid-cols-3 items-center gap-4 text-sm font-sans text-neutral-300">
           <p className="text-center md:text-left">© { currentYear } ISSA Foundation. All rights reserved.</p>
-          <div className="flex items-center justify-center gap-3 text-neutral-400 flex-wrap text-center">
+          <div className="flex items-center justify-center gap-3 text-neutral-300 flex-wrap text-center">
             <Link href="/privacy" className="hover:text-accent transition-colors cursor-pointer">
               Privacy Policy
             </Link>
@@ -136,7 +136,7 @@ export default function Footer() {
               href="https://pinebrooktechnologies.com" 
               target="_blank" 
               rel="noopener noreferrer" 
-              className="hover:underline transition-all cursor-pointer text-neutral-400 hover:text-accent"
+              className="hover:underline transition-all cursor-pointer text-neutral-300 hover:text-accent"
             >
             By PineBrook
             </a>

@@ -1,82 +1,215 @@
+'use client';
+
+import React from 'react';
 import {
   ArrowRight,
+  Award,
   BarChart3,
-  BriefcaseBusiness,
+  Briefcase,
+  Building2,
   CheckCircle2,
   ChevronRight,
+  Compass,
+  Cpu,
+  Globe2,
   Handshake,
+  Layers,
   Lightbulb,
   LineChart,
   MapPin,
+  Megaphone,
   PiggyBank,
   Rocket,
+  ShieldCheck,
+  Sprout,
+  Store,
+  TrendingUp,
   Users,
+  Utensils,
+  Zap,
 } from 'lucide-react';
 
-const supportOffers = [
-  ['Business assessment', 'A clear view of the current business, constraints, and growth opportunities.'],
-  ['Growth planning', 'A jointly prepared roadmap with practical priorities for the next stage.'],
-  ['One-to-one mentorship', 'Ongoing guidance from people who understand the entrepreneur’s context.'],
-  ['Business management training', 'Practical capability development for stronger day-to-day decisions.'],
-  ['Product and industry guidance', 'Access to relevant expertise to improve products and operations.'],
-  ['Branding and packaging', 'Support to present products with greater clarity and market readiness.'],
-  ['Market access and buyer connect', 'Introductions and pathways to reach new customers and buyers.'],
-  ['Digital marketing', 'Help building a credible online presence and reaching customers digitally.'],
-  ['Business website development', 'A stronger digital home for the enterprise and its products.'],
-  ['Technology through PineBrook', 'Technology enablement matched to the needs and maturity of the business.'],
-  ['Financial advisory', 'Responsible guidance to make better financing and cash-flow decisions.'],
-  ['0% interest soft loans', 'Eligible cases may receive patient, responsible financial support.'],
-  ['Business growth grants', 'Eligible cases may receive grants to unlock defined growth opportunities.'],
-  ['Continuous monitoring', 'Regular follow-up, problem solving, and support beyond onboarding.'],
+// Districts covered in current EDP cohort
+const edpDistricts = [
+  { name: 'Pauri Garhwal', region: 'Garhwal Hills', note: 'E-learning, agriculture & rural homestays' },
+  { name: 'Tehri Garhwal', region: 'Garhwal Hills', note: 'Organic horticulture & handloom crafts' },
+  { name: 'Rudraprayag', region: 'High Altitude', note: 'Herbal processing & eco-tourism' },
+  { name: 'Uttarkashi', region: 'High Altitude', note: 'Traditional foods & apple value addition' },
+  { name: 'Dehradun', region: 'Valley & Tech Hub', note: 'Digital enterprise & service innovation' },
+  { name: 'Haridwar', region: 'Plains & Manufacturing', note: 'Food processing & micro-manufacturing' },
 ];
 
-const ecosystemPartners = [
-  'Experienced mentors',
-  'Industry specialists',
-  'Technology partners',
-  'Financial advisors',
-  'Academic institutions',
-  'Government agencies',
-  'Market partners',
-  'CSR organisations',
+// 10 Business Sectors Supported
+const edpSectors = [
+  {
+    icon: Utensils,
+    title: 'Food Processing & Value Addition',
+    desc: 'Transforming raw hill produce into market-ready packaged goods with enhanced shelf life.',
+  },
+  {
+    icon: Sprout,
+    title: 'Organic & Herbal Products',
+    desc: 'Leveraging Uttarakhand’s pristine biodiversity for certified organic & wellness lines.',
+  },
+  {
+    icon: Globe2,
+    title: 'Agriculture & Horticulture',
+    desc: 'Boosting farm-gate incomes through sustainable cultivation and modern post-harvest tech.',
+  },
+  {
+    icon: Users,
+    title: 'Women’s Enterprises',
+    desc: 'Fostering financial independence through women-led self-help groups and artisanal collectives.',
+  },
+  {
+    icon: Store,
+    title: 'Traditional Foods & Local Products',
+    desc: 'Preserving indigenous culinary heritage while introducing modern branding and packaging.',
+  },
+  {
+    icon: Building2,
+    title: 'Manufacturing',
+    desc: 'Supporting micro-manufacturing units to upgrade machinery, quality controls, and capacity.',
+  },
+  {
+    icon: Compass,
+    title: 'Tourism & Homestays',
+    desc: 'Empowering local homestay hosts and eco-tour guides to deliver authentic Himalayan experiences.',
+  },
+  {
+    icon: Briefcase,
+    title: 'Service-Based Businesses',
+    desc: 'Backing essential community services, logistics, and repair networks across hill towns.',
+  },
+  {
+    icon: Cpu,
+    title: 'Digital & Tech-Enabled Enterprises',
+    desc: 'Equipping youth to launch tech services, e-commerce stores, and digital marketing agencies.',
+  },
+  {
+    icon: Zap,
+    title: 'Rural Innovation',
+    desc: 'Nurturing grassroots inventions that solve local challenges in water, energy, and farming.',
+  },
 ];
 
-const entrepreneurProfiles = [
-  { sector: 'Agriculture', detail: 'Growing local value through better products, planning, and market access.' },
-  { sector: 'Horticulture', detail: 'Building stronger rural enterprises around Uttarakhand’s natural strengths.' },
-  { sector: 'Food processing', detail: 'Helping local producers move from raw materials to market-ready products.' },
-  { sector: 'Manufacturing', detail: 'Supporting businesses working to improve capacity, systems, and reach.' },
-  { sector: 'Handicrafts and natural products', detail: 'Connecting distinctive local work with stronger brands and buyers.' },
-  { sector: 'Rural services and women-led enterprises', detail: 'Backing inclusive businesses that create livelihoods close to home.' },
+// 7-Step Entrepreneur Journey
+const edpSteps = [
+  {
+    num: '01',
+    title: 'Application & Business Profiling',
+    desc: 'Understanding the entrepreneur, business idea, vision, and growth potential.',
+  },
+  {
+    num: '02',
+    title: 'Expert Evaluation',
+    desc: 'Business experts assess innovation, sustainability, scalability, and market readiness.',
+  },
+  {
+    num: '03',
+    title: 'Due Diligence',
+    desc: 'Verification of business information and readiness for program onboarding.',
+  },
+  {
+    num: '04',
+    title: 'Entrepreneur Onboarding',
+    desc: 'Selected entrepreneurs formally become part of the ISSA Entrepreneurship Network.',
+  },
+  {
+    num: '05',
+    title: 'Mentorship & Capacity Building',
+    desc: 'Entrepreneurs receive structured mentoring, business guidance, technical support, and leadership development.',
+  },
+  {
+    num: '06',
+    title: 'Financial Assistance',
+    desc: 'Eligible businesses receive structured financial support linked with business growth and responsible utilization.',
+  },
+  {
+    num: '07',
+    title: 'Continuous Growth Support',
+    desc: 'Regular reviews, mentoring sessions, business monitoring, networking, and strategic guidance to scale sustainably.',
+  },
 ];
 
-const outcomes = [
-  'Business expansion',
-  'Increased revenue',
-  'Employment generation',
-  'Market access',
-  'Product improvement',
-  'Digital adoption',
-  'Long-term sustainability',
+// 4 Pillars of Support
+const supportPillars = [
+  {
+    title: 'Business Development',
+    icon: Briefcase,
+    color: '#E06D3B', // Terracotta Rust
+    points: [
+      'Business Planning & Strategy',
+      'Growth Strategy & Scaling Roadmaps',
+      'Financial Planning & Cash Flow Modeling',
+      'Business Model Refinement',
+      'Compliance & Legal Guidance',
+    ],
+  },
+  {
+    title: 'Technology & Digital Enablement',
+    icon: Cpu,
+    color: '#38BDF8', // Sky Blue
+    points: [
+      'Branding & Visual Identity',
+      'Custom Website & E-commerce Development',
+      'Digital Marketing & Customer Acquisition',
+      'Social Media Strategy & Content Creation',
+      'Business Automation & Tech Adoption',
+    ],
+  },
+  {
+    title: 'Market Linkages',
+    icon: Megaphone,
+    color: '#E8B94C', // Marigold Gold
+    points: [
+      'Customer Networks & Buyer Introductions',
+      'B2B & Retail Business Partnerships',
+      'Industry Connections & Mentorship Access',
+      'Trade Fairs & Market Exposure',
+      'Promotional Platforms & Exhibition Support',
+    ],
+  },
+  {
+    title: 'Financial Enablement',
+    icon: PiggyBank,
+    color: '#10B981', // Emerald
+    points: [
+      'Responsible Financial Assistance',
+      'Patient Capital & Soft Loan Structure',
+      'Performance-Based Growth Guidance',
+      'Financial Advisory & Capital Readiness',
+      'Continuous Monitoring & Accountability',
+    ],
+  },
 ];
 
-const roadmap = [
-  ['2026', 'Launch and first cohort', 'Identify promising entrepreneurs, complete assessments, and onboard the first 19 businesses.'],
-  ['Next', 'Deepen the support network', 'Grow the mentor and partner network around the needs of entrepreneurs across the state.'],
-  ['Scale', 'Expand across Uttarakhand', 'Support hundreds of entrepreneurs, create local employment, and strengthen rural value chains.'],
-  ['Long term', 'Build a trusted ecosystem', 'Make knowledge, partnerships, technology, and opportunity easier to access for every entrepreneur.'],
+// Impact Outcomes
+const impactOutcomes = [
+  'Creating sustainable local employment',
+  'Supporting women-led enterprises',
+  'Promoting rural entrepreneurship',
+  'Encouraging value addition to local products',
+  'Strengthening agriculture and allied businesses',
+  'Increasing digital adoption among entrepreneurs',
+  'Expanding market access for rural enterprises',
+  'Building financially sustainable businesses',
+  'Reducing migration by creating opportunities closer to home',
+  'Strengthening Uttarakhand’s local economy',
 ];
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
-  return <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-rust">{children}</p>;
+  return <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-rust font-sans">{children}</p>;
 }
 
 function ActionLink({ href, children, dark = false }: { href: string; children: React.ReactNode; dark?: boolean }) {
   return (
     <a
       href={href}
-      className={`inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-xs font-bold transition-all hover:-translate-y-0.5 ${
-        dark ? 'bg-accent text-primary hover:bg-accent-dark' : 'border border-white/25 text-white hover:border-accent hover:text-accent'
+      className={`inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-xs font-bold transition-all hover:-translate-y-0.5 cursor-pointer ${
+        dark
+          ? 'bg-accent text-primary hover:bg-accent-dark shadow-md'
+          : 'border border-white/25 text-white hover:border-accent hover:text-accent bg-white/5 hover:bg-white/10'
       }`}
     >
       {children}
@@ -88,152 +221,389 @@ function ActionLink({ href, children, dark = false }: { href: string; children: 
 export default function EntrepreneurshipInitiativeView() {
   return (
     <section id="entrepreneurship-initiative" className="bg-neutral-50 font-sans text-neutral-800">
+      {/* HERO SECTION */}
       <header className="relative overflow-hidden bg-primary-dark text-white">
         <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#E8B94C_1px,transparent_1px)] [background-size:18px_18px]" />
-        <div className="relative mx-auto grid max-w-7xl gap-12 px-4 py-24 sm:px-6 lg:grid-cols-12 lg:px-8 lg:py-28">
-          <div className="lg:col-span-8">
-            <SectionLabel>ISSA Entrepreneurship Development Program</SectionLabel>
-            <h1 className="mt-5 max-w-4xl font-serif text-4xl font-bold leading-tight sm:text-6xl">
-              Businesses grow stronger when entrepreneurs do not grow alone.
+        <div className="relative mx-auto grid max-w-7xl gap-12 px-4 py-20 sm:px-6 lg:grid-cols-12 lg:px-8 lg:py-28 items-center">
+          <div className="lg:col-span-7 space-y-6">
+            <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold leading-tight tracking-tight">
+              Entrepreneurship Development Program (EDP)
             </h1>
-            <p className="mt-6 max-w-2xl text-base leading-relaxed text-neutral-300 sm:text-lg">
-              IEDP is ISSA Foundation’s Business Growth Partnership for entrepreneurs and local enterprises across Uttarakhand.
-              We combine guidance, practical capability, market connections, technology, and responsible financial support.
+            <p className="text-xl font-serif text-accent font-medium leading-snug">
+              Creating Entrepreneurs. Generating Employment. Building a Self-Reliant Uttarakhand.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <ActionLink href="#join-iedp" dark>Join IEDP</ActionLink>
-              <ActionLink href="#partner-iedp">Partner with us</ActionLink>
+            <p className="text-sm sm:text-base leading-relaxed text-neutral-300 font-sans max-w-2xl">
+              The ISSA Foundation EDP is a flagship initiative designed to identify, mentor, and support aspiring and existing entrepreneurs across Uttarakhand. Our mission is to transform innovative ideas and local skills into sustainable enterprises that generate employment, strengthen local economies, and improve livelihoods.
+            </p>
+
+            <div className="pt-2 flex flex-wrap gap-3">
+              <ActionLink href="#apply-edp" dark>
+                Apply to EDP
+              </ActionLink>
+              <ActionLink href="#edp-journey">Explore 7-Step Journey</ActionLink>
+              <ActionLink href="#partner-edp">Partner With Us</ActionLink>
             </div>
           </div>
-          <div className="flex items-end lg:col-span-4">
-            <div className="w-full border-l-2 border-accent pl-6">
-              <p className="font-serif text-2xl italic text-accent">A long-term partnership</p>
-              <p className="mt-3 text-sm leading-relaxed text-neutral-300">
-                From understanding a business and identifying opportunities to measuring growth, ISSA works alongside each entrepreneur.
+
+          <div className="lg:col-span-5">
+            <div className="relative rounded-3xl bg-white/10 backdrop-blur-xl p-8 border border-white/15 shadow-2xl space-y-6">
+              <div className="w-12 h-12 rounded-2xl bg-accent/20 text-accent flex items-center justify-center">
+                <Lightbulb className="w-6 h-6" />
+              </div>
+              <blockquote className="text-base sm:text-lg font-serif italic text-white leading-relaxed border-l-2 border-accent pl-4">
+                &ldquo;Employment is not created only by offering jobs—it is created by empowering individuals to become entrepreneurs who build businesses, create opportunities, and inspire others.&rdquo;
+              </blockquote>
+              <p className="text-xs text-neutral-300 font-sans leading-relaxed">
+                Rather than offering one-time financial assistance, ISSA has built an integrated support ecosystem that nurtures entrepreneurs throughout their business journey—from idea validation to growth and expansion.
               </p>
             </div>
           </div>
         </div>
       </header>
 
-      <div className="border-b border-neutral-200 bg-white">
-        <div className="mx-auto grid max-w-7xl grid-cols-2 divide-x divide-neutral-200 sm:grid-cols-4 px-4 sm:px-6 lg:px-8">
-          {[
-            ['2026', 'Programme launched'],
-            ['40', 'Entrepreneurs identified'],
-            ['19', 'First cohort shortlisted'],
-            ['1', 'Business growth partnership'],
-          ].map(([value, label]) => (
-            <div key={label} className="px-3 py-7 text-center first:pl-0 last:pr-0 sm:py-9">
-              <p className="font-serif text-3xl font-bold text-primary sm:text-4xl">{value}</p>
-              <p className="mt-2 text-[10px] font-bold uppercase tracking-wider text-neutral-500">{label}</p>
+      {/* SUGGESTED HOMEPAGE IMPACT COUNTERS / TILES BAR */}
+      <div className="border-b border-neutral-200 bg-white shadow-sm">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 divide-y sm:divide-y-0 sm:divide-x divide-neutral-200">
+            <div className="text-center pt-2 sm:pt-0 sm:px-2">
+              <p className="font-serif text-3xl sm:text-4xl font-bold text-primary">20+</p>
+              <p className="mt-1 text-[11px] font-bold uppercase tracking-wider text-neutral-500 font-sans">
+                Entrepreneurs Onboarded
+              </p>
             </div>
-          ))}
+            <div className="text-center pt-2 sm:pt-0 sm:px-2">
+              <p className="font-serif text-3xl sm:text-4xl font-bold text-primary">6</p>
+              <p className="mt-1 text-[11px] font-bold uppercase tracking-wider text-neutral-500 font-sans">
+                Districts Covered
+              </p>
+            </div>
+            <div className="text-center pt-2 sm:pt-0 sm:px-2">
+              <p className="font-serif text-3xl sm:text-4xl font-bold text-primary">10+</p>
+              <p className="mt-1 text-[11px] font-bold uppercase tracking-wider text-neutral-500 font-sans">
+                Sectors Supported
+              </p>
+            </div>
+            <div className="text-center pt-2 sm:pt-0 sm:px-2">
+              <p className="font-serif text-3xl sm:text-4xl font-bold text-primary">100+</p>
+              <p className="mt-1 text-[11px] font-bold uppercase tracking-wider text-neutral-500 font-sans">
+                Jobs Targeted
+              </p>
+            </div>
+            <div className="text-center pt-2 sm:pt-0 sm:px-2">
+              <p className="font-serif text-3xl sm:text-4xl font-bold text-primary">100%</p>
+              <p className="mt-1 text-[11px] font-bold uppercase tracking-wider text-neutral-500 font-sans">
+                Structured Mentorship
+              </p>
+            </div>
+            <div className="text-center pt-2 sm:pt-0 sm:px-2">
+              <p className="font-serif text-2xl sm:text-3xl font-bold text-rust">1 Mission</p>
+              <p className="mt-1 text-[11px] font-bold uppercase tracking-wider text-neutral-500 font-sans">
+                Sustainable Livelihoods
+              </p>
+            </div>
+          </div>
         </div>
       </div>
 
-      <main className="mx-auto max-w-7xl space-y-24 px-4 py-20 sm:px-6 lg:px-8 lg:py-28">
-        <section className="grid gap-12 lg:grid-cols-12" id="iedp-overview">
-          <div className="lg:col-span-5">
-            <SectionLabel>Why IEDP exists</SectionLabel>
-            <h2 className="mt-4 font-serif text-3xl font-bold leading-tight text-primary sm:text-4xl">Good products and determination need a support system.</h2>
+      <main className="mx-auto max-w-7xl space-y-24 px-4 py-16 sm:px-6 lg:px-8 lg:py-24">
+        {/* WHY THIS INITIATIVE */}
+        <section className="grid gap-12 lg:grid-cols-12 items-center" id="why-edp">
+          <div className="lg:col-span-5 space-y-4">
+            <SectionLabel>Why This Initiative?</SectionLabel>
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold leading-tight text-primary">
+              Bridging the gap between passion and business success.
+            </h2>
+            <p className="text-sm sm:text-base leading-relaxed text-neutral-600">
+              Many talented individuals across Uttarakhand possess the passion and capability to build successful businesses but often lack access to mentoring, technical guidance, market opportunities, financial resources, and professional networks.
+            </p>
           </div>
-          <div className="space-y-5 text-sm leading-relaxed text-neutral-600 lg:col-span-7">
-            <p>Many talented entrepreneurs struggle to grow because they lack access to business guidance, industry expertise, branding, digital capabilities, markets, and professional networks.</p>
-            <p>IEDP was created to bring mentorship, capability development, technology, market access, and responsible financial support into one integrated ecosystem.</p>
-            <p>Our goal is not simply to support individual businesses. It is to create employment, strengthen rural economies, and inspire the next generation of entrepreneurs in Uttarakhand.</p>
+          <div className="lg:col-span-7 bg-white rounded-3xl p-8 border border-neutral-200/80 shadow-sm space-y-6">
+            <h3 className="font-serif text-xl font-bold text-primary">
+              Building Sustainable Enterprises in Himalayan Communities
+            </h3>
+            <p className="text-sm leading-relaxed text-neutral-600">
+              The ISSA Entrepreneurship Development Program bridges this gap by providing structured support that enables entrepreneurs to build sustainable enterprises capable of creating long-term employment within their communities.
+            </p>
+            <div className="p-5 rounded-2xl bg-amber-50/60 border border-amber-200/60 flex items-center gap-4">
+              <div className="w-10 h-10 rounded-xl bg-rust text-white flex items-center justify-center shrink-0 font-bold">
+                <ShieldCheck className="w-5 h-5" />
+              </div>
+              <p className="text-xs sm:text-sm font-medium text-rust font-sans leading-relaxed">
+                <strong>Core Belief:</strong> By strengthening entrepreneurs, we strengthen families, mountain villages, and the entire regional economy of Uttarakhand.
+              </p>
+            </div>
           </div>
         </section>
 
-        <section className="grid gap-8 lg:grid-cols-12" id="iedp-journey">
-          <div className="rounded-3xl bg-white p-8 shadow-sm ring-1 ring-neutral-200 lg:col-span-5 lg:p-10">
-            <SectionLabel>Our journey</SectionLabel>
-            <h2 className="mt-4 font-serif text-3xl font-bold text-primary">The first cohort began in 2026.</h2>
-            <div className="mt-8 space-y-6 border-l border-accent pl-6">
-              <div><p className="font-bold text-primary">Launch</p><p className="mt-1 text-sm leading-relaxed text-neutral-600">IEDP launched in 2026 to identify and support promising entrepreneurs across Uttarakhand.</p></div>
-              <div><p className="font-bold text-primary">MuY partnership</p><p className="mt-1 text-sm leading-relaxed text-neutral-600">ISSA partnered with Mukhyamantri Udyam Shala (MuY) to identify aspiring and existing entrepreneurs from different regions.</p></div>
-              <div><p className="font-bold text-primary">40 identified</p><p className="mt-1 text-sm leading-relaxed text-neutral-600">The first phase identified 40 entrepreneurs working across diverse sectors.</p></div>
-              <div><p className="font-bold text-primary">4 June 2026</p><p className="mt-1 text-sm leading-relaxed text-neutral-600">ISSA and MuY held an Entrepreneur Orientation Programme at the ISSA Foundation office in Dehradun.</p></div>
-              <div><p className="font-bold text-primary">19 shortlisted</p><p className="mt-1 text-sm leading-relaxed text-neutral-600">After personal business visits and detailed assessments, 19 entrepreneurs were shortlisted for the first cohort. Formal onboarding is underway.</p></div>
-            </div>
-          </div>
-          <div className="flex flex-col justify-between rounded-3xl bg-primary p-8 text-white lg:col-span-7 lg:p-10">
+        {/* 6 DISTRICTS COVERED */}
+        <section id="edp-districts" className="space-y-8">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
             <div>
-              <SectionLabel>Assessment before action</SectionLabel>
-              <h3 className="mt-4 max-w-xl font-serif text-3xl font-bold">Support starts with understanding the entrepreneur, not just the business.</h3>
-              <p className="mt-5 max-w-2xl text-sm leading-relaxed text-neutral-300">Following orientation, the ISSA team personally visited shortlisted entrepreneurs at their business locations. These visits explored operations, challenges, growth aspirations, and support requirements through a detailed business assessment.</p>
+              <SectionLabel>Geographic Footprint</SectionLabel>
+              <h2 className="mt-2 font-serif text-3xl font-bold text-primary">6 Districts Covered in Current Cohort</h2>
             </div>
-            <div className="mt-10 grid gap-3 sm:grid-cols-3">
-              {['Understand the business', 'Identify opportunities', 'Agree a growth roadmap'].map((item, index) => (
-                <div key={item} className="border-t border-white/20 pt-4"><p className="text-2xl font-serif text-accent">0{index + 1}</p><p className="mt-2 text-xs font-semibold text-neutral-200">{item}</p></div>
-              ))}
-            </div>
+            <p className="text-xs text-neutral-500 max-w-sm">
+              Supporting rural, semi-urban, and high-altitude mountain enterprises across diverse topographies.
+            </p>
           </div>
-        </section>
 
-        <section id="iedp-offers">
-          <div className="max-w-3xl"><SectionLabel>What we offer</SectionLabel><h2 className="mt-4 font-serif text-3xl font-bold text-primary sm:text-4xl">Comprehensive support, tailored to the business stage.</h2><p className="mt-4 text-sm leading-relaxed text-neutral-600">Every support intervention is customized based on the entrepreneur’s business needs and growth stage. Financial support is offered only in eligible cases and within a responsible growth plan.</p></div>
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-            {supportOffers.map(([title, description], index) => (
-              <article key={title} className={`rounded-2xl border p-5 transition-shadow hover:shadow-md ${index > 10 ? 'border-accent/50 bg-amber-50/40' : 'border-neutral-200 bg-white'}`}>
-                <div className="flex items-start justify-between gap-3"><CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-accent" /><span className="text-[10px] font-bold text-neutral-400">{String(index + 1).padStart(2, '0')}</span></div>
-                <h3 className="mt-5 text-sm font-bold text-primary">{title}</h3><p className="mt-2 text-xs leading-relaxed text-neutral-600">{description}</p>
-              </article>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {edpDistricts.map((district) => (
+              <div
+                key={district.name}
+                className="bg-white rounded-2xl p-6 border border-neutral-200 hover:border-primary/40 transition-all shadow-sm hover:shadow-md flex items-start gap-4"
+              >
+                <div className="w-10 h-10 rounded-xl bg-primary/10 text-primary flex items-center justify-center shrink-0">
+                  <MapPin className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-serif text-lg font-bold text-primary">{district.name}</h3>
+                  <p className="text-[11px] font-semibold text-rust uppercase tracking-wider mt-0.5">
+                    {district.region}
+                  </p>
+                  <p className="text-xs text-neutral-600 mt-2 leading-relaxed">{district.note}</p>
+                </div>
+              </div>
             ))}
           </div>
         </section>
 
-        <section className="grid gap-12 lg:grid-cols-12" id="iedp-model">
-          <div className="lg:col-span-5"><SectionLabel>How we work</SectionLabel><h2 className="mt-4 font-serif text-3xl font-bold text-primary sm:text-4xl">A practical partnership that continues after onboarding.</h2><p className="mt-5 text-sm leading-relaxed text-neutral-600">We work closely with each entrepreneur to understand the current business, identify opportunities, assess challenges, and jointly prepare a roadmap for development. We continue monitoring progress, measuring outcomes, solving challenges, and supporting long-term growth.</p></div>
-          <div className="grid gap-4 sm:grid-cols-2 lg:col-span-7">
-            {[
-              [BriefcaseBusiness, 'Assess', 'Understand operations, context, challenges, and growth aspirations.'],
-              [Lightbulb, 'Plan', 'Turn the assessment into a clear, shared business development roadmap.'],
-              [Handshake, 'Enable', 'Connect the right mentors, expertise, technology, markets, and finance.'],
-              [LineChart, 'Measure', 'Monitor progress against jointly agreed goals and measurable outcomes.'],
-            ].map(([Icon, title, description]) => {
-              const IconComponent = Icon as typeof BriefcaseBusiness;
-              return <article key={title as string} className="rounded-2xl border border-neutral-200 bg-white p-6"><IconComponent className="h-6 w-6 text-rust" /><h3 className="mt-5 font-serif text-xl font-bold text-primary">{title as string}</h3><p className="mt-2 text-xs leading-relaxed text-neutral-600">{description as string}</p></article>;
+        {/* SUPPORTING DIVERSE BUSINESS SECTORS */}
+        <section id="edp-sectors" className="space-y-8">
+          <div>
+            <SectionLabel>Portfolio Diversity</SectionLabel>
+            <h2 className="mt-2 font-serif text-3xl sm:text-4xl font-bold text-primary">
+              Supporting 10+ Diverse Business Sectors
+            </h2>
+            <p className="mt-3 text-sm text-neutral-600 max-w-2xl leading-relaxed">
+              This diverse portfolio promotes balanced economic growth while leveraging the unique geographic and cultural strengths of Uttarakhand.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+            {edpSectors.map((sector) => {
+              const IconComp = sector.icon;
+              return (
+                <div
+                  key={sector.title}
+                  className="bg-white rounded-2xl p-5 border border-neutral-200 hover:border-accent transition-all shadow-sm hover:shadow-md flex flex-col justify-between space-y-4"
+                >
+                  <div className="space-y-3">
+                    <div className="w-10 h-10 rounded-xl bg-neutral-100 text-primary flex items-center justify-center">
+                      <IconComp className="w-5 h-5" />
+                    </div>
+                    <h3 className="font-serif text-base font-bold text-primary leading-snug">{sector.title}</h3>
+                  </div>
+                  <p className="text-xs text-neutral-600 leading-relaxed">{sector.desc}</p>
+                </div>
+              );
             })}
           </div>
         </section>
 
-        <section className="rounded-3xl bg-neutral-100 p-8 sm:p-10" id="iedp-ecosystem">
-          <div className="grid gap-10 lg:grid-cols-12 lg:items-center">
-            <div className="lg:col-span-5"><SectionLabel>Building an ecosystem</SectionLabel><h2 className="mt-4 font-serif text-3xl font-bold text-primary">Entrepreneurship cannot succeed in isolation.</h2><p className="mt-4 text-sm leading-relaxed text-neutral-600">IEDP connects entrepreneurs with people and institutions that can provide knowledge, networks, and opportunity to build sustainable businesses.</p></div>
-            <div className="grid gap-3 sm:grid-cols-2 lg:col-span-7">{ecosystemPartners.map((partner) => <div key={partner} className="flex items-center gap-3 rounded-xl border border-neutral-200 bg-white px-4 py-4 text-sm font-semibold text-primary"><ChevronRight className="h-4 w-4 shrink-0 text-accent" />{partner}</div>)}</div>
+        {/* OUR ENTREPRENEUR JOURNEY (7 STEPS) */}
+        <section id="edp-journey" className="bg-primary text-white rounded-3xl p-8 sm:p-12 space-y-12 shadow-xl">
+          <div className="max-w-3xl space-y-4">
+            <span className="text-xs uppercase tracking-widest text-accent font-bold">The 7-Step Roadmap</span>
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold tracking-tight">Our Entrepreneur Journey</h2>
+            <p className="text-sm sm:text-base text-neutral-300 leading-relaxed">
+              Every entrepreneur follows a structured growth journey designed to maximize business success from initial idea validation to long-term scaling.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4">
+            {edpSteps.map((step) => (
+              <div
+                key={step.num}
+                className="bg-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/15 flex flex-col justify-between space-y-4 hover:bg-white/15 transition-all"
+              >
+                <div>
+                  <span className="text-2xl font-serif font-bold text-accent">{step.num}</span>
+                  <h3 className="mt-2 font-serif text-sm font-bold text-white leading-snug">{step.title}</h3>
+                </div>
+                <p className="text-xs text-neutral-300 leading-relaxed">{step.desc}</p>
+              </div>
+            ))}
           </div>
         </section>
 
-        <section id="iedp-entrepreneurs">
-          <div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end"><div><SectionLabel>Meet our entrepreneurs</SectionLabel><h2 className="mt-4 font-serif text-3xl font-bold text-primary sm:text-4xl">One cohort. Many local visions for growth.</h2></div><p className="max-w-sm text-xs leading-relaxed text-neutral-500">The first cohort represents entrepreneurs from different regions of Uttarakhand. Profiles can be expanded with consent while protecting personal and confidential information.</p></div>
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{entrepreneurProfiles.map((profile, index) => <article key={profile.sector} className="group rounded-2xl border border-neutral-200 bg-white p-6 hover:border-accent transition-colors"><div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary text-accent"><Users className="h-5 w-5" /></div><p className="mt-6 text-[10px] font-bold uppercase tracking-widest text-rust">Cohort profile 0{index + 1}</p><h3 className="mt-2 font-serif text-xl font-bold text-primary">{profile.sector}</h3><p className="mt-2 text-xs leading-relaxed text-neutral-600">{profile.detail}</p></article>)}</div>
+        {/* HOW WE SUPPORT ENTREPRENEURS (4 SUPPORT PILLARS) */}
+        <section id="edp-support" className="space-y-8">
+          <div>
+            <SectionLabel>Integrated Ecosystem</SectionLabel>
+            <h2 className="mt-2 font-serif text-3xl sm:text-4xl font-bold text-primary">
+              How We Support Entrepreneurs
+            </h2>
+            <p className="mt-3 text-sm text-neutral-600 max-w-2xl leading-relaxed">
+              Tailored interventions delivered across four core pillars of enterprise enablement.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {supportPillars.map((pillar) => {
+              const PillarIcon = pillar.icon;
+              return (
+                <div
+                  key={pillar.title}
+                  className="bg-white rounded-3xl p-8 border border-neutral-200 shadow-sm hover:shadow-md transition-all space-y-6"
+                >
+                  <div className="flex items-center gap-4">
+                    <div
+                      className="w-12 h-12 rounded-2xl flex items-center justify-center text-white shrink-0"
+                      style={{ backgroundColor: pillar.color }}
+                    >
+                      <PillarIcon className="w-6 h-6" />
+                    </div>
+                    <h3 className="font-serif text-xl font-bold text-primary">{pillar.title}</h3>
+                  </div>
+
+                  <ul className="space-y-3 border-t border-neutral-100 pt-4">
+                    {pillar.points.map((pt) => (
+                      <li key={pt} className="flex items-start gap-3 text-xs sm:text-sm text-neutral-700 font-sans">
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 mt-0.5 shrink-0" />
+                        <span>{pt}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              );
+            })}
+          </div>
         </section>
 
-        <section className="grid gap-12 lg:grid-cols-12" id="iedp-measurement">
-          <div className="lg:col-span-5"><SectionLabel>Measuring success</SectionLabel><h2 className="mt-4 font-serif text-3xl font-bold text-primary sm:text-4xl">Growth is more than the amount of finance provided.</h2><p className="mt-5 text-sm leading-relaxed text-neutral-600">ISSA measures success through the growth of the entrepreneur and the business. Each entrepreneur’s progress is monitored through jointly agreed business goals and measurable outcomes.</p></div>
-          <div className="grid gap-3 sm:grid-cols-2 lg:col-span-7">{outcomes.map((outcome) => <div key={outcome} className="flex items-center gap-3 border-b border-neutral-200 py-4 text-sm font-semibold text-primary"><BarChart3 className="h-4 w-4 shrink-0 text-rust" />{outcome}</div>)}</div>
+        {/* THE IMPACT WE ARE CREATING */}
+        <section id="edp-impact" className="bg-neutral-100 rounded-3xl p-8 sm:p-12 border border-neutral-200/80 space-y-8">
+          <div className="max-w-3xl space-y-3">
+            <SectionLabel>Creating Real Change</SectionLabel>
+            <h2 className="font-serif text-3xl sm:text-4xl font-bold text-primary">The Impact We Are Creating</h2>
+            <p className="text-sm text-neutral-600 leading-relaxed">
+              Our objective is not only to support businesses—but to build an entrepreneurial ecosystem that creates employment and transforms communities across Uttarakhand.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-4">
+            {impactOutcomes.map((item, idx) => (
+              <div
+                key={item}
+                className="bg-white rounded-2xl p-4 border border-neutral-200 flex items-center gap-3.5 shadow-sm"
+              >
+                <div className="w-8 h-8 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 font-bold text-xs">
+                  ✓
+                </div>
+                <span className="text-xs sm:text-sm font-semibold text-neutral-800 font-sans">{item}</span>
+              </div>
+            ))}
+          </div>
         </section>
 
-        <section id="iedp-roadmap">
-          <SectionLabel>Looking ahead</SectionLabel><h2 className="mt-4 max-w-2xl font-serif text-3xl font-bold text-primary sm:text-4xl">The first cohort is only the beginning.</h2>
-          <div className="mt-10 grid gap-4 lg:grid-cols-4">{roadmap.map(([phase, title, description]) => <article key={phase} className="relative border-t-2 border-accent pt-5"><p className="text-xs font-bold uppercase tracking-widest text-rust">{phase}</p><h3 className="mt-3 font-serif text-xl font-bold text-primary">{title}</h3><p className="mt-2 text-xs leading-relaxed text-neutral-600">{description}</p></article>)}</div>
+        {/* BEYOND FUNDING & OUR VISION */}
+        <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch" id="edp-vision">
+          <div className="lg:col-span-6 bg-white rounded-3xl p-8 border border-neutral-200 shadow-sm space-y-6 flex flex-col justify-between">
+            <div className="space-y-4">
+              <SectionLabel>Beyond Funding</SectionLabel>
+              <h3 className="font-serif text-2xl font-bold text-primary">Building Future Business Leaders</h3>
+              <p className="text-sm leading-relaxed text-neutral-600">
+                Financial assistance alone cannot create successful enterprises. Every entrepreneur in the ISSA Entrepreneurship Development Program receives ongoing mentorship, strategic guidance, technology support, business reviews, and continuous engagement to help overcome challenges and unlock new growth opportunities.
+              </p>
+            </div>
+            <div className="p-4 rounded-xl bg-neutral-100 text-xs font-semibold text-primary font-sans">
+              &bull; Our relationship with entrepreneurs begins at onboarding—it does not end there.
+            </div>
+          </div>
+
+          <div className="lg:col-span-6 bg-primary text-white rounded-3xl p-8 shadow-md space-y-6 flex flex-col justify-between">
+            <div className="space-y-4">
+              <span className="text-xs uppercase tracking-widest text-accent font-bold">Our Vision</span>
+              <h3 className="font-serif text-2xl font-bold">Self-Reliant Himalayan Communities</h3>
+              <p className="text-sm leading-relaxed text-neutral-200">
+                We envision an entrepreneurial ecosystem where every aspiring entrepreneur in Uttarakhand has access to the knowledge, mentorship, technology, and opportunities needed to build a successful enterprise.
+              </p>
+            </div>
+            <p className="text-xs italic text-accent border-t border-white/20 pt-4">
+              Through collaborative partnerships, innovation, and continuous support, ISSA Foundation is committed to developing enterprises that create employment and long-term regional prosperity.
+            </p>
+          </div>
         </section>
       </main>
 
-      <section className="bg-primary-dark text-white" id="join-iedp">
-        <div className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8 lg:py-24">
-          <div className="max-w-3xl"><SectionLabel>Join the movement</SectionLabel><h2 className="mt-4 font-serif text-3xl font-bold sm:text-5xl">Build a stronger business. Strengthen a stronger Uttarakhand.</h2><p className="mt-5 text-sm leading-relaxed text-neutral-300">If you are starting a new venture or looking to expand an existing enterprise, IEDP offers the guidance, mentorship, ecosystem, and support needed to help you grow.</p></div>
-          <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-            {[
-              [Rocket, 'Entrepreneurs', 'Apply to join IEDP and grow with a long-term business partner.', '#iedp-apply'],
-              [Handshake, 'Partners', 'Work with us across government, CSR, corporate, academic, technology, and market partnerships.', '#partner-iedp'],
-              [Users, 'Mentors', 'Share your experience as a successful entrepreneur, leader, specialist, or domain expert.', 'mailto:career.issafoundation@gmail.com?subject=IEDP%20Mentor%20Network'],
-              [PiggyBank, 'Supporters', 'Contribute funding, expertise, technology, market access, training, or volunteering.', 'mailto:career.issafoundation@gmail.com?subject=Support%20IEDP'],
-            ].map(([Icon, title, description, href]) => { const IconComponent = Icon as typeof Rocket; return <a key={title as string} href={href as string} className="group rounded-2xl border border-white/15 bg-white/5 p-6 transition-colors hover:border-accent hover:bg-white/10"><IconComponent className="h-6 w-6 text-accent" /><h3 className="mt-6 font-serif text-xl font-bold">{title as string}</h3><p className="mt-2 min-h-12 text-xs leading-relaxed text-neutral-300">{description as string}</p><span className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-accent">{title === 'Entrepreneurs' ? 'Apply to join' : title === 'Partners' ? 'Become a partner' : title === 'Mentors' ? 'Join mentor network' : 'Connect with ISSA'}<ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" /></span></a>; })}
+      {/* JOIN THE MOVEMENT CTA */}
+      <section className="bg-primary-dark text-white py-20" id="apply-edp">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 space-y-12">
+          <div className="max-w-3xl space-y-4">
+            <SectionLabel>Join the Movement</SectionLabel>
+            <h2 className="font-serif text-3xl sm:text-5xl font-bold">
+              Building a stronger, more self-reliant Uttarakhand.
+            </h2>
+            <p className="text-sm sm:text-base text-neutral-300 leading-relaxed">
+              At ISSA Foundation, we are proud to partner with entrepreneurs who share the vision of building a stronger Uttarakhand—one enterprise at a time.
+            </p>
           </div>
-          <div className="mt-8 flex flex-wrap gap-3" id="partner-iedp"><ActionLink href="mailto:career.issafoundation@gmail.com?subject=IEDP%20Partnership" dark>Start a partnership</ActionLink><ActionLink href="mailto:career.issafoundation@gmail.com?subject=IEDP%20Enquiry">Connect with ISSA</ActionLink></div>
-          <p id="iedp-apply" className="mt-8 text-xs text-neutral-400">To apply, partner, mentor, or support IEDP, contact career.issafoundation@gmail.com with your interest and a short introduction.</p>
+
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            <a
+              href="mailto:career.issafoundation@gmail.com?subject=EDP%20Entrepreneur%20Application"
+              className="group rounded-2xl border border-white/15 bg-white/5 p-6 transition-all hover:border-accent hover:bg-white/10"
+            >
+              <Rocket className="h-6 w-6 text-accent" />
+              <h3 className="mt-4 font-serif text-lg font-bold">Apply as Entrepreneur</h3>
+              <p className="mt-2 text-xs leading-relaxed text-neutral-300">
+                Are you an aspiring or existing entrepreneur in Uttarakhand? Submit your business profile to join our upcoming cohort.
+              </p>
+              <span className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-accent">
+                Apply to EDP <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </span>
+            </a>
+
+            <a
+              href="mailto:career.issafoundation@gmail.com?subject=EDP%20Partnership"
+              className="group rounded-2xl border border-white/15 bg-white/5 p-6 transition-all hover:border-accent hover:bg-white/10"
+            >
+              <Handshake className="h-6 w-6 text-accent" />
+              <h3 className="mt-4 font-serif text-lg font-bold">Become a Partner</h3>
+              <p className="mt-2 text-xs leading-relaxed text-neutral-300">
+                Partner across government, CSR, corporate, academic, technology, and market channels to support rural entrepreneurs.
+              </p>
+              <span className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-accent">
+                Partner with ISSA <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </span>
+            </a>
+
+            <a
+              href="mailto:career.issafoundation@gmail.com?subject=EDP%20Mentor%20Network"
+              className="group rounded-2xl border border-white/15 bg-white/5 p-6 transition-all hover:border-accent hover:bg-white/10"
+            >
+              <Users className="h-6 w-6 text-accent" />
+              <h3 className="mt-4 font-serif text-lg font-bold">Join Mentor Network</h3>
+              <p className="mt-2 text-xs leading-relaxed text-neutral-300">
+                Share your expertise as an industry specialist, domain expert, or experienced business leader.
+              </p>
+              <span className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-accent">
+                Become a Mentor <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </span>
+            </a>
+
+            <a
+              href="mailto:career.issafoundation@gmail.com?subject=EDP%20Support%20Enquiry"
+              className="group rounded-2xl border border-white/15 bg-white/5 p-6 transition-all hover:border-accent hover:bg-white/10"
+            >
+              <PiggyBank className="h-6 w-6 text-accent" />
+              <h3 className="mt-4 font-serif text-lg font-bold">Support & Fund</h3>
+              <p className="mt-2 text-xs leading-relaxed text-neutral-300">
+                Contribute capital, technology enablement, equipment, market access, or training infrastructure.
+              </p>
+              <span className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-accent" id="partner-edp">
+                Contribute Support <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </span>
+            </a>
+          </div>
+
+          <p className="text-xs text-neutral-400 border-t border-white/15 pt-6">
+            To apply, partner, mentor, or support EDP, reach out directly to{' '}
+            <a href="mailto:career.issafoundation@gmail.com" className="text-accent underline">
+              career.issafoundation@gmail.com
+            </a>{' '}
+            with your background and expression of interest.
+          </p>
         </div>
       </section>
     </section>

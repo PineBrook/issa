@@ -21,6 +21,12 @@ export default function ImpactView() {
       details: 'By deploying local mobile camp vans, over 72% of critical dental/diagnostic patients were saved from traveling 60+ km to cities.'
     },
     {
+      title: 'EDP Entrepreneurship',
+      metric: '20+',
+      sub: 'Entrepreneurs Onboarded',
+      details: 'Mentoring, tech enablement, and market connections across 6 districts and 10+ sectors, targeting 100+ local employment opportunities.'
+    },
+    {
       title: 'Accountability Model',
       metric: '100%',
       sub: 'Direct Aid Sourcing',
@@ -34,14 +40,14 @@ export default function ImpactView() {
       village: "Mana Outskirts",
       quote: "I thought my blurry vision was just a side effect of growing old in the hills. ISSA's medical van proved me wrong and gifted my needlework back.",
       narrative: "Meera, a 64-year-old traditional shawl weaver in high-altitude Mana, started losing her vision in 2022. Due to the high cost of traveling to Dehradun, she discontinued her craft. During our December Himalayan Mobile Camp, a specialist diagnostician diagnosed her cataracts. Two weeks later, she underwent completely free surgery funded directly by ISSA. Today, she is back to training young village girls in handloom weaving.",
-      image: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=800"
+      image: "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?q=80&w=800"
     },
     {
       title: "A Class of Her Own: Renu's Academic Ascent",
       village: "Pauri School Cluster",
       quote: "Seeing a computer for the first time changed how I study. Now I want to become a software engineer right here in the hills.",
       narrative: "Renu, an eighth-grade student at Pauri Government High School, had never experienced interactive smart learning. After ISSA's CIAS schools initiative adopted her classroom and provided satellite internet connection, she scored 94% on the regional mathematics board assessments, top among her peer cluster. She now leads the village student computer circle every Saturday afternoon.",
-      image: "https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=800"
+      image: "https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=800"
     }
   ];
 
@@ -52,32 +58,32 @@ export default function ImpactView() {
         <div className="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:24px_24px]"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl space-y-4">
-            <p className="text-xs uppercase tracking-widest text-accent font-sans font-bold">Evidence-Led Progress</p>
+            <p className="text-sm uppercase tracking-wider text-accent font-sans font-bold">Evidence-Led Progress</p>
             <h1 className="text-4xl sm:text-5xl font-serif font-bold tracking-tight">
               Transforming Lives. <br />
               <span className="italic font-normal text-accent">One Village At A Time.</span>
             </h1>
-            <p className="text-neutral-300 text-sm sm:text-base max-w-xl leading-relaxed font-light">
+            <p className="text-neutral-200 text-base sm:text-lg max-w-xl leading-relaxed font-normal">
               We focus on measurable outputs. Our financial allocations and community programs are audited periodically to maintain rigorous performance ratios.
             </p>
           </div>
         </div>
       </section>
 
-      {/* METRIC CARD TRIO */}
+      {/* METRIC CARD QUAD */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16" id="impact-metrics">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {featuredImpacts.map((imp, idx) => (
             <div key={idx} className="bg-white rounded-3xl p-8 border border-neutral-200/80 shadow-sm flex flex-col justify-between space-y-6">
               <div className="space-y-4">
-                <span className="text-[10px] uppercase tracking-widest text-neutral-400 font-sans font-bold block">{imp.title}</span>
+                <span className="text-xs uppercase tracking-wider text-neutral-600 font-sans font-bold block">{imp.title}</span>
                 <p className="text-5xl sm:text-6xl font-serif font-bold text-primary tracking-tight">{imp.metric}</p>
-                <h3 className="text-base font-semibold text-neutral-800 font-serif">{imp.sub}</h3>
-                <p className="text-xs text-neutral-500 leading-relaxed">{imp.details}</p>
+                <h3 className="text-lg font-bold text-neutral-900 font-serif">{imp.sub}</h3>
+                <p className="text-sm text-neutral-700 leading-relaxed font-sans">{imp.details}</p>
               </div>
               <div className="pt-4 border-t border-neutral-100 flex items-center justify-between">
-                <span className="text-[10px] text-primary uppercase font-sans tracking-widest font-semibold flex items-center gap-1">
-                  <CheckCircle className="w-3 h-3 text-rust" /> Direct Impact Verified
+                <span className="text-xs text-primary uppercase font-sans tracking-wider font-bold flex items-center gap-1.5">
+                  <CheckCircle className="w-4 h-4 text-rust" /> Direct Impact Verified
                 </span>
               </div>
             </div>
@@ -91,9 +97,9 @@ export default function ImpactView() {
           {/* Chart Content on Left */}
           <div className="lg:col-span-7 space-y-6">
             <div className="space-y-2">
-              <p className="text-xs uppercase tracking-widest text-primary font-sans font-bold">Metrics Trend</p>
-              <h3 className="text-2xl font-serif font-bold text-primary">Sustained Growth in Student Competency</h3>
-              <p className="text-xs text-neutral-500 leading-relaxed max-w-lg">
+              <p className="text-sm uppercase tracking-wider text-primary font-sans font-bold">Metrics Trend</p>
+              <h3 className="text-2xl sm:text-3xl font-serif font-bold text-primary">Sustained Growth in Student Competency</h3>
+              <p className="text-sm text-neutral-700 leading-relaxed max-w-lg font-sans">
                 Independent assessment of rural primary and secondary students adopted into our CIAS digital classrooms showing competency increases over three school terms.
               </p>
             </div>
@@ -104,38 +110,38 @@ export default function ImpactView() {
                 {/* Bar 1 */}
                 <div className="flex-1 flex flex-col items-center gap-2">
                   <div className="w-full bg-neutral-200 hover:bg-neutral-300 transition-all rounded-t-lg relative group h-[35%]">
-                    <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-sans text-neutral-500 font-bold">35%</span>
+                    <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-sans text-neutral-700 font-bold">35%</span>
                     <div className="absolute inset-x-0 bottom-0 bg-primary h-[85%] rounded-t-md"></div>
                   </div>
-                  <span className="text-[9px] font-sans uppercase tracking-wider text-neutral-400 mt-1">Pre-Adoption</span>
+                  <span className="text-xs font-sans uppercase tracking-wider text-neutral-600 font-semibold mt-1">Pre-Adoption</span>
                 </div>
                 {/* Bar 2 */}
                 <div className="flex-1 flex flex-col items-center gap-2">
                   <div className="w-full bg-neutral-200 hover:bg-neutral-300 transition-all rounded-t-lg relative group h-[60%]">
-                    <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-sans text-neutral-500 font-bold">60%</span>
+                    <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-sans text-neutral-700 font-bold">60%</span>
                     <div className="absolute inset-x-0 bottom-0 bg-rust h-[85%] rounded-t-md"></div>
                   </div>
-                  <span className="text-[9px] font-sans uppercase tracking-wider text-neutral-400 mt-1">Term 1 (CIAS)</span>
+                  <span className="text-xs font-sans uppercase tracking-wider text-neutral-600 font-semibold mt-1">Term 1 (CIAS)</span>
                 </div>
                 {/* Bar 3 */}
                 <div className="flex-1 flex flex-col items-center gap-2">
                   <div className="w-full bg-neutral-200 hover:bg-neutral-300 transition-all rounded-t-lg relative group h-[88%]">
-                    <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-[10px] font-sans text-neutral-500 font-bold">88%</span>
+                    <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-sans text-neutral-700 font-bold">88%</span>
                     <div className="absolute inset-x-0 bottom-0 bg-accent h-full rounded-t-md"></div>
                   </div>
-                  <span className="text-[9px] font-sans uppercase tracking-wider text-neutral-400 mt-1">Term 2 (CIAS)</span>
+                  <span className="text-xs font-sans uppercase tracking-wider text-neutral-600 font-semibold mt-1">Term 2 (CIAS)</span>
                 </div>
               </div>
-              <div className="flex justify-between items-center mt-4 text-[10px] text-neutral-400 font-sans">
-                <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 bg-primary rounded-full inline-block"></span> Basic Computer literacy</span>
-                <span className="flex items-center gap-1"><span className="w-2.5 h-2.5 bg-rust rounded-full inline-block"></span> Advanced Logical Coding</span>
+              <div className="flex justify-between items-center mt-4 text-xs text-neutral-600 font-sans font-medium">
+                <span className="flex items-center gap-1.5"><span className="w-3 h-3 bg-primary rounded-full inline-block"></span> Basic Computer literacy</span>
+                <span className="flex items-center gap-1.5"><span className="w-3 h-3 bg-rust rounded-full inline-block"></span> Advanced Logical Coding</span>
               </div>
             </div>
           </div>
 
           {/* Core Stats list on Right */}
           <div className="lg:col-span-5 space-y-8" id="impact-highlights">
-            <span className="text-xs uppercase tracking-widest text-neutral-400 block border-b border-neutral-100 pb-2 font-sans">Key Highlights</span>
+            <span className="text-sm uppercase tracking-wider text-neutral-700 block border-b border-neutral-100 pb-2 font-sans font-bold">Key Highlights</span>
 
             <div className="space-y-6">
               <div className="flex items-start gap-4">
@@ -143,8 +149,8 @@ export default function ImpactView() {
                   <Award className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-semibold text-primary">3+ Edtech Village Labs</h4>
-                  <p className="text-xs text-neutral-500 leading-relaxed mt-1">High-end computing systems maintained by trained local administrators.</p>
+                  <h4 className="text-base font-bold text-primary">3+ Edtech Village Labs</h4>
+                  <p className="text-sm text-neutral-700 leading-relaxed mt-1 font-sans">High-end computing systems maintained by trained local administrators.</p>
                 </div>
               </div>
 
@@ -153,8 +159,8 @@ export default function ImpactView() {
                   <TrendingUp className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-semibold text-primary">15k+ Lives Impacted</h4>
-                  <p className="text-xs text-neutral-500 leading-relaxed mt-1">Direct access to diagnostic checks, secondary classes, or technical certificate modules.</p>
+                  <h4 className="text-base font-bold text-primary">15k+ Lives Impacted</h4>
+                  <p className="text-sm text-neutral-700 leading-relaxed mt-1 font-sans">Direct access to diagnostic checks, secondary classes, or technical certificate modules.</p>
                 </div>
               </div>
 
@@ -163,8 +169,8 @@ export default function ImpactView() {
                   <FileSpreadsheet className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="text-sm font-semibold text-primary">100% Transparency Audit</h4>
-                  <p className="text-xs text-neutral-500 leading-relaxed mt-1">We publish annual program audits detailing precisely how donations support our operational clusters.</p>
+                  <h4 className="text-base font-bold text-primary">100% Transparency Audit</h4>
+                  <p className="text-sm text-neutral-700 leading-relaxed mt-1 font-sans">We publish annual program audits detailing precisely how donations support our operational clusters.</p>
                 </div>
               </div>
             </div>
@@ -175,8 +181,8 @@ export default function ImpactView() {
       {/* STORY OF THE MONTH (INTERACTIVE) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24" id="impact-story-month">
         <div className="space-y-3 mb-12">
-          <p className="text-xs uppercase tracking-widest text-primary font-sans font-bold font-semibold">Narrative Focus</p>
-          <h2 className="text-3xl font-serif font-bold text-primary">Story of the month.</h2>
+          <p className="text-sm uppercase tracking-wider text-primary font-sans font-bold">Narrative Focus</p>
+          <h2 className="text-3xl sm:text-4xl font-serif font-bold text-primary">Story of the month.</h2>
         </div>
 
         <div className="bg-[#0D311F] text-white rounded-3xl overflow-hidden shadow-2xl grid grid-cols-1 lg:grid-cols-12 items-stretch">
@@ -184,14 +190,14 @@ export default function ImpactView() {
           <div className="lg:col-span-7 p-8 sm:p-12 flex flex-col justify-between space-y-8">
             <div className="space-y-6">
               {/* Tabs */}
-              <div className="flex gap-2 bg-white/10 p-1 rounded-full max-w-sm">
+              <div className="flex gap-2 bg-white/10 p-1.5 rounded-full max-w-sm">
                 {storiesOfTheMonth.map((st, idx) => (
                   <button
                     key={idx}
                     onClick={() => setActiveStoryIdx(idx)}
-                    className={`flex-1 py-2 text-[10px] font-sans uppercase tracking-widest rounded-full transition-all cursor-pointer ${
+                    className={`flex-1 py-2 text-xs font-sans font-bold uppercase tracking-wider rounded-full transition-all cursor-pointer ${
                       activeStoryIdx === idx
-                        ? 'bg-accent text-primary font-bold'
+                        ? 'bg-accent text-primary'
                         : 'text-neutral-300 hover:text-white'
                     }`}
                   >
@@ -204,23 +210,23 @@ export default function ImpactView() {
                 <h3 className="text-2xl sm:text-3xl font-serif font-bold text-accent leading-snug">
                   {storiesOfTheMonth[activeStoryIdx].title}
                 </h3>
-                <blockquote className="border-l-2 border-accent pl-4 text-base italic text-neutral-300 font-serif font-light">
+                <blockquote className="border-l-2 border-accent pl-4 text-lg italic text-neutral-200 font-serif font-normal">
                   &ldquo;{storiesOfTheMonth[activeStoryIdx].quote}&rdquo;
                 </blockquote>
-                <p className="text-xs text-neutral-300 leading-relaxed font-sans font-light">
+                <p className="text-sm sm:text-base text-neutral-200 leading-relaxed font-sans">
                   {storiesOfTheMonth[activeStoryIdx].narrative}
                 </p>
               </div>
             </div>
 
             <div className="pt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
-              <span className="text-[10px] font-sans text-neutral-400 uppercase tracking-widest">Featured Himalayan Journal</span>
+              <span className="text-xs font-sans text-neutral-300 uppercase tracking-wider font-semibold">Featured Himalayan Journal</span>
               <button 
                 onClick={() => alert(`Sustained community programs are completely funded by donors and managed locally by ISSA partners. Thank you for your support.`)}
-                className="bg-accent hover:bg-accent-dark text-primary px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider flex items-center gap-1.5 transition-all cursor-pointer"
+                className="bg-accent hover:bg-accent-dark text-primary px-5 py-2.5 rounded-full text-sm font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all cursor-pointer"
               >
                 Learn More
-                <ArrowUpRight className="w-3.5 h-3.5" />
+                <ArrowUpRight className="w-4 h-4" />
               </button>
             </div>
           </div>

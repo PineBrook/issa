@@ -29,5 +29,5 @@ const breadcrumbJsonLd = {
 };
 
 export default function CareersPage() {
-  return <><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} /><CareersView /></>;
+  return <><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, '\\u003c') }} /><CareersView /></>;
 }

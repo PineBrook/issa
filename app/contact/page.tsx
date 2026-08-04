@@ -17,5 +17,5 @@ export const metadata: Metadata = {
 const breadcrumbJsonLd = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Home', item: 'https://issafoundation.org/' }, { '@type': 'ListItem', position: 2, name: 'Contact', item: 'https://issafoundation.org/contact' }] };
 
 export default function ContactPage() {
-  return <><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} /><ContactView /></>;
+  return <><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, '\\u003c') }} /><ContactView /></>;
 }

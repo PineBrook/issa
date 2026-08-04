@@ -19,7 +19,7 @@ export default function StoriesView() {
       subtitle: 'Bringing computer education to over 350 rural students.',
       desc: 'Our latest smart classroom cluster is official. In partnership with school authorities, we successfully completed the installation of five interactive smart boards and high-capacity computers. Students now engage in daily interactive coding modules and video-lectures.',
       fullContent: 'For years, students in high-altitude Pauri Garhwal had minimal exposure to digital infrastructure. Traditional blackboard teaching was the only pedagogical mode. Today, with the collaboration of village heads and government school boards, ISSA has equipped three high-altitude clusters with interactive satellite-connected classrooms. The response is unprecedented: student retention rates rose by 84%, and children frequently remain after school to explore digital map tools, code logic puzzles, and science videos.',
-      image: 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=800',
+      image: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=800',
       author: 'Aarti Rawat, Education Lead'
     },
     {
@@ -43,7 +43,7 @@ export default function StoriesView() {
       subtitle: 'Local Himalayan graduates completing industry technical certifications.',
       desc: 'Connecting mountain talent to digital livelihoods. Our vocational computer labs completed training for another cohort of 40 local girls and boys, focusing on office administration and software tools.',
       fullContent: 'Himalayan youth frequently migrate to cities looking for basic manual labor due to a lack of technical training. ISSA’s Vocational Skill Labs seek to reverse this by offering certified computer literacy, accounting systems training, and basic software development directly in the hills. Working alongside regional industries, we help link top-performing graduates with remote data-entry and online administrative opportunities, allowing them to support their families without leaving their ancestral homes.',
-      image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800',
+      image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=800',
       author: 'Rajesh Bist, Vocational Coordinator'
     },
     {
@@ -55,7 +55,7 @@ export default function StoriesView() {
       subtitle: 'Restoring traditional village springs for reliable winter supply.',
       desc: 'Sustained climate disruptions dried out natural water tables. Working with local groups, we helped clean and secure three natural mountain springs, safeguarding supply for 80+ families.',
       fullContent: 'In high altitudes, clean water relies on natural underground springs. Silt collection and climatic shifts have reduced output. By organizing local youth groups and funding safe masonry surrounds, we restored clean, constant supply to three farming hamlets. The water is tested regularly and filtered using local gravel filters to ensure purity.',
-      image: 'https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?q=80&w=800',
+      image: 'https://images.unsplash.com/photo-1542810634-71277d95dcbb?q=80&w=800',
       author: 'Sohan Singh, Field Supervisor'
     }
   ];

@@ -9,12 +9,14 @@ import './globals.css';
 /* Source Sans 3 pairs with Lora better than Inter for editorial NGO surfaces */
 const sourceSans = Source_Sans_3({
   subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
   variable: '--font-sans',
   display: 'swap',
 });
 
 const lora = Lora({
   subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
   style: ['normal', 'italic'],
   variable: '--font-serif',
   display: 'swap',
@@ -105,7 +107,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
         />
       </head>
       <body className="font-sans text-charcoal bg-page selection:bg-accent selection:text-primary antialiased flex flex-col min-h-screen" suppressHydrationWarning>

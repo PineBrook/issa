@@ -13,8 +13,6 @@ export default function HomeView() {
 
   React.useEffect(() => {
     if (isHeroPaused) return;
-    // WCAG 2.2.2: do not auto-advance when the user prefers reduced motion.
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const interval = setInterval(() => {
       setActiveSlide((prev) => (prev + 1) % HERO_SLIDES.length);
     }, 6000);
@@ -41,7 +39,7 @@ export default function HomeView() {
       date: 'March 2024',
       title: 'Digital empowerment in remote Pauri.',
       desc: 'Launching our fifth smart-classroom cluster in rural Uttarakhand, bringing computer training and high-speed satellite learning to over 350 students.',
-      image: 'https://images.unsplash.com/photo-1497633762265-9d179a990aa6?q=80&w=800',
+      image: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=800',
     },
     {
       id: 2,
@@ -57,7 +55,7 @@ export default function HomeView() {
       date: 'January 2024',
       title: 'Future-proofing youth skills.',
       desc: 'A new cohort completes industry-ready digital and technical certification, linking local Himalayan graduates to remote job opportunities.',
-      image: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?q=80&w=800',
+      image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=800',
     }
   ];
 
@@ -82,7 +80,7 @@ export default function HomeView() {
   return (
     <div className="bg-page" id="home-view">
       {/* 1. HERO SECTION — full-viewport photo slideshow + light network overlay */}
-      <section className="relative min-h-svh flex items-center text-white overflow-hidden bg-ink" id="home-hero" aria-label="Homepage hero">
+      <section className="relative w-full text-white bg-ink overflow-hidden" id="home-hero" aria-label="Homepage hero">
         <HeroSlideshow
           activeIndex={activeSlide}
           onSelect={handleSelectSlide}
@@ -102,22 +100,26 @@ export default function HomeView() {
       {/* 2. STATS STRIP */}
       <section className="bg-white border-b border-neutral-200" id="home-stats">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-4 divide-y md:divide-y-0 md:divide-x divide-neutral-200">
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-6 md:gap-4 divide-y md:divide-y-0 md:divide-x divide-neutral-200">
             <div className="text-center pt-4 md:pt-0">
               <p className="text-4xl md:text-5xl font-serif font-bold text-primary tracking-tight">11+</p>
-              <p className="text-xs uppercase tracking-widest text-neutral-500 font-sans mt-2">Schools Adopted</p>
+              <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-neutral-600 font-sans mt-2">Schools Adopted</p>
             </div>
             <div className="text-center pt-4 md:pt-0">
               <p className="text-4xl md:text-5xl font-serif font-bold text-primary tracking-tight">20+</p>
-              <p className="text-xs uppercase tracking-widest text-neutral-500 font-sans mt-2">Hospital Beds</p>
+              <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-neutral-600 font-sans mt-2">Hospital Beds</p>
             </div>
             <div className="text-center pt-4 md:pt-0">
-              <p className="text-4xl md:text-5xl font-serif font-bold text-primary tracking-tight">600+</p>
-              <p className="text-xs uppercase tracking-widest text-neutral-500 font-sans mt-2">Students Trained</p>
+              <p className="text-4xl md:text-5xl font-serif font-bold text-primary tracking-tight">1,200+</p>
+              <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-neutral-600 font-sans mt-2">Patients Cared For</p>
             </div>
             <div className="text-center pt-4 md:pt-0">
               <p className="text-4xl md:text-5xl font-serif font-bold text-primary tracking-tight">20+</p>
-              <p className="text-xs uppercase tracking-widest text-neutral-500 font-sans mt-2">Entrepreneur Onboarded</p>
+              <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-neutral-600 font-sans mt-2">Entrepreneurs Onboarded</p>
+            </div>
+            <div className="text-center pt-4 md:pt-0 col-span-2 md:col-span-1">
+              <p className="text-4xl md:text-5xl font-serif font-bold text-primary tracking-tight">6</p>
+              <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-neutral-600 font-sans mt-2">Districts Covered</p>
             </div>
           </div>
         </div>
@@ -128,10 +130,10 @@ export default function HomeView() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
             <div className="lg:col-span-5 relative">
-              <div className="aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl relative">
+              <div className="aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl relative border border-neutral-200/80">
                 <BlurImage 
-                  src="https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=800" 
-                  alt="Uttarakhand community life" 
+                  src="/local-ownership.jpg" 
+                  alt="Himalayan village children happily reading books in an Indian mountain community" 
                   fill
                   sizes="(max-width: 1024px) 100vw, 40vw"
                   className="object-cover"
@@ -139,9 +141,9 @@ export default function HomeView() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-transparent"></div>
               </div>
-              <div className="absolute bottom-6 -right-6 md:-right-10 bg-white rounded-2xl p-6 shadow-xl border border-neutral-100 max-w-xs hidden sm:block">
-                <p className="text-primary font-serif font-medium text-base mb-1">Restoring Trust.</p>
-                <p className="text-xs text-neutral-500 leading-relaxed">
+              <div className="absolute bottom-6 -right-6 md:-right-10 bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-neutral-200/80 max-w-xs hidden sm:block">
+                <p className="text-primary font-serif font-semibold text-base mb-1">Restoring Trust.</p>
+                <p className="text-xs sm:text-sm text-neutral-700 leading-relaxed font-sans">
                   Working closely with government departments to ensure sustainable community impact and trust.
                 </p>
               </div>
@@ -149,12 +151,12 @@ export default function HomeView() {
 
             <div className="lg:col-span-7 space-y-8">
               <div className="space-y-3">
-                <h2 className="text-3xl sm:text-4xl font-serif font-bold text-primary tracking-tight">
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-primary tracking-tight leading-tight">
                   Development Rooted in Local Ownership
                 </h2>
               </div>
 
-              <div className="space-y-6 text-neutral-600 leading-relaxed font-sans text-base">
+              <div className="space-y-6 text-neutral-700 leading-relaxed font-sans text-base sm:text-lg">
                 <p>
                   ISSA Foundation was established with a singular vision: to bridge systemic gaps in education and healthcare. We believe true progress isn&apos;t about charity, but about building resilience.
                 </p>
@@ -163,24 +165,24 @@ export default function HomeView() {
                 </p>
               </div>
 
-              <div className="space-y-4 pt-4 border-t border-neutral-100">
-                <div className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-accent/20 flex items-center justify-center text-primary mt-1">
+              <div className="space-y-5 pt-4 border-t border-neutral-200">
+                <div className="flex items-start gap-3.5">
+                  <div className="w-6 h-6 rounded-full bg-accent/20 flex items-center justify-center text-primary mt-1 shrink-0">
                     <CheckCircle2 className="w-4 h-4" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-semibold text-primary">Integrated Education</h3>
-                    <p className="text-xs text-neutral-500">Merging digital literacy with traditional government curriculum.</p>
+                    <h3 className="text-base font-bold text-primary">Integrated Education</h3>
+                    <p className="text-sm text-neutral-600 mt-0.5">Merging digital literacy with traditional government curriculum.</p>
                   </div>
                 </div>
 
-                <div className="flex items-start gap-3">
-                  <div className="w-6 h-6 rounded-full bg-accent/20 flex items-center justify-center text-primary mt-1">
+                <div className="flex items-start gap-3.5">
+                  <div className="w-6 h-6 rounded-full bg-accent/20 flex items-center justify-center text-primary mt-1 shrink-0">
                     <CheckCircle2 className="w-4 h-4" />
                   </div>
                   <div>
-                    <h3 className="text-sm font-semibold text-primary">Holistic Health</h3>
-                    <p className="text-xs text-neutral-500">Bringing tertiary-level care to the remotest hill districts.</p>
+                    <h3 className="text-base font-bold text-primary">Holistic Health</h3>
+                    <p className="text-sm text-neutral-600 mt-0.5">Bringing tertiary-level care to the remotest hill districts.</p>
                   </div>
                 </div>
               </div>
@@ -188,7 +190,7 @@ export default function HomeView() {
               <div className="pt-4">
                 <Link 
                   href="/programs"
-                  className="inline-flex items-center gap-2 text-primary hover:text-rust font-semibold text-sm transition-colors group cursor-pointer"
+                  className="inline-flex items-center gap-2 text-primary hover:text-rust font-bold text-sm sm:text-base transition-colors group cursor-pointer"
                 >
                   LEARN ABOUT ISSA
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
@@ -203,10 +205,10 @@ export default function HomeView() {
       <section className="py-24 bg-neutral-100 border-t border-b border-neutral-200" id="home-pillars">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center space-y-4 mb-16">
-            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-primary tracking-tight">
-              Four Pillars of Sustainable Progress
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-primary tracking-tight">
+              Four Areas of Sustainable Progress
             </h2>
-            <p className="text-neutral-500 text-sm max-w-xl mx-auto">
+            <p className="text-neutral-700 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
               Integrated programs that meet urgent needs while creating durable pathways forward for remote Himalayan families.
             </p>
           </div>
@@ -215,92 +217,92 @@ export default function HomeView() {
             <div className="group bg-white rounded-2xl p-8 border border-neutral-200/80 shadow-sm hover:shadow-md hover:border-neutral-300 transition-all duration-300 flex flex-col justify-between">
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-sans font-semibold uppercase tracking-wider text-neutral-600 bg-neutral-100 px-3 py-1 rounded-full">Education</span>
+                  <span className="text-xs font-sans font-semibold uppercase tracking-wider text-neutral-700 bg-neutral-100 px-3 py-1 rounded-full">Education</span>
                 </div>
                 <div className="w-12 h-12 rounded-xl bg-neutral-100 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                   <BookOpen className="w-6 h-6" />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-lg font-serif font-bold text-primary">Education Empowerment</h3>
-                  <p className="text-xs text-neutral-600 leading-relaxed">
+                  <h3 className="text-xl font-serif font-bold text-primary">Education Empowerment</h3>
+                  <p className="text-sm text-neutral-700 leading-relaxed font-sans">
                     Smart classrooms, trained teachers, and academic support through the CIAS school initiative.
                   </p>
                 </div>
               </div>
               <Link 
                 href="/programs?pillar=education" 
-                className="text-xs font-bold text-primary hover:text-rust transition-colors text-left pt-6 flex items-center gap-1 cursor-pointer"
+                className="text-xs sm:text-sm font-bold text-primary hover:text-rust transition-colors text-left pt-6 flex items-center gap-1 cursor-pointer"
               >
-                DISCOVER EDUCATION <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                DISCOVER EDUCATION <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
 
             <div className="group bg-white rounded-2xl p-8 border border-neutral-200/80 shadow-sm hover:shadow-md hover:border-neutral-300 transition-all duration-300 flex flex-col justify-between">
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-sans font-semibold uppercase tracking-wider text-neutral-600 bg-neutral-100 px-3 py-1 rounded-full">Healthcare</span>
+                  <span className="text-xs font-sans font-semibold uppercase tracking-wider text-neutral-700 bg-neutral-100 px-3 py-1 rounded-full">Healthcare</span>
                 </div>
                 <div className="w-12 h-12 rounded-xl bg-neutral-100 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                   <Stethoscope className="w-6 h-6" />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-lg font-serif font-bold text-primary">Healthcare Access</h3>
-                  <p className="text-xs text-neutral-600 leading-relaxed">
+                  <h3 className="text-xl font-serif font-bold text-primary">Healthcare Access</h3>
+                  <p className="text-sm text-neutral-700 leading-relaxed font-sans">
                     Affordable care, mobile outreach, and Uttara Care Hospital support for remote mountain districts.
                   </p>
                 </div>
               </div>
               <Link 
                 href="/programs?pillar=healthcare" 
-                className="text-xs font-bold text-primary hover:text-rust transition-colors text-left pt-6 flex items-center gap-1 cursor-pointer"
+                className="text-xs sm:text-sm font-bold text-primary hover:text-rust transition-colors text-left pt-6 flex items-center gap-1 cursor-pointer"
               >
-                DISCOVER HEALTHCARE <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                DISCOVER HEALTHCARE <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
 
             <div className="group bg-white rounded-2xl p-8 border border-neutral-200/80 shadow-sm hover:shadow-md hover:border-neutral-300 transition-all duration-300 flex flex-col justify-between">
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-sans font-semibold uppercase tracking-wider text-neutral-600 bg-neutral-100 px-3 py-1 rounded-full">Skills</span>
+                  <span className="text-xs font-sans font-semibold uppercase tracking-wider text-neutral-700 bg-neutral-100 px-3 py-1 rounded-full">Livelihoods</span>
                 </div>
                 <div className="w-12 h-12 rounded-xl bg-neutral-100 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                   <Briefcase className="w-6 h-6" />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-lg font-serif font-bold text-primary">Entrepreneurship</h3>
-                  <p className="text-xs text-neutral-600 leading-relaxed">
-                    Practical digital skills, career coaching, and national-service preparation for youth.
+                  <h3 className="text-xl font-serif font-bold text-primary">Entrepreneurship (EDP)</h3>
+                  <p className="text-sm text-neutral-700 leading-relaxed font-sans">
+                    Structured mentoring, tech enablement, and market access across 6 districts & 10+ business sectors.
                   </p>
                 </div>
               </div>
               <Link 
-                href="/programs?pillar=entrepreneurship" 
-                className="text-xs font-bold text-primary hover:text-rust transition-colors text-left pt-6 flex items-center gap-1 cursor-pointer"
+                href="/programs/entrepreneurship" 
+                className="text-xs sm:text-sm font-bold text-primary hover:text-rust transition-colors text-left pt-6 flex items-center gap-1 cursor-pointer"
               >
-                DISCOVER ENTREPRENEURSHIP <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                DISCOVER EDP <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
 
             <div className="group bg-white rounded-2xl p-8 border border-neutral-200/80 shadow-sm hover:shadow-md hover:border-neutral-300 transition-all duration-300 flex flex-col justify-between">
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-sans font-semibold uppercase tracking-wider text-neutral-600 bg-neutral-100 px-3 py-1 rounded-full">Digital Inclusion</span>
+                  <span className="text-xs font-sans font-semibold uppercase tracking-wider text-neutral-700 bg-neutral-100 px-3 py-1 rounded-full">Digital Inclusion</span>
                 </div>
                 <div className="w-12 h-12 rounded-xl bg-neutral-100 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                   <Cpu className="w-6 h-6" />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-lg font-serif font-bold text-primary">Digital Inclusion</h3>
-                  <p className="text-xs text-neutral-600 leading-relaxed">
+                  <h3 className="text-xl font-serif font-bold text-primary">Digital Inclusion</h3>
+                  <p className="text-sm text-neutral-700 leading-relaxed font-sans">
                     Village-level technology labs that make modern learning opportunities accessible to everyone.
                   </p>
                 </div>
               </div>
               <Link 
                 href="https://classes.issafoundation.in" 
-                className="text-xs font-bold text-primary hover:text-rust transition-colors text-left pt-6 flex items-center gap-1 cursor-pointer"
+                className="text-xs sm:text-sm font-bold text-primary hover:text-rust transition-colors text-left pt-6 flex items-center gap-1 cursor-pointer"
               >
-                DISCOVER INCLUSION <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                DISCOVER INCLUSION <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
           </div>
@@ -311,27 +313,27 @@ export default function HomeView() {
       <section className="py-24 bg-primary text-white" id="home-strategic-interventions">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl space-y-4 mb-16">
-            <h2 className="text-3xl sm:text-4xl font-serif font-bold text-white tracking-tight">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-white tracking-tight">
               Targeted Interventions, Measurable Regional Impact
             </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 pt-8 border-t border-white/10">
             <div className="space-y-4">
-              <p className="text-3xl font-serif font-bold text-accent">11+</p>
-              <p className="text-sm text-neutral-300 leading-relaxed">
+              <p className="text-4xl font-serif font-bold text-accent">11+</p>
+              <p className="text-base sm:text-lg text-neutral-200 leading-relaxed">
                 Smart boards and computers distributed across high-altitude government schools to revolutionize local learning.
               </p>
             </div>
             <div className="space-y-4">
-              <p className="text-3xl font-serif font-bold text-accent">11+</p>
-              <p className="text-sm text-neutral-300 leading-relaxed">
+              <p className="text-4xl font-serif font-bold text-accent">11+</p>
+              <p className="text-base sm:text-lg text-neutral-200 leading-relaxed">
                 Specialist teachers appointed to mentor rural students and deliver high-quality, continuous digital training.
               </p>
             </div>
             <div className="space-y-4">
-              <p className="text-3xl font-serif font-bold text-accent">20</p>
-              <p className="text-sm text-neutral-300 leading-relaxed">
+              <p className="text-4xl font-serif font-bold text-accent">20</p>
+              <p className="text-base sm:text-lg text-neutral-200 leading-relaxed">
                 Hospital beds and high-tech equipment delivering critical, life-saving diagnostic care in Pauri Garhwal.
               </p>
             </div>
@@ -344,21 +346,21 @@ export default function HomeView() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-16 gap-6">
             <div className="space-y-3">
-              <h2 className="text-3xl sm:text-4xl font-serif font-bold text-primary tracking-tight">
+              <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-primary tracking-tight">
                 Dispatches from Himalayan Communities
               </h2>
             </div>
             <Link 
               href="/stories"
-              className="inline-flex items-center gap-2 bg-neutral-100 hover:bg-neutral-200 text-primary px-6 py-3 rounded-full text-xs font-semibold tracking-wider uppercase transition-colors cursor-pointer"
+              className="inline-flex items-center gap-2 bg-neutral-100 hover:bg-neutral-200 text-primary px-6 py-3 rounded-full text-xs sm:text-sm font-semibold tracking-wider uppercase transition-colors cursor-pointer"
             >
-              ALL STORIES <ArrowRight className="w-3.5 h-3.5" />
+              ALL STORIES <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {stories.map((story) => (
-              <div key={story.id} className="bg-neutral-50 rounded-2xl overflow-hidden border border-neutral-200/60 shadow-sm flex flex-col justify-between group hover:shadow-lg transition-all duration-300">
+              <div key={story.id} className="bg-neutral-50 rounded-2xl overflow-hidden border border-neutral-200/80 shadow-sm flex flex-col justify-between group hover:shadow-lg transition-all duration-300">
                 <div>
                   <div className="relative aspect-[16/10] overflow-hidden">
                     <BlurImage 
@@ -369,19 +371,19 @@ export default function HomeView() {
                       className="object-cover" 
                       referrerPolicy="no-referrer"
                     />
-                    <span className="absolute top-4 left-4 bg-primary text-white text-[10px] font-sans uppercase tracking-widest px-3 py-1.5 rounded-full">
+                    <span className="absolute top-4 left-4 bg-primary text-white text-xs font-semibold uppercase tracking-wider px-3.5 py-1.5 rounded-full shadow-sm">
                       {story.category}
                     </span>
                   </div>
                   <div className="p-6 space-y-4">
-                    <div className="flex items-center gap-2 text-xs text-neutral-400 font-sans">
-                      <Calendar className="w-3.5 h-3.5" />
+                    <div className="flex items-center gap-2 text-sm text-neutral-500 font-medium">
+                      <Calendar className="w-4 h-4 text-primary/70" />
                       <span>{story.date}</span>
                     </div>
-                    <h3 className="text-lg font-serif font-bold text-primary group-hover:text-rust transition-colors leading-snug">
+                    <h3 className="text-xl font-serif font-bold text-primary group-hover:text-rust transition-colors leading-snug">
                       {story.title}
                     </h3>
-                    <p className="text-xs text-neutral-600 leading-relaxed line-clamp-3">
+                    <p className="text-sm text-neutral-700 leading-relaxed line-clamp-3">
                       {story.desc}
                     </p>
                   </div>
@@ -389,9 +391,9 @@ export default function HomeView() {
                 <div className="px-6 pb-6 pt-2">
                   <Link 
                     href="/stories"
-                    className="text-xs font-bold text-primary hover:text-rust transition-colors flex items-center gap-1 group/btn cursor-pointer"
+                    className="text-xs sm:text-sm font-bold text-primary hover:text-rust transition-colors flex items-center gap-1 group/btn cursor-pointer"
                   >
-                    READ JOURNAL <ArrowRight className="w-3 h-3 group-hover/btn:translate-x-1 transition-transform" />
+                    READ JOURNAL <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
                   </Link>
                 </div>
               </div>

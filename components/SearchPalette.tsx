@@ -213,13 +213,13 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -20 }}
             transition={{ type: 'spring', duration: 0.4, bounce: 0.1 }}
-            className="relative w-full max-w-xl bg-[#092215]/95 border border-white/10 rounded-2xl shadow-[0_32px_64px_rgba(0,0,0,0.5)] overflow-hidden"
+            className="relative w-full max-w-2xl bg-[#141210]/98 border border-white/20 rounded-2xl shadow-[0_32px_80px_rgba(0,0,0,0.75)] overflow-hidden backdrop-blur-2xl"
             id="search-palette-modal"
             ref={containerRef}
           >
             {/* Search Input Bar */}
-            <div className="relative border-b border-white/10 flex items-center px-4 py-4">
-              <Search className="w-5 h-5 text-neutral-400 shrink-0" />
+            <div className="relative border-b border-white/15 flex items-center px-5 py-4 bg-white/[0.03]">
+              <Search className="w-5 h-5 text-accent shrink-0" />
               <input
                 ref={inputRef}
                 type="text"
@@ -229,25 +229,25 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
                   setSelectedIndex(0);
                 }}
                 onKeyDown={handleKeyDown}
-                placeholder="Search programs, stories, careers..."
-                className="w-full bg-transparent border-none text-white placeholder-neutral-400 focus:outline-none focus:ring-0 pl-3 text-sm font-sans"
+                placeholder="Search programs, stories, careers, healthcare..."
+                className="w-full bg-transparent border-none text-white placeholder-neutral-400 focus:outline-none focus:ring-0 pl-3.5 text-base sm:text-lg font-sans font-medium"
               />
-              <div className="flex items-center gap-2">
-                <span className="hidden sm:inline-flex items-center gap-0.5 px-2 py-0.5 rounded bg-white/5 border border-white/10 text-[10px] text-neutral-400 font-sans">
+              <div className="flex items-center gap-2 shrink-0">
+                <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-white/10 border border-white/15 text-xs text-neutral-300 font-mono font-semibold">
                   ESC
                 </span>
                 <button
                   onClick={onClose}
-                  className="p-1 rounded-lg text-neutral-400 hover:text-white hover:bg-white/5 transition-colors cursor-pointer"
+                  className="p-1.5 rounded-xl text-neutral-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
                   aria-label="Close search"
                 >
-                  <X className="w-4 h-4" />
+                  <X className="w-5 h-5" />
                 </button>
               </div>
             </div>
 
             {/* Results Body */}
-            <div className="max-h-[350px] overflow-y-auto p-2 space-y-1 scrollbar-thin">
+            <div className="max-h-[420px] overflow-y-auto p-3 space-y-1.5 scrollbar-thin">
               {filteredItems.length > 0 ? (
                 <>
                   {filteredItems.map((item, index) => {
@@ -257,31 +257,35 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
                         key={item.id}
                         onClick={() => handleSelectItem(item)}
                         onMouseEnter={() => setSelectedIndex(index)}
-                        className={`flex items-start justify-between p-3.5 rounded-xl cursor-pointer transition-all duration-200 border ${
+                        className={`flex items-center justify-between p-4 rounded-xl cursor-pointer transition-all duration-200 border ${
                           isSelected
-                            ? 'bg-accent/15 border-accent/20 text-white shadow-inner'
-                            : 'bg-transparent border-transparent text-neutral-300 hover:text-white'
+                            ? 'bg-accent/20 border-accent/40 text-white shadow-md'
+                            : 'bg-white/[0.02] hover:bg-white/[0.06] border-white/5 text-neutral-200'
                         }`}
                         id={`search-item-${item.id}`}
                       >
-                        <div className="flex flex-col gap-0.5 max-w-[85%]">
-                          <div className="flex items-center gap-2">
-                            <span className="text-xs font-semibold font-serif leading-none">
+                        <div className="flex flex-col gap-1 max-w-[82%]">
+                          <div className="flex items-center gap-2.5 flex-wrap">
+                            <span className="text-base sm:text-lg font-bold font-serif text-white leading-tight">
                               {item.label}
                             </span>
-                            <span className="px-1.5 py-0.5 rounded-md bg-white/5 border border-white/5 text-[9px] font-sans uppercase tracking-wider text-neutral-400">
+                            <span className="px-2 py-0.5 rounded-md bg-accent/15 border border-accent/30 text-xs font-sans uppercase tracking-wider text-accent font-bold">
                               {item.category}
                             </span>
                           </div>
-                          <span className="text-[11px] text-neutral-400 font-sans leading-normal line-clamp-1">
+                          <span className="text-xs sm:text-sm text-neutral-300 font-sans leading-relaxed line-clamp-1 font-normal">
                             {item.description}
                           </span>
                         </div>
 
-                        {isSelected && (
-                          <div className="flex items-center gap-1 self-center animate-fade-in text-accent shrink-0">
-                            <span className="text-[9px] font-sans tracking-wider">JUMP</span>
-                            <CornerDownLeft className="w-3.5 h-3.5" />
+                        {isSelected ? (
+                          <div className="flex items-center gap-1.5 self-center animate-fade-in text-accent shrink-0 font-bold bg-accent/20 px-2.5 py-1 rounded-lg border border-accent/30">
+                            <span className="text-xs font-sans tracking-wider uppercase font-extrabold">GO</span>
+                            <CornerDownLeft className="w-4 h-4" />
+                          </div>
+                        ) : (
+                          <div className="text-neutral-500 hover:text-neutral-300 shrink-0">
+                            <CornerDownLeft className="w-4 h-4 opacity-40" />
                           </div>
                         )}
                       </div>
@@ -289,28 +293,30 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
                   })}
                 </>
               ) : (
-                <div className="py-12 flex flex-col items-center justify-center text-center gap-3">
-                  <HelpCircle className="w-8 h-8 text-neutral-500 animate-pulse" />
-                  <div>
-                    <p className="text-xs font-semibold text-neutral-300 font-serif">No matches found</p>
-                    <p className="text-[11px] text-neutral-500 font-sans mt-0.5">Try &quot;CIAS&quot;, &quot;UttaraCare&quot;, &quot;IEDP&quot;, &quot;Agniveer&quot;, or &quot;careers&quot;</p>
+                <div className="py-14 flex flex-col items-center justify-center text-center gap-3">
+                  <HelpCircle className="w-10 h-10 text-accent animate-pulse" />
+                  <div className="space-y-1">
+                    <p className="text-base font-bold text-white font-serif">No matches found</p>
+                    <p className="text-xs sm:text-sm text-neutral-300 font-sans max-w-xs mx-auto">
+                      Try searching for &quot;CIAS&quot;, &quot;UttaraCare&quot;, &quot;IEDP&quot;, &quot;Agniveer&quot;, or &quot;careers&quot;.
+                    </p>
                   </div>
                 </div>
               )}
             </div>
 
             {/* Footer Commands */}
-            <div className="px-4 py-3 bg-primary-dark/80 border-t border-white/5 flex items-center justify-between text-[10px] font-sans text-neutral-400">
-              <div className="flex items-center gap-4">
-                <span className="flex items-center gap-1">
-                  <span className="px-1 bg-white/5 rounded border border-white/10">↑↓</span> Move
+            <div className="px-5 py-3.5 bg-[#0e0c0b] border-t border-white/10 flex items-center justify-between text-xs font-sans text-neutral-300 font-medium">
+              <div className="flex items-center gap-5">
+                <span className="flex items-center gap-1.5">
+                  <span className="px-1.5 py-0.5 bg-white/10 rounded border border-white/15 font-mono text-white text-xs font-bold">↑↓</span> Move
                 </span>
-                <span className="flex items-center gap-1">
-                  <span className="px-1 bg-white/5 rounded border border-white/10">↵</span> Select
+                <span className="flex items-center gap-1.5">
+                  <span className="px-1.5 py-0.5 bg-white/10 rounded border border-white/15 font-mono text-white text-xs font-bold">↵</span> Select
                 </span>
               </div>
-              <div className="flex items-center gap-1">
-                <Command className="w-3.5 h-3.5" />
+              <div className="flex items-center gap-1.5 text-neutral-300 font-semibold">
+                <Command className="w-4 h-4 text-accent" />
                 <span>+ K</span>
               </div>
             </div>

@@ -26,5 +26,5 @@ export default async function ProgramsPage({ searchParams }: ProgramsPageProps) 
   if (params.pillar === 'education' || params.pillar === 'healthcare' || params.pillar === 'entrepreneurship') {
     redirect(`/programs/${params.pillar}`);
   }
-  return <><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} /><ProgramsView view="overview" /></>;
+  return <><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, '\\u003c') }} /><ProgramsView view="overview" /></>;
 }
