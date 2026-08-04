@@ -146,7 +146,7 @@ export default function StoriesView() {
                     alt={story.title} 
                     fill
                     sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-cover group-hover:scale-103 transition-transform duration-500"
+                    className="object-cover"
                     referrerPolicy="no-referrer"
                   />
                   <span className="absolute top-4 left-4 bg-primary text-white text-[9px] font-sans uppercase tracking-widest px-3 py-1.5 rounded-full font-bold">

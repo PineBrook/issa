@@ -1,20 +1,23 @@
 import type { Metadata } from 'next';
-import { Inter, Lora } from 'next/font/google';
+import { Source_Sans_3, Lora } from 'next/font/google';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import BackToTop from '@/components/BackToTop';
 import { ToastProvider } from '@/components/Toast';
 import './globals.css';
 
-const inter = Inter({
+/* Source Sans 3 pairs with Lora better than Inter for editorial NGO surfaces */
+const sourceSans = Source_Sans_3({
   subsets: ['latin'],
   variable: '--font-sans',
+  display: 'swap',
 });
 
 const lora = Lora({
   subsets: ['latin'],
   style: ['normal', 'italic'],
   variable: '--font-serif',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
@@ -97,7 +100,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   };
 
   return (
-    <html lang="en" className={`${inter.variable} ${lora.variable}`}>
+    <html lang="en" className={`${sourceSans.variable} ${lora.variable}`}>
       <head>
         <link rel="preconnect" href="https://images.unsplash.com" crossOrigin="anonymous" />
         <script
@@ -105,7 +108,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
       </head>
-      <body className="font-sans text-neutral-800 bg-neutral-50 selection:bg-accent selection:text-primary antialiased flex flex-col min-h-screen" suppressHydrationWarning>
+      <body className="font-sans text-charcoal bg-page selection:bg-accent selection:text-primary antialiased flex flex-col min-h-screen" suppressHydrationWarning>
         <ToastProvider>
           <Navbar />
           <BackToTop />

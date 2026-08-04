@@ -8,17 +8,8 @@ import {
   Sprout,
   Users,
   Globe,
-  Sparkles,
-  ChevronRight,
   Play,
-  Pause,
-  ArrowUpRight,
-  Shield,
-  Activity,
-  CheckCircle2,
-  Building2,
-  BookOpen,
-  Briefcase
+  Pause
 } from 'lucide-react';
 
 export type ImpactCategory = 'education' | 'healthcare' | 'entrepreneurship' | 'socialwork' | 'ecosystem';
@@ -35,6 +26,7 @@ export interface PillarInfo {
   glowColor: string;
   metrics: { value: string; label: string }[];
   highlights: string[];
+  story: { headline: string; quote: string };
 }
 
 export const PILLARS: PillarInfo[] = [
@@ -50,9 +42,13 @@ export const PILLARS: PillarInfo[] = [
     glowColor: 'rgba(232, 185, 76, 0.4)',
     metrics: [
       { value: '11+', label: 'Schools Adopted' },
-      { value: '350+', label: 'Students Trained' }
+      { value: '600+', label: 'Students Trained' }
     ],
-    highlights: ['Satellite E-Learning', 'STEM & Computer Labs', 'Teacher Upskilling']
+    highlights: ['Satellite E-Learning', 'STEM & Computer Labs', 'Teacher Upskilling'],
+    story: {
+      headline: 'A classroom that reaches the peaks',
+      quote: 'For the first time, my daughter can learn from the world\u2019s best teachers \u2014 right here in our village.'
+    }
   },
   {
     id: 'healthcare',
@@ -68,7 +64,11 @@ export const PILLARS: PillarInfo[] = [
       { value: '20+', label: 'Hospital Beds' },
       { value: '1,200+', label: 'Patients Cared For' }
     ],
-    highlights: ['Mobile Diagnostics', 'Free Cataract Surgeries', 'Tele-med Support']
+    highlights: ['Mobile Diagnostics', 'Free Cataract Surgeries', 'Tele-med Support'],
+    story: {
+      headline: 'Care that climbs the mountain',
+      quote: 'The medical camp came to us. My mother\u2019s eyesight was saved without a single day of travel.'
+    }
   },
   {
     id: 'entrepreneurship',
@@ -84,7 +84,11 @@ export const PILLARS: PillarInfo[] = [
       { value: '600+', label: 'Youth Certified' },
       { value: '100%', label: 'Local Sourcing' }
     ],
-    highlights: ['Tech & Admin Certs', 'Artisan Handloom Grants', 'Marketplace Access']
+    highlights: ['Tech & Admin Certs', 'Artisan Handloom Grants', 'Marketplace Access'],
+    story: {
+      headline: 'Hands that weave, futures that grow',
+      quote: 'I turned my grandmother\u2019s loom into a business that now feeds our whole family.'
+    }
   },
   {
     id: 'socialwork',
@@ -100,7 +104,11 @@ export const PILLARS: PillarInfo[] = [
       { value: '15+', label: 'Remote Blocks' },
       { value: '100%', label: 'Grassroots Trust' }
     ],
-    highlights: ['Panchayat Co-Action', 'Women SHG Empowerment', 'Ecological Protection']
+    highlights: ['Panchayat Co-Action', 'Women SHG Empowerment', 'Ecological Protection'],
+    story: {
+      headline: 'Trust, built village by village',
+      quote: 'We don\u2019t just visit these villages \u2014 we belong to them.'
+    }
   },
   {
     id: 'ecosystem',
@@ -116,20 +124,30 @@ export const PILLARS: PillarInfo[] = [
       { value: '4 Pillars', label: 'Interconnected' },
       { value: 'Sustainable', label: 'Village Autonomy' }
     ],
-    highlights: ['Synergistic Impact', 'Community Ownership', 'Scalable NGO Model']
+    highlights: ['Synergistic Impact', 'Community Ownership', 'Scalable NGO Model'],
+    story: {
+      headline: 'One circle of care',
+      quote: 'Education, health and livelihood \u2014 working together for every family in the hills.'
+    }
   }
 ];
 
 interface HeroAnimationProps {
   activeTab: ImpactCategory;
+  /** `overlay` = transparent layer for photo heroes; `standalone` = full dark fill */
+  variant?: 'overlay' | 'standalone';
 }
 
 /**
- * HTML5 Canvas + Floating Nodes background animation representing ISSA Foundation's 5 pillars:
- * Social Work, NGO Community Mesh, Education, Primary Healthcare, and Rural Entrepreneurship.
+ * HTML5 Canvas + floating nodes representing ISSA's interconnected pillars.
+ * Use `variant="overlay"` over photo heroes so images stay visible.
  */
-export default function HeroSocialImpactAnimation({ activeTab }: HeroAnimationProps) {
+export default function HeroSocialImpactAnimation({
+  activeTab,
+  variant = 'standalone',
+}: HeroAnimationProps) {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  const isOverlay = variant === 'overlay';
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -368,56 +386,34 @@ export default function HeroSocialImpactAnimation({ activeTab }: HeroAnimationPr
   const currentPillar = PILLARS.find((p) => p.id === activeTab) || PILLARS[0];
 
   return (
-    <div className="absolute inset-0 overflow-hidden bg-primary-dark select-none" aria-hidden="true">
-      {/* 1. Dynamic Canvas Layer */}
+    <div
+      className={`absolute inset-0 overflow-hidden select-none ${isOverlay ? 'bg-transparent' : 'bg-primary-dark'}`}
+      aria-hidden="true"
+    >
+      {/* Canvas network — always on top of optional fills */}
       <canvas
         ref={canvasRef}
         className="absolute inset-0 pointer-events-none z-[2] w-full h-full"
       />
 
-      {/* 2. Deep Organic Radial Glow matching ISSA Brand */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_90%_90%_at_50%_-10%,rgba(13,49,31,0.85),rgba(7,30,19,1))] z-[1]" />
+      {!isOverlay && (
+        <>
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_90%_90%_at_50%_-10%,rgba(13,49,31,0.85),rgba(7,30,19,1))] z-[1]" />
+          <div
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full blur-[150px] opacity-20 transition-colors duration-1000 z-[1] pointer-events-none"
+            style={{ backgroundColor: currentPillar.accentColor }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-primary-dark/95 via-primary-dark/85 to-primary-dark/40 z-[3] pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-primary-dark via-transparent to-transparent z-[3] pointer-events-none" />
+        </>
+      )}
 
-      {/* Dynamic Pillar Glow Spotlight */}
-      <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full blur-[150px] opacity-20 transition-all duration-1000 z-[1] pointer-events-none"
-        style={{ backgroundColor: currentPillar.accentColor }}
-      />
-
-      {/* Ambient Overlay Gradients */}
-      <div className="absolute inset-0 bg-gradient-to-r from-primary-dark/95 via-primary-dark/85 to-primary-dark/40 z-[3] pointer-events-none" />
-      <div className="absolute inset-0 bg-gradient-to-t from-primary-dark via-transparent to-transparent z-[3] pointer-events-none" />
-
-      {/* Floating Badges in Atmosphere */}
-      <div className="hidden lg:block absolute inset-0 z-[4] pointer-events-none">
-        <motion.div
-          animate={{ y: [0, -8, 0] }}
-          transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
-          className="absolute top-[16%] left-[58%] bg-white/5 border border-white/10 backdrop-blur-md px-3.5 py-1.5 rounded-full flex items-center gap-2 text-xs text-neutral-300 shadow-xl"
-        >
-          <span className="w-2 h-2 rounded-full bg-accent animate-ping" />
-          <GraduationCap className="w-3.5 h-3.5 text-accent" />
-          <span>Smart Classrooms Active</span>
-        </motion.div>
-
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 1.2 }}
-          className="absolute top-[42%] left-[62%] bg-white/5 border border-white/10 backdrop-blur-md px-3.5 py-1.5 rounded-full flex items-center gap-2 text-xs text-neutral-300 shadow-xl"
-        >
-          <HeartPulse className="w-3.5 h-3.5 text-sky-400" />
-          <span>Mobile Medical Vans on Route</span>
-        </motion.div>
-
-        <motion.div
-          animate={{ y: [0, -10, 0] }}
-          transition={{ duration: 5.5, repeat: Infinity, ease: 'easeInOut', delay: 2.4 }}
-          className="absolute bottom-[20%] left-[55%] bg-white/5 border border-white/10 backdrop-blur-md px-3.5 py-1.5 rounded-full flex items-center gap-2 text-xs text-neutral-300 shadow-xl"
-        >
-          <Sprout className="w-3.5 h-3.5 text-terracotta" />
-          <span>Youth Skill Certifications</span>
-        </motion.div>
-      </div>
+      {isOverlay && (
+        <div
+          className="absolute top-1/2 right-[18%] -translate-y-1/2 w-[420px] h-[420px] rounded-full blur-[120px] opacity-25 transition-colors duration-1000 z-[1] pointer-events-none"
+          style={{ backgroundColor: currentPillar.accentColor }}
+        />
+      )}
     </div>
   );
 }
@@ -430,150 +426,92 @@ interface HeroImpactCardProps {
 }
 
 /**
- * Interactive 5-Pillar Social Impact HUD Card displayed in the Hero Section
+ * Warm, human impact snapshot — one beneficiary story at a time.
  */
 export function HeroImpactCard({
   activeTab,
-  onSelectTab,
   isPaused,
-  onTogglePause
+  onTogglePause,
 }: HeroImpactCardProps) {
   const currentPillar = PILLARS.find((p) => p.id === activeTab) || PILLARS[0];
   const ActiveIcon = currentPillar.icon;
+  const metric = currentPillar.metrics[0];
 
   return (
-    <div className="bg-white/10 backdrop-blur-xl border border-white/15 rounded-2xl p-6 shadow-2xl space-y-5 text-white w-full max-w-lg">
-      {/* Header & Play/Pause */}
-      <div className="flex items-center justify-between border-b border-white/10 pb-4">
-        <div className="flex items-center gap-2">
-          <span
-            className="w-2.5 h-2.5 rounded-full animate-pulse"
-            style={{ backgroundColor: currentPillar.accentColor }}
-          />
-          <span className="text-xs uppercase tracking-widest text-neutral-300 font-semibold font-sans">
-            ISSA Impact Engine
-          </span>
-        </div>
+    <div className="bg-[#1a1714]/75 backdrop-blur-xl border border-white/15 rounded-2xl p-6 shadow-2xl text-white w-full max-w-lg">
+      <div className="flex items-center justify-between">
+        <span className="text-[11px] uppercase tracking-[0.18em] text-white/70 font-sans font-medium">
+          A story from the hills
+        </span>
 
         <button
+          type="button"
           onClick={onTogglePause}
-          className="text-neutral-300 hover:text-white transition-colors flex items-center gap-1.5 text-xs bg-white/10 hover:bg-white/20 px-3 py-1 rounded-full border border-white/15 cursor-pointer"
+          className="text-white/70 hover:text-white transition-colors flex items-center gap-1.5 text-xs bg-white/10 hover:bg-white/20 px-3 py-1 rounded-full border border-white/15 cursor-pointer"
           title={isPaused ? 'Resume auto-cycle' : 'Pause auto-cycle'}
         >
-          {isPaused ? <Play className="w-3 h-3 text-accent" /> : <Pause className="w-3 h-3 text-neutral-300" />}
+          {isPaused ? <Play className="w-3 h-3 text-accent" /> : <Pause className="w-3 h-3 text-white/70" />}
           <span className="font-medium">{isPaused ? 'Play' : 'Auto'}</span>
         </button>
       </div>
 
-      {/* 5 Pillar Selector Tabs */}
-      <div className="grid grid-cols-5 gap-1 bg-black/40 p-1.5 rounded-xl border border-white/10">
-        {PILLARS.map((pillar) => {
-          const Icon = pillar.icon;
-          const isActive = activeTab === pillar.id;
-          return (
-            <button
-              key={pillar.id}
-              onClick={() => onSelectTab(pillar.id)}
-              className={`flex flex-col items-center justify-center py-2 px-1 rounded-lg text-[10px] font-medium transition-all duration-300 relative cursor-pointer ${
-                isActive
-                  ? 'bg-white/20 text-white shadow-lg border border-white/25'
-                  : 'text-neutral-400 hover:text-white hover:bg-white/10'
-              }`}
-            >
-              <Icon
-                className="w-4 h-4 mb-1 transition-transform duration-300"
-                style={{ color: isActive ? pillar.accentColor : 'currentColor' }}
-              />
-              <span className="truncate w-full text-center leading-none font-sans font-medium">{pillar.shortLabel}</span>
-              {isActive && (
-                <motion.div
-                  layoutId="activePillarUnderline"
-                  className="absolute -bottom-1 left-2 right-2 h-0.5 rounded-full"
-                  style={{ backgroundColor: pillar.accentColor }}
-                />
-              )}
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Active Pillar Card Details */}
       <AnimatePresence mode="wait">
         <motion.div
           key={currentPillar.id}
-          initial={{ opacity: 0, y: 8 }}
+          initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -8 }}
-          transition={{ duration: 0.25 }}
-          className="space-y-4 pt-1"
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.3 }}
+          className="pt-6"
         >
-          <div className="flex items-center justify-between">
+          <div className="flex items-start gap-3">
             <span
-              className="text-[10px] uppercase font-bold tracking-widest px-2.5 py-0.5 rounded-full border inline-block"
+              className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
               style={{
-                borderColor: `${currentPillar.accentColor}66`,
+                backgroundColor: `${currentPillar.accentColor}22`,
                 color: currentPillar.accentColor,
-                backgroundColor: `${currentPillar.accentColor}20`
               }}
             >
-              {currentPillar.badge}
+              <ActiveIcon className="w-5 h-5" />
             </span>
-            <span className="text-[11px] text-neutral-300 font-sans italic">
-              {currentPillar.tagline}
-            </span>
-          </div>
-
-          <div>
-            <h3 className="text-xl font-serif font-bold text-white flex items-center gap-2.5">
-              <ActiveIcon className="w-5 h-5 shrink-0" style={{ color: currentPillar.accentColor }} />
-              {currentPillar.title}
-            </h3>
-            <p className="text-xs text-neutral-300 leading-relaxed font-sans mt-2 font-light">
-              {currentPillar.description}
+            {/* Visual title under page h1 — not a heading to preserve outline */}
+            <p className="text-2xl font-serif font-bold leading-snug">
+              {currentPillar.story.headline}
             </p>
           </div>
 
-          {/* Metrics & Highlights Box */}
-          <div className="bg-black/35 rounded-xl p-3.5 border border-white/10 space-y-3">
-            <div className="grid grid-cols-2 gap-3 divide-x divide-white/10">
-              {currentPillar.metrics.map((m, idx) => (
-                <div key={idx} className={idx > 0 ? 'pl-3' : ''}>
-                  <p
-                    className="text-2xl font-serif font-bold tracking-tight"
-                    style={{ color: currentPillar.accentColor }}
-                  >
-                    {m.value}
-                  </p>
-                  <p className="text-[11px] text-neutral-300 font-sans mt-0.5">{m.label}</p>
-                </div>
-              ))}
-            </div>
-
-            <div className="border-t border-white/10 pt-2.5 flex flex-wrap gap-1.5">
-              {currentPillar.highlights.map((h, i) => (
-                <span
-                  key={i}
-                  className="text-[10px] bg-white/10 border border-white/10 text-neutral-200 px-2 py-0.5 rounded-md flex items-center gap-1 font-sans"
-                >
-                  <Sparkles className="w-2.5 h-2.5 text-accent" />
-                  {h}
-                </span>
-              ))}
-            </div>
+          <div className="mt-6 flex items-baseline gap-3">
+            <span
+              className="text-5xl font-serif font-bold tracking-tight"
+              style={{ color: currentPillar.accentColor }}
+            >
+              {metric.value}
+            </span>
+            <span className="text-sm text-white/80 font-sans">{metric.label}</span>
           </div>
+
+          <p
+            className="mt-5 text-[15px] text-white/85 leading-relaxed font-serif italic border-l-2 pl-4"
+            style={{ borderColor: currentPillar.accentColor }}
+          >
+            &ldquo;{currentPillar.story.quote}&rdquo;
+          </p>
+
+          <p className="mt-4 text-xs text-white/55 font-sans">
+            {currentPillar.shortLabel} · {currentPillar.tagline}
+          </p>
         </motion.div>
       </AnimatePresence>
 
-      {/* Progress Bar */}
       {!isPaused && (
-        <div className="w-full bg-white/10 h-1 rounded-full overflow-hidden">
+        <div className="mt-6 w-full bg-white/10 h-1 rounded-full overflow-hidden">
           <motion.div
             key={activeTab}
-            initial={{ width: '0%' }}
-            animate={{ width: '100%' }}
+            className="h-full origin-left"
+            initial={{ scaleX: 0 }}
+            animate={{ scaleX: 1 }}
             transition={{ duration: 6, ease: 'linear' }}
-            className="h-full"
-            style={{ backgroundColor: currentPillar.accentColor }}
+            style={{ backgroundColor: currentPillar.accentColor, width: '100%' }}
           />
         </div>
       )}

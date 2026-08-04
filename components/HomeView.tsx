@@ -1,27 +1,38 @@
 'use client';
 
 import React from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import BlurImage from './BlurImage';
 import { ArrowRight, BookOpen, Stethoscope, Briefcase, Cpu, CheckCircle2, Calendar } from 'lucide-react';
-import HeroSocialImpactAnimation, { HeroImpactCard, ImpactCategory } from './HeroSocialImpactAnimation';
+import { HeroImpactCard, ImpactCategory } from './HeroSocialImpactAnimation';
+import HeroSlideshow, { HERO_SLIDES } from './HeroSlideshow';
 
 export default function HomeView() {
-  const [activeHeroTab, setActiveHeroTab] = React.useState<ImpactCategory>('education');
+  const [activeSlide, setActiveSlide] = React.useState(0);
   const [isHeroPaused, setIsHeroPaused] = React.useState(false);
 
   React.useEffect(() => {
     if (isHeroPaused) return;
+    // WCAG 2.2.2: do not auto-advance when the user prefers reduced motion.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const interval = setInterval(() => {
-      setActiveHeroTab((prev) => {
-        const PILLARS_KEYS: ImpactCategory[] = ['education', 'healthcare', 'entrepreneurship', 'socialwork', 'ecosystem'];
-        const currentIndex = PILLARS_KEYS.indexOf(prev);
-        return PILLARS_KEYS[(currentIndex + 1) % PILLARS_KEYS.length];
-      });
+      setActiveSlide((prev) => (prev + 1) % HERO_SLIDES.length);
     }, 6000);
     return () => clearInterval(interval);
   }, [isHeroPaused]);
+
+  const activePillar = HERO_SLIDES[activeSlide].pillar;
+
+  const handleSelectSlide = (index: number) => {
+    setActiveSlide(index);
+  };
+
+  const handleSelectPillar = (pillar: ImpactCategory) => {
+    const idx = HERO_SLIDES.findIndex((s) => s.pillar === pillar);
+    if (idx >= 0) {
+      setActiveSlide(idx);
+    }
+  };
 
   const stories = [
     {
@@ -69,51 +80,23 @@ export default function HomeView() {
   };
 
   return (
-    <div className="pt-20 bg-neutral-50" id="home-view">
-      {/* 1. HERO SECTION — dynamic social work, NGO, education, primary healthcare & entrepreneurship animation */}
-      <section className="relative min-h-[90vh] flex items-center text-white overflow-hidden bg-primary-dark" id="home-hero" aria-label="Homepage hero">
-        <HeroSocialImpactAnimation activeTab={activeHeroTab} />
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 w-full z-20 grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-          <div className="lg:col-span-7 space-y-8 hero-content-enter">
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold tracking-tight text-white leading-[1.1]">
-              Lasting change starts <br className="hidden sm:inline" />
-              <span className="text-accent italic font-normal">close to home.</span>
-            </h1>
-
-            <p className="text-base sm:text-lg md:text-xl text-neutral-300 max-w-2xl leading-relaxed font-sans font-light">
-              Strengthening primary healthcare, digital education, youth entrepreneurship, and community governance across Uttarakhand.
-            </p>
-
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Link
-                href="/programs"
-                className="bg-accent hover:bg-accent-dark text-primary font-semibold px-8 py-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 shadow-lg shadow-accent/10 hover:shadow-accent/25 hover:translate-y-[-2px] cursor-pointer"
-              >
-                Explore our work
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
-                href="/impact"
-                className="border border-white/20 hover:border-white/50 hover:bg-white/5 text-white font-medium px-8 py-4 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 cursor-pointer"
-              >
-                Our Mission
-              </Link>
-            </div>
-          </div>
-
-          <div className="lg:col-span-5 flex justify-center lg:justify-end hero-card-enter">
+    <div className="bg-page" id="home-view">
+      {/* 1. HERO SECTION — full-viewport photo slideshow + light network overlay */}
+      <section className="relative min-h-svh flex items-center text-white overflow-hidden bg-ink" id="home-hero" aria-label="Homepage hero">
+        <HeroSlideshow
+          activeIndex={activeSlide}
+          onSelect={handleSelectSlide}
+          isPaused={isHeroPaused}
+          onTogglePause={() => setIsHeroPaused(!isHeroPaused)}
+          rightContent={
             <HeroImpactCard
-              activeTab={activeHeroTab}
-              onSelectTab={(tab) => {
-                setActiveHeroTab(tab);
-                setIsHeroPaused(true);
-              }}
+              activeTab={activePillar}
+              onSelectTab={handleSelectPillar}
               isPaused={isHeroPaused}
               onTogglePause={() => setIsHeroPaused(!isHeroPaused)}
             />
-          </div>
-        </div>
+          }
+        />
       </section>
 
       {/* 2. STATS STRIP */}
@@ -133,8 +116,8 @@ export default function HomeView() {
               <p className="text-xs uppercase tracking-widest text-neutral-500 font-sans mt-2">Students Trained</p>
             </div>
             <div className="text-center pt-4 md:pt-0">
-              <p className="text-4xl md:text-5xl font-serif font-bold text-primary tracking-tight">100%</p>
-              <p className="text-xs uppercase tracking-widest text-neutral-500 font-sans mt-2">Local Sourcing</p>
+              <p className="text-4xl md:text-5xl font-serif font-bold text-primary tracking-tight">20+</p>
+              <p className="text-xs uppercase tracking-widest text-neutral-500 font-sans mt-2">Entrepreneur Onboarded</p>
             </div>
           </div>
         </div>
@@ -186,7 +169,7 @@ export default function HomeView() {
                     <CheckCircle2 className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-semibold text-primary">Integrated Education</h4>
+                    <h3 className="text-sm font-semibold text-primary">Integrated Education</h3>
                     <p className="text-xs text-neutral-500">Merging digital literacy with traditional government curriculum.</p>
                   </div>
                 </div>
@@ -196,7 +179,7 @@ export default function HomeView() {
                     <CheckCircle2 className="w-4 h-4" />
                   </div>
                   <div>
-                    <h4 className="text-sm font-semibold text-primary">Holistic Health</h4>
+                    <h3 className="text-sm font-semibold text-primary">Holistic Health</h3>
                     <p className="text-xs text-neutral-500">Bringing tertiary-level care to the remotest hill districts.</p>
                   </div>
                 </div>
@@ -383,7 +366,7 @@ export default function HomeView() {
                       alt={story.title} 
                       fill
                       sizes="(max-width: 768px) 100vw, 33vw"
-                      className="object-cover group-hover:scale-105 transition-transform duration-500" 
+                      className="object-cover" 
                       referrerPolicy="no-referrer"
                     />
                     <span className="absolute top-4 left-4 bg-primary text-white text-[10px] font-sans uppercase tracking-widest px-3 py-1.5 rounded-full">

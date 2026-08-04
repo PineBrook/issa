@@ -44,7 +44,7 @@ export default function Newsletter() {
 
   return (
     <div className="space-y-4" id="newsletter-section">
-      <h4 className="text-xs font-sans uppercase tracking-wider text-white font-bold">Stay Updated</h4>
+      <p className="text-xs font-sans uppercase tracking-wider text-white font-bold">Stay Updated</p>
       <p className="text-xs text-neutral-400 leading-relaxed font-sans max-w-sm">
         Receive monthly dispatches, progress audits, and stories of direct impact from our teams in Uttarakhand.
       </p>

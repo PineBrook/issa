@@ -54,7 +54,7 @@ export default function Footer() {
 
           {/* Quick Links */}
           <div className="md:col-span-2 space-y-4">
-            <h4 className="text-xs font-sans uppercase tracking-wider text-white font-bold">Quick Links</h4>
+            <p className="text-xs font-sans uppercase tracking-wider text-white font-bold">Quick Links</p>
             <ul className="space-y-2 text-xs">
               <li>
                 <Link href="/" className="hover:text-accent transition-colors">
@@ -81,7 +81,7 @@ export default function Footer() {
 
           {/* Support Links */}
           <div className="md:col-span-2 space-y-4">
-            <h4 className="text-xs font-sans uppercase tracking-wider text-white font-bold">Governance & Legal</h4>
+            <p className="text-xs font-sans uppercase tracking-wider text-white font-bold">Governance & Legal</p>
             <ul className="space-y-2 text-xs">
               <li>
                 <Link href="/careers" className="hover:text-accent transition-colors">
