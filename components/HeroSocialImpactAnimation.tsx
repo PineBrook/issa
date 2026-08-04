@@ -145,12 +145,12 @@ export default function HeroSocialImpactAnimation({
     >
       {!isOverlay && (
         <>
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_90%_90%_at_50%_-10%,rgba(13,49,31,0.85),rgba(7,30,19,1))] z-[1]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_120%_100%_at_50%_40%,rgba(13,49,31,0.6),rgba(7,30,19,1))] z-[1]" />
           <div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full blur-[150px] opacity-20 transition-colors duration-1000 z-[1] pointer-events-none"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full blur-[150px] opacity-25 transition-colors duration-1000 z-[1] pointer-events-none"
             style={{ backgroundColor: currentPillar.accentColor }}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-primary-dark/95 via-primary-dark/85 to-primary-dark/40 z-[3] pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-r from-primary-dark/80 via-primary-dark/50 to-transparent z-[3] pointer-events-none" />
           <div className="absolute inset-0 bg-gradient-to-t from-primary-dark via-transparent to-transparent z-[3] pointer-events-none" />
         </>
       )}
