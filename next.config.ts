@@ -7,8 +7,9 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: false,
   },
-  // Allow access to remote image placeholder.
+  // Allow access to remote image placeholder and unoptimized loading in sandboxed container preview.
   images: {
+    unoptimized: true,
     remotePatterns: [
       {
         protocol: 'https',
@@ -24,11 +25,10 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  // output: 'standalone',
+  output: 'standalone',
   transpilePackages: ['motion'],
   turbopack: {},
   webpack: (config, {dev}) => {
-    // HMR is disabled in AI Studio via DISABLE_HMR env var.
     // Do not modify—file watching is disabled to prevent flickering during agent edits.
     if (dev && process.env.DISABLE_HMR === 'true') {
       config.watchOptions = {
