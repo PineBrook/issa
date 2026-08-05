@@ -104,7 +104,7 @@ function HeartHandshake(props: React.ComponentProps<typeof Users>) {
 export default function EducationInitiativeView() {
   return (
     <main id="education-initiative" className="bg-neutral-50 font-sans text-neutral-800">
-      <section className="relative overflow-hidden bg-primary-dark py-20 text-white sm:py-24">
+      <section className="relative overflow-hidden bg-primary-dark pt-28 pb-20 text-white sm:pt-32 sm:pb-24">
         <div className="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:24px_24px]" />
         <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-4xl space-y-6">

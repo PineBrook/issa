@@ -30,9 +30,10 @@ export default function ProgramsView({ initialPillar = 'education', view = 'deta
     ];
 
     return (
-      <div className="pt-24 pb-24 bg-neutral-50 font-sans" id="programs-view">
-        <section className="bg-primary text-white py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="pb-24 bg-neutral-50 font-sans" id="programs-view">
+        <section className="bg-teal-brand text-white pt-28 pb-20 relative overflow-hidden">
+          <div className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#E8B94C_1px,transparent_1px)] [background-size:24px_24px]" aria-hidden="true"></div>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="max-w-3xl space-y-4">
               <p className="text-xs uppercase tracking-widest text-accent font-sans font-bold">Our Programs</p>
               <h1 className="text-4xl sm:text-5xl font-serif font-bold tracking-tight">Three connected pillars of ISSA&apos;s mission.</h1>
@@ -57,10 +58,10 @@ export default function ProgramsView({ initialPillar = 'education', view = 'deta
   }
 
   return (
-    <div className="pt-24 pb-24 bg-neutral-50 font-sans" id="programs-view">
+    <div className="pb-24 bg-neutral-50 font-sans" id="programs-view">
       {/* HEADER SECTION */}
-      <section className="bg-primary text-white py-20 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#E8B94C_1px,transparent_1px)] [background-size:16px_16px]"></div>
+      <section className="bg-teal-brand text-white pt-28 pb-20 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#E8B94C_1px,transparent_1px)] [background-size:24px_24px]" aria-hidden="true"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl space-y-4">
             <p className="text-xs uppercase tracking-widest text-accent font-sans font-bold">Our Pillars</p>

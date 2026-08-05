@@ -69,10 +69,10 @@ export default function StoriesView() {
   });
 
   return (
-    <div className="pt-24 pb-24 bg-neutral-50 font-sans" id="stories-view">
+    <div className="pb-24 bg-neutral-50 font-sans" id="stories-view">
       {/* HERO SECTION */}
-      <section className="bg-teal-brand text-white py-20 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#E8B94C_1px,transparent_1px)] [background-size:24px_24px]"></div>
+      <section className="bg-teal-brand text-white pt-28 pb-20 relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#E8B94C_1px,transparent_1px)] [background-size:24px_24px]" aria-hidden="true"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl space-y-4">
             <p className="text-xs uppercase tracking-widest text-accent font-sans font-bold">Field Journals</p>

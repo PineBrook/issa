@@ -19,9 +19,9 @@ export default function PrivacyPolicyView({ defaultSubTab = 'privacy' }: Privacy
   }
 
   return (
-    <div className="bg-neutral-50 min-h-screen pt-24 pb-20">
+    <div className="bg-neutral-50 min-h-screen pb-20">
       {/* Header Banner */}
-      <section className="bg-primary-dark text-white py-14 px-4 sm:px-6 lg:px-8 border-b border-white/10 relative overflow-hidden">
+      <section className="bg-primary-dark text-white pt-28 pb-14 px-4 sm:px-6 lg:px-8 border-b border-white/10 relative overflow-hidden">
         <div className="max-w-5xl mx-auto relative z-10 space-y-4">
           {/* Breadcrumb Navigation */}
           <nav className="flex items-center gap-2 text-xs font-sans text-neutral-400">
