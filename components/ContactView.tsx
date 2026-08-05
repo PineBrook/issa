@@ -271,7 +271,7 @@ export default function ContactView() {
             <div className="bg-white p-8 rounded-3xl border border-neutral-200/80 shadow-sm" id="contact-newsletter-card">
               <Newsletter 
                 variant="light" 
-                title="Subscribe for Field Dispatches"
+                title="Subscribe for Newsletter"
                 subtitle="Get monthly progress updates, smart classroom milestones, and clinical camp reports directly in your inbox."
                 id="contact-newsletter-form"
               />

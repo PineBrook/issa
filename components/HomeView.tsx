@@ -132,7 +132,7 @@ export default function HomeView() {
             <div className="lg:col-span-5 relative">
               <div className="aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl relative border border-neutral-200/80">
                 <BlurImage 
-                  src="/local-ownership.jpg" 
+                  src="/school.webp" 
                   alt="Himalayan village children happily reading books in an Indian mountain community" 
                   fill
                   sizes="(max-width: 1024px) 100vw, 40vw"
