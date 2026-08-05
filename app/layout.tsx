@@ -23,7 +23,7 @@ const lora = Lora({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://issafoundation.org'),
+  metadataBase: new URL('https://issafoundation.co.in'),
   title: {
     default: 'ISSA Foundation - Empowering Uttarakhand through Direct Action',
     template: '%s | ISSA Foundation',
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://issafoundation.org',
+    url: 'https://issafoundation.co.in',
     siteName: 'ISSA Foundation',
     title: 'ISSA Foundation - Empowering Uttarakhand through Direct Action',
     description: 'Strengthening education, healthcare, and opportunity for remote Himalayan communities.',
@@ -75,7 +75,7 @@ export const metadata: Metadata = {
     images: ['https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=1200'],
   },
   alternates: {
-    canonical: 'https://issafoundation.org',
+    canonical: 'https://issafoundation.co.in',
   },
   icons: {
     icon: '/favicon.ico',
@@ -88,8 +88,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     '@context': 'https://schema.org',
     '@type': ['Organization', 'NGO'],
     name: 'ISSA Foundation',
-    url: 'https://issafoundation.org',
-    logo: 'https://issafoundation.org/logo.webp',
+    url: 'https://issafoundation.co.in',
+    logo: 'https://issafoundation.co.in/logo.webp',
     description: 'A grassroots non-profit committed to strengthening education, healthcare, and sustainable development across remote Himalayan communities.',
     telephone: '+91-0135-430-8180',
     email: 'career.issafoundation@gmail.com',

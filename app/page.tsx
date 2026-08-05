@@ -1,13 +1,14 @@
 import { Metadata } from 'next';
 import HomeView from '@/components/HomeView';
+import { Analytics } from "@vercel/analytics/next"
 
 export const metadata: Metadata = {
   title: 'Empowering Uttarakhand through Direct Action',
   description: 'We strengthen education, healthcare, and opportunity for communities across the Himalayan region—working with people, not around them.',
-  alternates: { canonical: 'https://issafoundation.org/' },
+  alternates: { canonical: 'https://issafoundation.co.in' },
   openGraph: {
     type: 'website',
-    url: 'https://issafoundation.org/',
+    url: 'https://issafoundation.co.in/',
     title: 'ISSA Foundation - Empowering Uttarakhand through Direct Action',
     description: 'We strengthen education, healthcare, and opportunity for communities across the Himalayan region.',
     images: [{ url: 'https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=1200', width: 1200, height: 630, alt: 'Himalayan community landscape' }],
@@ -21,5 +22,10 @@ export const metadata: Metadata = {
 };
 
 export default function HomePage() {
-  return <HomeView />;
+  return (
+    <>
+      <HomeView />
+      <Analytics />
+    </>
+  );
 }
