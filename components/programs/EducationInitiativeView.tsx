@@ -12,6 +12,7 @@ import {
   Sparkles,
   Users,
 } from 'lucide-react';
+import Image from 'next/image';
 
 const programmes = [
   {
@@ -92,7 +93,7 @@ const involvementPaths = [
   },
   {
     icon: BriefcaseBusiness,
-    title: 'CSR Partners',
+    title: 'Corporate Partners',
     description: 'Invest in scalable education infrastructure, teacher support, digital inclusion, and future-ready skills.',
   },
 ];
@@ -134,14 +135,19 @@ export default function EducationInitiativeView() {
           </p>
         </div>
 
-        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-1">
-          <div className="border-t-4 border-accent bg-white p-7 shadow-sm">
-            <p className="mb-2 text-xs font-bold uppercase tracking-widest text-neutral-400">Vision</p>
-            <p className="font-serif text-xl leading-8 text-primary">An inclusive, technology-enabled, future-ready education ecosystem where every learner can realise their full potential.</p>
+        <div className="space-y-5">
+          <div className="relative aspect-[4/3] overflow-hidden bg-neutral-200">
+            <Image src="/isssa-education-program-v2.png" alt="Students learning in an ISSA-supported Himalayan classroom" fill className="object-cover" sizes="(max-width: 1024px) 100vw, 35vw" />
           </div>
-          <div className="border-t-4 border-primary bg-white p-7 shadow-sm">
-            <p className="mb-2 text-xs font-bold uppercase tracking-widest text-neutral-400">Mission</p>
-            <p className="font-serif text-xl leading-8 text-primary">Strengthen schools, empower teachers, improve outcomes, promote digital inclusion, and connect students with opportunity.</p>
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-1">
+            <div className="border-t-4 border-accent bg-white p-7 shadow-sm">
+              <p className="mb-2 text-xs font-bold uppercase tracking-widest text-neutral-400">Vision</p>
+              <p className="font-serif text-xl leading-8 text-primary">An inclusive, technology-enabled, future-ready education ecosystem where every learner can realise their full potential.</p>
+            </div>
+            <div className="border-t-4 border-primary bg-white p-7 shadow-sm">
+              <p className="mb-2 text-xs font-bold uppercase tracking-widest text-neutral-400">Mission</p>
+              <p className="font-serif text-xl leading-8 text-primary">Strengthen schools, empower teachers, improve outcomes, promote digital inclusion, and connect students with opportunity.</p>
+            </div>
           </div>
         </div>
       </section>

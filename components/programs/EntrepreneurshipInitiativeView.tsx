@@ -28,6 +28,7 @@ import {
   Utensils,
   Zap,
 } from 'lucide-react';
+import Image from 'next/image';
 
 // Districts covered in current EDP cohort
 const edpDistricts = [
@@ -159,7 +160,7 @@ const supportPillars = [
     ],
   },
   {
-    title: 'Market Linkages',
+    title: 'Customer and Buyer Connections',
     icon: Megaphone,
     color: '#E8B94C', // Marigold Gold
     points: [
@@ -171,7 +172,7 @@ const supportPillars = [
     ],
   },
   {
-    title: 'Financial Enablement',
+    title: 'Funding and Financial Guidance',
     icon: PiggyBank,
     color: '#10B981', // Emerald
     points: [
@@ -268,7 +269,7 @@ export default function EntrepreneurshipInitiativeView() {
             <div className="text-center pt-2 sm:pt-0 sm:px-2">
               <p className="font-serif text-3xl sm:text-4xl font-bold text-primary">20+</p>
               <p className="mt-1 text-[11px] font-bold uppercase tracking-wider text-neutral-500 font-sans">
-                Entrepreneurs Onboarded
+                Entrepreneurs Supported
               </p>
             </div>
             <div className="text-center pt-2 sm:pt-0 sm:px-2">
@@ -317,6 +318,9 @@ export default function EntrepreneurshipInitiativeView() {
               Many talented individuals across Uttarakhand possess the passion and capability to build successful businesses but often lack access to mentoring, technical guidance, market opportunities, financial resources, and professional networks.
             </p>
           </div>
+          <div className="relative min-h-64 overflow-hidden rounded-2xl bg-neutral-200 lg:col-span-3">
+            <Image src="/isssa-entrepreneurship-program-v2.png" alt="Young entrepreneurs learning digital business skills with an ISSA mentor" fill className="object-cover" sizes="(max-width: 1024px) 100vw, 25vw" />
+          </div>
           <div className="lg:col-span-7 bg-white rounded-3xl p-8 border border-neutral-200/80 shadow-sm space-y-6">
             <h3 className="font-serif text-xl font-bold text-primary">
               Building Sustainable Enterprises in Himalayan Communities
@@ -339,7 +343,7 @@ export default function EntrepreneurshipInitiativeView() {
         <section id="edp-districts" className="space-y-8">
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4">
             <div>
-              <SectionLabel>Geographic Footprint</SectionLabel>
+              <SectionLabel>Where We Work</SectionLabel>
               <h2 className="mt-2 font-serif text-3xl font-bold text-primary">6 Districts Covered in Current Cohort</h2>
             </div>
             <p className="text-xs text-neutral-500 max-w-sm">
@@ -435,7 +439,7 @@ export default function EntrepreneurshipInitiativeView() {
               How We Support Entrepreneurs
             </h2>
             <p className="mt-3 text-sm text-neutral-600 max-w-2xl leading-relaxed">
-              Tailored interventions delivered across four core pillars of enterprise enablement.
+              Practical support across four areas that help businesses grow.
             </p>
           </div>
 
@@ -561,7 +565,7 @@ export default function EntrepreneurshipInitiativeView() {
               <Handshake className="h-6 w-6 text-accent" />
               <h3 className="mt-4 font-serif text-lg font-bold">Become a Partner</h3>
               <p className="mt-2 text-xs leading-relaxed text-neutral-300">
-                Partner across government, CSR, corporate, academic, technology, and market channels to support rural entrepreneurs.
+                Partner across government, corporate, academic, technology, and market channels to support rural entrepreneurs.
               </p>
               <span className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-accent">
                 Partner with ISSA <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />

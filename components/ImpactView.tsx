@@ -23,8 +23,8 @@ export default function ImpactView() {
     {
       title: 'EDP Entrepreneurship',
       metric: '20+',
-      sub: 'Entrepreneurs Onboarded',
-      details: 'Mentoring, tech enablement, and market connections across 6 districts and 10+ sectors, targeting 100+ local employment opportunities.'
+      sub: 'Entrepreneurs Supported',
+      details: 'Mentoring, technology support, and market connections across 6 districts and 10+ sectors, targeting 100+ local employment opportunities.'
     },
     {
       title: 'Accountability Model',
@@ -40,14 +40,14 @@ export default function ImpactView() {
       village: "Mana Outskirts",
       quote: "I thought my blurry vision was just a side effect of growing old in the hills. ISSA's medical van proved me wrong and gifted my needlework back.",
       narrative: "Meera, a 64-year-old traditional shawl weaver in high-altitude Mana, started losing her vision in 2022. Due to the high cost of traveling to Dehradun, she discontinued her craft. During our December Himalayan Mobile Camp, a specialist diagnostician diagnosed her cataracts. Two weeks later, she underwent completely free surgery funded directly by ISSA. Today, she is back to training young village girls in handloom weaving.",
-      image: "https://images.unsplash.com/photo-1605000797499-95a51c5269ae?q=80&w=800"
+      image: "/isssa-healthcare-program-v2.png"
     },
     {
       title: "A Class of Her Own: Renu's Academic Ascent",
       village: "Pauri School Cluster",
       quote: "Seeing a computer for the first time changed how I study. Now I want to become a software engineer right here in the hills.",
       narrative: "Renu, an eighth-grade student at Pauri Government High School, had never experienced interactive smart learning. After ISSA's CIAS schools initiative adopted her classroom and provided satellite internet connection, she scored 94% on the regional mathematics board assessments, top among her peer cluster. She now leads the village student computer circle every Saturday afternoon.",
-      image: "https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=800"
+      image: "/isssa-education-program-v2.png"
     }
   ];
 
@@ -58,7 +58,7 @@ export default function ImpactView() {
         <div className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#E8B94C_1px,transparent_1px)] [background-size:24px_24px]" aria-hidden="true"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl space-y-4">
-            <p className="text-sm uppercase tracking-wider text-accent font-sans font-bold">Evidence-Led Progress</p>
+            <p className="text-sm uppercase tracking-wider text-accent font-sans font-bold">Measured Progress</p>
             <h1 className="text-4xl sm:text-5xl font-serif font-bold tracking-tight">
               Transforming Lives. <br />
               <span className="italic font-normal text-accent">One Village At A Time.</span>
@@ -150,7 +150,7 @@ export default function ImpactView() {
                 </div>
                 <div>
                   <h4 className="text-base font-bold text-primary">3+ Edtech Village Labs</h4>
-                  <p className="text-sm text-neutral-700 leading-relaxed mt-1 font-sans">High-end computing systems maintained by trained local administrators.</p>
+                  <p className="text-sm text-neutral-700 leading-relaxed mt-1 font-sans">Computers and digital learning equipment maintained by trained local administrators.</p>
                 </div>
               </div>
 
@@ -178,11 +178,9 @@ export default function ImpactView() {
         </div>
       </section>
 
-      {/* STORY OF THE MONTH (INTERACTIVE) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24" id="impact-story-month">
         <div className="space-y-3 mb-12">
-          <p className="text-sm uppercase tracking-wider text-primary font-sans font-bold">Narrative Focus</p>
-          <h2 className="text-3xl sm:text-4xl font-serif font-bold text-primary">Story of the month.</h2>
+          <h2 className="text-3xl sm:text-4xl font-serif font-bold text-primary">Stories from ISSA</h2>
         </div>
 
         <div className="bg-[#0D311F] text-white rounded-3xl overflow-hidden shadow-2xl grid grid-cols-1 lg:grid-cols-12 items-stretch">

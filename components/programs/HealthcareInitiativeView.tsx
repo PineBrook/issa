@@ -12,6 +12,7 @@ import {
   Stethoscope,
   Users,
 } from 'lucide-react';
+import Image from 'next/image';
 
 const healthcareModel = [
   {
@@ -45,12 +46,12 @@ const accessPoints = [
   {
     title: 'UttaraCare Hospital',
     icon: Hospital,
-    description: 'Established in Pauri Garhwal, UttaraCare is the clinical backbone of the network, providing specialist consultation, inpatient care, diagnostics, and referral support for rural health centres.',
+    description: 'Established in Pauri Garhwal, UttaraCare is the main hospital supporting the network, providing specialist consultations, inpatient care, diagnostics, and referrals for rural health centres.',
   },
   {
     title: 'Bironkhal Rural Health Hub',
     icon: MapPin,
-    description: 'The first Rural Health Hub under ISSA\'s Hub-and-Spoke model, bringing OPD consultation, diagnostics, pharmacy, laboratory services, day-care procedures, telemedicine, follow-up, and referrals closer to remote communities.',
+    description: 'The first Rural Health Hub in ISSA\'s network, bringing outpatient consultations, diagnostics, pharmacy, laboratory services, day-care procedures, telemedicine, follow-up, and referrals closer to remote communities.',
   },
   {
     title: 'Mobile Healthcare',
@@ -105,12 +106,15 @@ export default function HealthcareInitiativeView() {
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-7xl gap-6 px-4 py-12 sm:px-6 lg:grid-cols-2 lg:px-8 lg:py-20">
+      <section className="mx-auto grid max-w-7xl gap-6 px-4 py-12 sm:px-6 lg:grid-cols-[1fr_0.8fr_1fr] lg:px-8 lg:py-20">
         <article className="space-y-4 rounded-2xl border border-emerald-200/70 border-t-4 border-t-primary bg-white p-8 shadow-sm">
           <h2 className="font-serif text-2xl font-bold text-primary">Why We Started</h2>
           <p className="text-sm leading-relaxed text-neutral-600">For many families in rural Uttarakhand, a simple consultation can require several hours of travel. Diagnostic facilities are often unavailable, specialist doctors are concentrated in cities, emergency response is delayed, and preventive healthcare receives little attention.</p>
           <p className="text-sm leading-relaxed text-neutral-600">ISSA believes every family deserves quality healthcare regardless of where they live. This initiative is designed to reach remote communities through a connected and scalable healthcare network.</p>
         </article>
+        <div className="relative min-h-64 overflow-hidden rounded-2xl bg-neutral-200">
+          <Image src="/isssa-healthcare-program-v2.png" alt="ISSA community healthcare outreach in a Himalayan village" fill className="object-cover" sizes="(max-width: 1024px) 100vw, 30vw" />
+        </div>
         <article className="space-y-4 rounded-2xl border border-emerald-200/70 border-t-4 border-t-primary bg-white p-8 shadow-sm">
           <h2 className="font-serif text-2xl font-bold text-primary">Vision & Mission</h2>
           <p className="text-sm leading-relaxed text-neutral-600"><strong className="text-primary">Vision:</strong> To build Uttarakhand&apos;s most trusted rural healthcare ecosystem by connecting hospitals, primary healthcare centres, telemedicine, mobile medical units, and community health programmes.</p>
@@ -195,7 +199,7 @@ export default function HealthcareInitiativeView() {
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
           <HeartHandshake className="mx-auto h-9 w-9 text-primary" aria-hidden="true" />
           <h2 className="mt-5 font-serif text-3xl font-bold text-primary sm:text-4xl">Help build a connected rural healthcare ecosystem.</h2>
-          <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-primary/80">We invite hospitals, doctors, healthcare professionals, technology providers, educational institutions, CSR organisations, volunteers, donors, and development partners to work with us.</p>
+          <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-primary/80">We invite hospitals, doctors, healthcare professionals, technology providers, educational institutions, corporate partners, volunteers, and donors to work with us.</p>
           <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
             <a href="#contact" className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-primary-light">Partner With Us <ArrowRight className="h-4 w-4" aria-hidden="true" /></a>
             <a href="#contact" className="inline-flex items-center justify-center gap-2 rounded-full border border-primary px-6 py-3 text-xs font-bold uppercase tracking-wider text-primary transition-colors hover:bg-white/50">Support Our Mission <ArrowRight className="h-4 w-4" aria-hidden="true" /></a>

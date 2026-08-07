@@ -4,7 +4,6 @@ import React from 'react';
 import Link from 'next/link';
 import BlurImage from './BlurImage';
 import { ArrowRight, BookOpen, Stethoscope, Briefcase, Cpu, CheckCircle2, Calendar } from 'lucide-react';
-import { HeroImpactCard, ImpactCategory } from './HeroSocialImpactAnimation';
 import HeroSlideshow, { HERO_SLIDES } from './HeroSlideshow';
 
 export default function HomeView() {
@@ -19,17 +18,8 @@ export default function HomeView() {
     return () => clearInterval(interval);
   }, [isHeroPaused]);
 
-  const activePillar = HERO_SLIDES[activeSlide].pillar;
-
   const handleSelectSlide = (index: number) => {
     setActiveSlide(index);
-  };
-
-  const handleSelectPillar = (pillar: ImpactCategory) => {
-    const idx = HERO_SLIDES.findIndex((s) => s.pillar === pillar);
-    if (idx >= 0) {
-      setActiveSlide(idx);
-    }
   };
 
   const stories = [
@@ -39,23 +29,23 @@ export default function HomeView() {
       date: 'March 2024',
       title: 'Digital empowerment in remote Pauri.',
       desc: 'Launching our fifth smart-classroom cluster in rural Uttarakhand, bringing computer training and high-speed satellite learning to over 350 students.',
-      image: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=800',
+      image: '/isssa-story-digital-inclusion-v2.png',
     },
     {
       id: 2,
       category: 'Healthcare',
       date: 'February 2024',
-      title: 'Reaching the unreachable peaks.',
+      title: 'Reaching remote mountain villages.',
       desc: 'Free medical camps provide essential diagnostic care, dental checkups, and optical health tools to remote, high-altitude villages.',
-      image: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?q=80&w=800',
+      image: '/isssa-healthcare-program-v2.png',
     },
     {
       id: 3,
       category: 'Entrepreneurship',
       date: 'January 2024',
-      title: 'Future-proofing youth skills.',
+      title: 'Preparing young people for work.',
       desc: 'A new cohort completes industry-ready digital and technical certification, linking local Himalayan graduates to remote job opportunities.',
-      image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=800',
+      image: '/isssa-entrepreneurship-program-v2.png',
     }
   ];
 
@@ -86,40 +76,53 @@ export default function HomeView() {
           onSelect={handleSelectSlide}
           isPaused={isHeroPaused}
           onTogglePause={() => setIsHeroPaused(!isHeroPaused)}
-          rightContent={
-            <HeroImpactCard
-              activeTab={activePillar}
-              onSelectTab={handleSelectPillar}
-              isPaused={isHeroPaused}
-              onTogglePause={() => setIsHeroPaused(!isHeroPaused)}
-            />
-          }
         />
       </section>
 
       {/* 2. STATS STRIP */}
       <section className="bg-white border-b border-neutral-200" id="home-stats">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-6 md:gap-4 divide-y md:divide-y-0 md:divide-x divide-neutral-200">
+          <div className="grid grid-cols-2 md:grid-cols-6 gap-6 md:gap-4 divide-y md:divide-y-0 md:divide-x divide-neutral-200">
             <div className="text-center pt-4 md:pt-0">
               <p className="text-4xl md:text-5xl font-serif font-bold text-primary tracking-tight">11+</p>
-              <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-neutral-600 font-sans mt-2">Schools Adopted</p>
+              <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-neutral-600 font-sans mt-2">
+                Schools Adopted
+              </p>
             </div>
+
+            <div className="text-center pt-4 md:pt-0">
+              <p className="text-4xl md:text-5xl font-serif font-bold text-primary tracking-tight">600+</p>
+              <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-neutral-600 font-sans mt-2">
+                Students Reached
+              </p>
+            </div>
+
             <div className="text-center pt-4 md:pt-0">
               <p className="text-4xl md:text-5xl font-serif font-bold text-primary tracking-tight">20+</p>
-              <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-neutral-600 font-sans mt-2">Hospital Beds</p>
+              <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-neutral-600 font-sans mt-2">
+                Hospital Beds
+              </p>
             </div>
+
             <div className="text-center pt-4 md:pt-0">
               <p className="text-4xl md:text-5xl font-serif font-bold text-primary tracking-tight">1,200+</p>
-              <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-neutral-600 font-sans mt-2">Patients Cared For</p>
+              <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-neutral-600 font-sans mt-2">
+                Patients Cared For
+              </p>
             </div>
+
             <div className="text-center pt-4 md:pt-0">
               <p className="text-4xl md:text-5xl font-serif font-bold text-primary tracking-tight">20+</p>
-              <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-neutral-600 font-sans mt-2">Entrepreneurs Onboarded</p>
+              <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-neutral-600 font-sans mt-2">
+                Entrepreneurs
+              </p>
             </div>
-            <div className="text-center pt-4 md:pt-0 col-span-2 md:col-span-1">
-              <p className="text-4xl md:text-5xl font-serif font-bold text-primary tracking-tight">6</p>
-              <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-neutral-600 font-sans mt-2">Districts Covered</p>
+
+            <div className="text-center pt-4 md:pt-0">
+              <p className="text-4xl md:text-5xl font-serif font-bold text-primary tracking-tight">6+</p>
+              <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-neutral-600 font-sans mt-2">
+                Districts
+              </p>
             </div>
           </div>
         </div>
@@ -132,7 +135,7 @@ export default function HomeView() {
             <div className="lg:col-span-5 relative">
               <div className="aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl relative border border-neutral-200/80">
                 <BlurImage 
-                  src="/school.webp" 
+                  src="/isssa-school-community-v2.png"
                   alt="Himalayan village children happily reading books in an Indian mountain community" 
                   fill
                   sizes="(max-width: 1024px) 100vw, 40vw"
@@ -141,10 +144,10 @@ export default function HomeView() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-transparent"></div>
               </div>
-              <div className="absolute bottom-6 -right-6 md:-right-10 bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-neutral-200/80 max-w-xs hidden sm:block">
-                <p className="text-primary font-serif font-semibold text-base mb-1">Restoring Trust.</p>
+              <div className="absolute z-10 bottom-6 -right-6 md:-right-10 bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-neutral-200/80 max-w-xs hidden sm:block">
+                <p className="text-primary font-serif font-semibold text-base mb-1">Working with communities.</p>
                 <p className="text-xs sm:text-sm text-neutral-700 leading-relaxed font-sans">
-                  Working closely with government departments to ensure sustainable community impact and trust.
+                  Working closely with government departments and local communities on long-term programs.
                 </p>
               </div>
             </div>
@@ -152,16 +155,16 @@ export default function HomeView() {
             <div className="lg:col-span-7 space-y-8">
               <div className="space-y-3">
                 <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-primary tracking-tight leading-tight">
-                  Development Rooted in Local Ownership
+                  Development led by local communities
                 </h2>
               </div>
 
               <div className="space-y-6 text-neutral-700 leading-relaxed font-sans text-base sm:text-lg">
                 <p>
-                  ISSA Foundation was established with a singular vision: to bridge systemic gaps in education and healthcare. We believe true progress isn&apos;t about charity, but about building resilience.
+                  ISSA Foundation was established to improve access to education and healthcare. We focus on practical support that helps communities become more independent.
                 </p>
                 <p>
-                  We collaborate with village elders, local leaders, and state authorities to customize programs that empower rather than impose.
+                  We design programs with village elders, local leaders, and state authorities so they respond to local needs.
                 </p>
               </div>
 
@@ -182,7 +185,7 @@ export default function HomeView() {
                   </div>
                   <div>
                     <h3 className="text-base font-bold text-primary">Holistic Health</h3>
-                    <p className="text-sm text-neutral-600 mt-0.5">Bringing tertiary-level care to the remotest hill districts.</p>
+                    <p className="text-sm text-neutral-600 mt-0.5">Bringing specialist hospital care to remote hill districts.</p>
                   </div>
                 </div>
               </div>
@@ -204,16 +207,16 @@ export default function HomeView() {
       {/* 4. FOUR FOCUSED PILLARS SECTION */}
       <section className="py-24 bg-neutral-100 border-t border-b border-neutral-200" id="home-pillars">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mx-auto text-center space-y-4 mb-16">
+          <div className="max-w-6xl mx-auto text-center space-y-4 mb-16">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-primary tracking-tight">
-              Four Areas of Sustainable Progress
+              Four Areas of Long-Term Community Support
             </h2>
-            <p className="text-neutral-700 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
-              Integrated programs that meet urgent needs while creating durable pathways forward for remote Himalayan families.
+            <p className="text-neutral-700 text-base sm:text-lg max-w-8xl mx-auto leading-relaxed">
+              Programs that meet urgent needs while creating long-term opportunities for remote Himalayan families.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="group bg-white rounded-2xl p-8 border border-neutral-200/80 shadow-sm hover:shadow-md hover:border-neutral-300 transition-all duration-300 flex flex-col justify-between">
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
@@ -223,9 +226,9 @@ export default function HomeView() {
                   <BookOpen className="w-6 h-6" />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-xl font-serif font-bold text-primary">Education Empowerment</h3>
+                  <h3 className="text-xl font-serif font-bold text-primary">Education Support</h3>
                   <p className="text-sm text-neutral-700 leading-relaxed font-sans">
-                    Smart classrooms, trained teachers, and academic support through the CIAS school initiative.
+                    Smart classrooms, trained teachers, and academic support through the Cluster of ISSA-Adopted Schools (CIAS) initiative.
                   </p>
                 </div>
               </div>
@@ -263,15 +266,15 @@ export default function HomeView() {
             <div className="group bg-white rounded-2xl p-8 border border-neutral-200/80 shadow-sm hover:shadow-md hover:border-neutral-300 transition-all duration-300 flex flex-col justify-between">
               <div className="space-y-6">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-sans font-semibold uppercase tracking-wider text-neutral-700 bg-neutral-100 px-3 py-1 rounded-full">Livelihoods</span>
+                  <span className="text-xs font-sans font-semibold uppercase tracking-wider text-neutral-700 bg-neutral-100 px-3 py-1 rounded-full">Entrepreneurship</span>
                 </div>
                 <div className="w-12 h-12 rounded-xl bg-neutral-100 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                   <Briefcase className="w-6 h-6" />
                 </div>
                 <div className="space-y-2">
-                  <h3 className="text-xl font-serif font-bold text-primary">Entrepreneurship (EDP)</h3>
+                    <h3 className="text-xl font-serif font-bold text-primary">Entrepreneurship (EDP)</h3>
                   <p className="text-sm text-neutral-700 leading-relaxed font-sans">
-                    Structured mentoring, tech enablement, and market access across 6 districts & 10+ business sectors.
+                    Structured mentoring, technology support, and connections to customers across 6 districts and 10+ business sectors.
                   </p>
                 </div>
               </div>
@@ -283,26 +286,31 @@ export default function HomeView() {
               </Link>
             </div>
 
-            <div className="group bg-white rounded-2xl p-8 border border-neutral-200/80 shadow-sm hover:shadow-md hover:border-neutral-300 transition-all duration-300 flex flex-col justify-between">
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-sans font-semibold uppercase tracking-wider text-neutral-700 bg-neutral-100 px-3 py-1 rounded-full">Digital Inclusion</span>
-                </div>
+            <div className="group md:col-span-3 bg-white rounded-2xl p-8 border border-neutral-200/80 shadow-sm hover:shadow-md hover:border-neutral-300 transition-all duration-300 flex flex-col justify-between md:flex-row md:items-center md:gap-8">
+              <div className="space-y-1">
                 <div className="w-12 h-12 rounded-xl bg-neutral-100 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                   <Cpu className="w-6 h-6" />
                 </div>
+
                 <div className="space-y-2">
-                  <h3 className="text-xl font-serif font-bold text-primary">Digital Inclusion</h3>
+                    <h3 className="text-xl font-serif font-bold text-primary">Digital Inclusion</h3>
                   <p className="text-sm text-neutral-700 leading-relaxed font-sans">
                     Village-level technology labs that make modern learning opportunities accessible to everyone.
                   </p>
                 </div>
               </div>
-              <Link 
+              <Link
+                href="https://pinebrooktechnologies.com/"
+                target="_blank"
+                className="text-xs sm:text-sm font-bold text-primary hover:text-rust transition-colors text-left pt-6 flex items-center gap-1 cursor-pointer"
+              >
+                DISCOVER IT SOLUTIONS <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <Link
                 href="https://classes.issafoundation.in" 
                 className="text-xs sm:text-sm font-bold text-primary hover:text-rust transition-colors text-left pt-6 flex items-center gap-1 cursor-pointer"
               >
-                DISCOVER INCLUSION <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                ISSA CLASSES <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
           </div>
@@ -314,7 +322,7 @@ export default function HomeView() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl space-y-4 mb-16">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-white tracking-tight">
-              Targeted Interventions, Measurable Regional Impact
+              Targeted Work, Measurable Results
             </h2>
           </div>
 
@@ -322,13 +330,13 @@ export default function HomeView() {
             <div className="space-y-4">
               <p className="text-4xl font-serif font-bold text-accent">11+</p>
               <p className="text-base sm:text-lg text-neutral-200 leading-relaxed">
-                Smart boards and computers distributed across high-altitude government schools to revolutionize local learning.
+                Smart boards and computers distributed across high-altitude government schools to improve classroom learning.
               </p>
             </div>
             <div className="space-y-4">
               <p className="text-4xl font-serif font-bold text-accent">11+</p>
               <p className="text-base sm:text-lg text-neutral-200 leading-relaxed">
-                Specialist teachers appointed to mentor rural students and deliver high-quality, continuous digital training.
+                Specialist teachers appointed to mentor rural students and provide ongoing digital training.
               </p>
             </div>
             <div className="space-y-4">
@@ -347,7 +355,7 @@ export default function HomeView() {
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-end mb-16 gap-6">
             <div className="space-y-3">
               <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-primary tracking-tight">
-                Dispatches from Himalayan Communities
+                Stories from Himalayan Communities
               </h2>
             </div>
             <Link 
@@ -393,7 +401,7 @@ export default function HomeView() {
                     href="/stories"
                     className="text-xs sm:text-sm font-bold text-primary hover:text-rust transition-colors flex items-center gap-1 group/btn cursor-pointer"
                   >
-                    READ JOURNAL <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
+                    READ STORY <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />
                   </Link>
                 </div>
               </div>
@@ -409,7 +417,7 @@ export default function HomeView() {
             <div className="lg:col-span-5 space-y-8">
               <div className="space-y-3">
                 <h2 className="text-3xl sm:text-4xl font-serif font-bold text-white tracking-tight">
-                  Partner with Us to Transform Lives
+                  Partner with us to Transform Lives
                 </h2>
               </div>
               <p className="text-sm text-neutral-300 leading-relaxed">

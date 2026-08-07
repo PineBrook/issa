@@ -1,15 +1,13 @@
 'use client';
 
 import React from 'react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowRight, Pause, Play, Heart } from 'lucide-react';
-import { ImpactCategory } from './HeroSocialImpactAnimation';
 
 export interface HeroSlide {
   id: string;
-  pillar: ImpactCategory;
   eyebrow: string;
   title: string;
   highlight: string;
@@ -27,61 +25,56 @@ export interface HeroSlide {
 export const HERO_SLIDES: HeroSlide[] = [
   {
     id: 'ecosystem',
-    pillar: 'ecosystem',
     eyebrow: 'Integrated Development',
     title: 'One connected',
     highlight: 'impact ecosystem.',
     description:
-      'Synchronizing healthcare, digital education, and entrepreneurship into a self-reinforcing model for sustainable growth.',
-    image: '/hero-himalaya.jpg',
+      'Connecting Healthcare, Digital Education, and Entrepreneurship to support long-term community development.',
+    image: '/isssa-local-ownership-v2.png',
     cta: { label: 'Explore Ecosystem', href: '/programs' },
     donate: { label: 'Support Our Mission', href: '/contact' },
   },
   {
     id: 'education',
-    pillar: 'education',
     eyebrow: 'Education & Smart Classrooms',
     title: 'Digital literacy for',
     highlight: 'every hill school.',
     description:
       'Upgrading mountain schools with satellite e-learning labs, computer literacy, and certified teacher training.',
-    image: 'https://images.unsplash.com/photo-1509062522246-3755977927d7?q=80&w=2400',
+    image: '/isssa-education-program-v2.png',
     cta: { label: 'Explore Education', href: '/programs/education' },
     donate: { label: 'Support Our Mission', href: '/contact' },
   },
   {
     id: 'healthcare',
-    pillar: 'healthcare',
-    eyebrow: 'Primary Healthcare Systems',
+    eyebrow: 'Healthcare Systems',
     title: 'Care that reaches',
-    highlight: 'unreachable peaks.',
+    highlight: 'remote mountain villages.',
     description:
       'Deploying specialist doctor rosters, diagnostic health camps, and clinical equipment to remote villages.',
-    image: 'https://images.unsplash.com/photo-1629909613654-28e377c37b09?q=80&w=2400',
+    image: '/isssa-healthcare-program-v2.png',
     cta: { label: 'Explore Healthcare', href: '/programs/healthcare' },
     donate: { label: 'Support Our Mission', href: '/contact' },
   },
   {
     id: 'entrepreneurship',
-    pillar: 'entrepreneurship',
-    eyebrow: 'Rural Entrepreneurship',
-    title: 'Future-proofing',
-    highlight: 'youth skills.',
+    eyebrow: 'Entrepreneurship Development',
+    title: 'Preparing young people',
+    highlight: 'for work and business.',
     description:
       'Certifying local youth in digital administration and connecting regional artisans to sustainable markets.',
-    image: 'https://images.unsplash.com/photo-1524178232363-1fb2b075b655?q=80&w=2400',
+    image: '/isssa-entrepreneurship-program-v2.png',
     cta: { label: 'Explore Entrepreneurship', href: '/programs/entrepreneurship' },
     donate: { label: 'Support Our Mission', href: '/contact' },
   },
   {
     id: 'socialwork',
-    pillar: 'socialwork',
     eyebrow: 'Social Work & NGO Action',
-    title: 'Grassroots trust,',
-    highlight: 'built together.',
+    title: 'Working with local',
+    highlight: 'communities.',
     description:
       'Partnering with village authorities and women self-help groups to foster enduring community self-reliance.',
-    image: 'https://images.unsplash.com/photo-1593113598332-cd288d649433?q=80&w=2400',
+    image: '/isssa-community-dispatch-v2.png',
     cta: { label: 'Explore Community Action', href: '/programs' },
     donate: { label: 'Support Our Mission', href: '/contact' },
   },
@@ -92,7 +85,6 @@ interface HeroSlideshowProps {
   onSelect: (index: number) => void;
   isPaused: boolean;
   onTogglePause: () => void;
-  rightContent?: React.ReactNode;
 }
 
 export default function HeroSlideshow({
@@ -100,7 +92,6 @@ export default function HeroSlideshow({
   onSelect,
   isPaused,
   onTogglePause,
-  rightContent,
 }: HeroSlideshowProps) {
   const slide = HERO_SLIDES[activeIndex] ?? HERO_SLIDES[0];
 
@@ -237,9 +228,6 @@ export default function HeroSlideshow({
           </AnimatePresence>
         </div>
 
-        {rightContent && (
-          <div className="hidden lg:flex lg:col-span-5 justify-center lg:justify-end">{rightContent}</div>
-        )}
       </div>
 
       {/* Progress dots & Pause/Play control */}
