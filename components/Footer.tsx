@@ -73,7 +73,7 @@ export default function Footer() {
               </li>
               <li>
                 <Link href="/stories" className="hover:text-accent transition-colors">
-                  Field Dispatches
+                  Program Stories
                 </Link>
               </li>
             </ul>

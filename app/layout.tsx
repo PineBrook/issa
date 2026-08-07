@@ -33,7 +33,7 @@ export const metadata: Metadata = {
     'ISSA Foundation',
     'Uttarakhand NGO',
     'Himalayan Community Development',
-    'CIAS Smart Classrooms',
+    'Smart Classrooms',
     'UttaraCare Hospital',
     'Rural Healthcare Uttarakhand',
     'Digital Literacy Pauri Garhwal'

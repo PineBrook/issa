@@ -52,7 +52,7 @@ export default function CareersView() {
       dept: 'Administration',
       location: 'Dehradun / Field visits',
       type: 'Full-time (Hybrid)',
-      desc: 'Act as the core bridge coordinating operational budgets, material purchase audits, and Memorandums of Understanding (MoUs) with local state government departments.',
+      desc: 'Coordinate program budgets, material purchase audits, and formal agreements with local government departments.',
       reqs: [
         'MBA or Post Graduate Degree in Rural Development or Operations.',
         'At least 5 years experience managing social impact initiatives at scale.',
@@ -111,7 +111,7 @@ export default function CareersView() {
           <div className="w-10 h-10 rounded-xl bg-accent/20 text-primary flex items-center justify-center">
             <Heart className="w-5 h-5" />
           </div>
-          <h3 className="text-lg font-bold font-serif text-primary">Purpose-Led Compensation</h3>
+          <h3 className="text-lg font-bold font-serif text-primary">Fair Pay and Meaningful Work</h3>
           <p className="text-sm text-neutral-700 leading-relaxed font-sans">
             We provide competitive salaries, rural field allowances, and comfortable shared housing units near program centers.
           </p>
@@ -121,7 +121,7 @@ export default function CareersView() {
           <div className="w-10 h-10 rounded-xl bg-accent/20 text-primary flex items-center justify-center">
             <CheckCircle2 className="w-5 h-5" />
           </div>
-          <h3 className="text-lg font-bold font-serif text-primary">Absolute Transparency</h3>
+          <h3 className="text-lg font-bold font-serif text-primary">Open Communication</h3>
           <p className="text-sm text-neutral-700 leading-relaxed font-sans">
             Every staff member has full access to project budgets and progress reports, aligning team effort with direct results.
           </p>
@@ -131,7 +131,7 @@ export default function CareersView() {
           <div className="w-10 h-10 rounded-xl bg-accent/20 text-primary flex items-center justify-center">
             <MapPin className="w-5 h-5" />
           </div>
-          <h3 className="text-lg font-bold font-serif text-primary">Rooted in Uttarakhand</h3>
+          <h3 className="text-lg font-bold font-serif text-primary">Work Based in Uttarakhand</h3>
           <p className="text-sm text-neutral-700 leading-relaxed font-sans">
             Work with local village heads and government officials, creating lasting structural improvements in your native state.
           </p>

@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 
 interface LogoProps {
   className?: string;
@@ -19,10 +20,11 @@ export default function Logo({ className = "h-10", iconOnly = false }: LogoProps
         className={`relative overflow-hidden aspect-square select-none shrink-0 ${heightClass} ${otherClasses}`}
         id="logo-icon-only-container"
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img 
+        <Image
           src="/logo.webp" 
           alt="ISSA Foundation Shield" 
+          width={520}
+          height={164}
           className="h-full w-auto max-w-none object-cover object-left pointer-events-none"
           id="logo-icon-only-img"
         />
@@ -35,10 +37,11 @@ export default function Logo({ className = "h-10", iconOnly = false }: LogoProps
       className={`relative select-none shrink-0 ${heightClass} ${otherClasses}`}
       id="logo-full-container"
     >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img 
+      <Image
         src="/logo.webp" 
         alt="ISSA Foundation Logo" 
+        width={520}
+        height={164}
         className="h-full w-auto object-contain pointer-events-none"
         id="logo-full-img"
       />

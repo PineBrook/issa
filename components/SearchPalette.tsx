@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { Search, X, CornerDownLeft, Command, HelpCircle } from 'lucide-react';
-import { motion, AnimatePresence } from 'motion/react';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface SearchItem {
   id: string;
@@ -18,12 +18,12 @@ interface SearchItem {
 const SEARCH_ITEMS: SearchItem[] = [
   // ── Home ──────────────────────────────────────────────────────────────
   { id: 'home-root', label: 'Home & About Us', description: 'ISSA Foundation overview and grassroots mission in Uttarakhand', category: 'Home', href: '/', elementId: 'home-view', keywords: 'about mission foundation uttarakhand himalaya' },
-  { id: 'home-hero-sec', label: 'Lasting Change Close to Home', description: 'Dynamic animation showcasing social work, NGO action, education, healthcare, and entrepreneurship', category: 'Home', href: '/', elementId: 'home-hero', keywords: 'hero animation social work ngo education healthcare primary healthcare entrepreneurship village trust' },
+  { id: 'home-hero-sec', label: 'Our Community Programs', description: 'Healthcare, education, entrepreneurship, and community programs across Uttarakhand', category: 'Home', href: '/', elementId: 'home-hero', keywords: 'hero animation social work ngo education healthcare primary healthcare entrepreneurship village trust' },
   { id: 'home-stats', label: 'Key Impact Snapshot', description: '11+ schools adopted, 20+ hospital beds, 600+ students trained, 100% local sourcing', category: 'Home', href: '/', elementId: 'home-stats', keywords: 'stats metrics numbers schools beds students' },
-  { id: 'home-philo', label: 'Development Rooted in Local Ownership', description: 'Collaborate with village elders, leaders, and state authorities to build resilience', category: 'Home', href: '/', elementId: 'home-philosophy', keywords: 'philosophy grassroots integrated education holistic health' },
-  { id: 'home-4pillars', label: 'Four Pillars of Sustainable Progress', description: 'Education, Healthcare, Entrepreneurship, and Digital Inclusion', category: 'Home', href: '/', elementId: 'home-pillars', keywords: 'pillars cias uttara care skills digital labs' },
-  { id: 'home-strategic', label: 'Targeted Interventions', description: 'Smart boards, specialist teachers, and hospital beds delivering regional impact', category: 'Home', href: '/', elementId: 'home-strategic-interventions', keywords: 'strategic interventions smart boards teachers pauri' },
-  { id: 'home-journals', label: 'Dispatches from Himalayan Communities', description: 'Recent field stories on smart classrooms, medical camps, and youth skills', category: 'Home', href: '/', elementId: 'home-stories', keywords: 'stories journals dispatches pauri medical skills' },
+  { id: 'home-philo', label: 'Development Led by Local Communities', description: 'Work with village elders, leaders, and state authorities on local programs', category: 'Home', href: '/', elementId: 'home-philosophy', keywords: 'philosophy grassroots integrated education holistic health' },
+  { id: 'home-4pillars', label: 'Four Areas of Community Support', description: 'Education, healthcare, entrepreneurship, and digital inclusion', category: 'Home', href: '/', elementId: 'home-pillars', keywords: 'pillars cias uttara care skills digital labs' },
+  { id: 'home-strategic', label: 'Targeted Work and Results', description: 'Smart boards, specialist teachers, and hospital beds supporting communities', category: 'Home', href: '/', elementId: 'home-strategic-interventions', keywords: 'strategic interventions smart boards teachers pauri' },
+  { id: 'home-journals', label: 'Stories from Himalayan Communities', description: 'Recent stories about smart classrooms, medical camps, and youth skills', category: 'Home', href: '/', elementId: 'home-stories', keywords: 'stories journals dispatches pauri medical skills' },
   { id: 'home-collab', label: 'Partner With Us', description: 'Volunteer, partner, or support structural development — 0135 430 8180', category: 'Home', href: '/', elementId: 'home-collaborate', keywords: 'collaborate volunteer partner form phone email career' },
 
   // ── Programs overview + sub-pages ─────────────────────────────────────
@@ -31,7 +31,7 @@ const SEARCH_ITEMS: SearchItem[] = [
 
   // Education (/programs/education)
   { id: 'prog-edu', label: 'ISSA Education Initiative', description: 'Transform government schools, digital classrooms, and teacher support in Uttarakhand', category: 'Education', href: '/programs/education', elementId: 'program-education', keywords: 'education school learning teachers digital' },
-  { id: 'prog-cias', label: 'CIAS – Cluster of ISSA Adopted Schools', description: '12 government schools adopted with the Uttarakhand Education Department', category: 'Education', href: '/programs/education', elementId: 'program-cias', keywords: 'cias adopted schools cluster government' },
+  { id: 'prog-cias', label: 'Cluster of ISSA-Adopted Schools (CIAS)', description: '12 government schools supported with the Uttarakhand Education Department', category: 'Education', href: '/programs/education', elementId: 'program-cias', keywords: 'cias adopted schools cluster government' },
   { id: 'prog-smart', label: 'Smart Classrooms & Digital Learning', description: 'Smart Boards, computers, and interactive technology-enabled education', category: 'Education', href: '/programs/education', elementId: 'program-smart-classrooms', keywords: 'smart board classroom digital lab computer' },
   { id: 'prog-academic', label: 'Academic Excellence', description: 'Subject-specialist teachers improving outcomes in key subjects', category: 'Education', href: '/programs/education', elementId: 'program-academic-excellence', keywords: 'academic excellence specialist teachers' },
   { id: 'prog-computer', label: 'Computer Education & Digital Literacy', description: 'Structured computer learning for higher education and employment', category: 'Education', href: '/programs/education', elementId: 'program-computer-edu', keywords: 'computer literacy digital skills coding' },
@@ -42,53 +42,53 @@ const SEARCH_ITEMS: SearchItem[] = [
   // Healthcare (/programs/healthcare)
   { id: 'prog-health', label: 'ISSA Rural Healthcare Initiative', description: 'Hospitals, rural hubs, mobile units, telemedicine, and community outreach', category: 'Healthcare', href: '/programs/healthcare', elementId: 'program-healthcare', keywords: 'healthcare health rural medical clinic hospital' },
   { id: 'prog-uttara', label: 'UttaraCare Hospital (Pauri Garhwal)', description: 'Specialist consultations, inpatient care, diagnostics, and referral backbone', category: 'Healthcare', href: '/programs/healthcare', elementId: 'program-uttaracare', keywords: 'uttaracare uttara care hospital pauri' },
-  { id: 'prog-bironkhal', label: 'Bironkhal Rural Health Hub', description: 'OPD, diagnostics, pharmacy, day-care, telemedicine in a remote block', category: 'Healthcare', href: '/programs/healthcare', elementId: 'program-bironkhal', keywords: 'bironkhal polyclinic hub spoke' },
+  { id: 'prog-bironkhal', label: 'Bironkhal Rural Health Hub', description: 'Outpatient consultations, diagnostics, pharmacy, day-care, and telemedicine in a remote block', category: 'Healthcare', href: '/programs/healthcare', elementId: 'program-bironkhal', keywords: 'bironkhal polyclinic hub spoke opd' },
   { id: 'prog-mobile', label: 'Mobile Healthcare Units & Camps', description: 'Weekly village visits, health camps, sample collection, medicine delivery', category: 'Healthcare', href: '/programs/healthcare', elementId: 'program-mobile-health', keywords: 'mobile medical unit camp village outreach' },
   { id: 'prog-beyond', label: 'Beyond Treatment – Preventive Care', description: 'Maternal care, school health, nutrition, elderly care, vaccination awareness', category: 'Healthcare', href: '/programs/healthcare', elementId: 'program-beyond-treatment', keywords: 'preventive screening maternal nutrition elderly vaccination' },
 
   // Entrepreneurship (/programs/entrepreneurship)
-  { id: 'prog-iedp', label: 'Entrepreneurship Program (IEDP)', description: 'Business Growth Partnership: mentorship, tech, markets, and soft loans', category: 'Entrepreneurship', href: '/programs/entrepreneurship', elementId: 'program-entrepreneurship', keywords: 'iedp entrepreneurship business livelihood' },
-  { id: 'prog-iedp-eco', label: 'IEDP Growth Ecosystem', description: 'Mentors, industry specialists, PineBrook tech, finance, and CSR partners', category: 'Entrepreneurship', href: '/programs/entrepreneurship', elementId: 'program-iedp-ecosystem', keywords: 'ecosystem pinebrook mentor market branding' },
+  { id: 'prog-iedp', label: 'Entrepreneurship Development Program (EDP)', description: 'Mentorship, technology support, customer connections, and soft loans', category: 'Entrepreneurship', href: '/programs/entrepreneurship', elementId: 'program-entrepreneurship', keywords: 'iedp edp entrepreneurship business livelihood' },
+  { id: 'prog-iedp-eco', label: 'EDP Business Support', description: 'Mentors, industry specialists, technology, finance, and corporate partners', category: 'Entrepreneurship', href: '/programs/entrepreneurship', elementId: 'program-iedp-ecosystem', keywords: 'iedp edp ecosystem pinebrook mentor market branding' },
   { id: 'prog-iedp-ent', label: 'Meet Our Rural Entrepreneurs', description: 'First cohort: 19 of 40 shortlisted across agri, food, craft, and services', category: 'Entrepreneurship', href: '/programs/entrepreneurship', elementId: 'program-iedp-entrepreneurs', keywords: 'entrepreneurs cohort agriculture horticulture handicrafts women' },
-  { id: 'prog-iedp-offers', label: 'What IEDP Offers', description: '0% interest soft loans, branding, digital marketing, websites, monitoring', category: 'Entrepreneurship', href: '/programs/entrepreneurship', elementId: 'program-iedp-offers', keywords: 'soft loan grant mentorship packaging digital marketing' },
+  { id: 'prog-iedp-offers', label: 'What EDP Offers', description: 'Soft loans, branding, digital marketing, websites, and monitoring', category: 'Entrepreneurship', href: '/programs/entrepreneurship', elementId: 'program-iedp-offers', keywords: 'soft loan grant mentorship packaging digital marketing' },
 
   // ── Impact ────────────────────────────────────────────────────────────
-  { id: 'impact-root', label: 'Evidence-Led Impact Overview', description: 'Measurable outputs, audited allocations, and community program performance', category: 'Impact', href: '/impact', elementId: 'impact-view', keywords: 'impact evidence audit metrics' },
+  { id: 'impact-root', label: 'Measured Impact Overview', description: 'Measured results, audited allocations, and community program performance', category: 'Impact', href: '/impact', elementId: 'impact-view', keywords: 'impact evidence audit metrics' },
   { id: 'impact-metrics-sec', label: 'Quantified Impact Metrics', description: '84% attendance surge, 72% reduced travel, 100% direct aid sourcing', category: 'Impact', href: '/impact', elementId: 'impact-metrics', keywords: '84 72 attendance travel sourcing accountability' },
   { id: 'impact-milestones-sec', label: 'Student Competency Growth', description: 'CIAS digital classroom competency trends: 35% → 60% → 88%', category: 'Impact', href: '/impact', elementId: 'impact-milestones', keywords: 'competency chart literacy coding terms cias' },
   { id: 'impact-highlights-sec', label: 'Key Impact Highlights', description: '3+ Edtech village labs, 15k+ lives impacted, 100% transparency audit', category: 'Impact', href: '/impact', elementId: 'impact-highlights', keywords: 'labs lives transparency audit edtech' },
   { id: 'impact-stories-sec', label: 'Story of the Month', description: 'Meera’s cataract journey in Mana and Renu’s academic ascent in Pauri', category: 'Impact', href: '/impact', elementId: 'impact-story-month', keywords: 'meera renu mana cataract weaver computer' },
 
   // ── Stories ───────────────────────────────────────────────────────────
-  { id: 'stories-root', label: 'Field Journals & Dispatches', description: 'Reports from educators, medical professionals, and community organizers', category: 'Stories', href: '/stories', elementId: 'stories-view', keywords: 'stories journals field reports dispatches' },
+  { id: 'stories-root', label: 'Program Stories', description: 'Reports from educators, medical professionals, and community organizers', category: 'Stories', href: '/stories', elementId: 'stories-view', keywords: 'stories journals field reports dispatches' },
   { id: 'story-digital-pauri', label: 'Digital Empowerment in Pauri', description: 'Smart classrooms for 350+ rural students — Education, March 2024', category: 'Stories', href: '/stories', elementId: 'story-digital-pauri', keywords: 'pauri smart classroom aarti rawat digital' },
-  { id: 'story-medical-peaks', label: 'Reaching the Unreachable Peaks', description: 'Free mobile medical camps in high altitudes — Healthcare, Feb 2024', category: 'Stories', href: '/stories', elementId: 'story-medical-peaks', keywords: 'medical camp peaks vivek negi cataract dental' },
-  { id: 'story-youth-skills', label: 'Future-Proofing Youth Skills', description: 'Industry technical certifications for Himalayan graduates — Skills, Jan 2024', category: 'Stories', href: '/stories', elementId: 'story-youth-skills', keywords: 'skills vocational rajesh bist certification' },
+  { id: 'story-medical-peaks', label: 'Reaching Remote Mountain Villages', description: 'Free mobile medical camps in high altitudes — Healthcare, Feb 2024', category: 'Stories', href: '/stories', elementId: 'story-medical-peaks', keywords: 'medical camp peaks vivek negi cataract dental' },
+  { id: 'story-youth-skills', label: 'Preparing Young People for Work', description: 'Industry technical certifications for Himalayan graduates — Skills, Jan 2024', category: 'Stories', href: '/stories', elementId: 'story-youth-skills', keywords: 'skills vocational rajesh bist certification' },
   { id: 'story-water', label: 'Reclaiming Ancestral Water Bodies', description: 'Restoring mountain springs for 80+ families — Communities, Dec 2023', category: 'Stories', href: '/stories', elementId: 'story-water-bodies', keywords: 'water springs sanitation climate sohan singh' },
 
   // ── Careers ───────────────────────────────────────────────────────────
   { id: 'careers-root', label: 'Careers & Field Opportunities', description: 'Purpose-led roles across Dehradun, Pauri, Srinagar, and field hubs', category: 'Careers', href: '/careers', elementId: 'careers-view', keywords: 'careers jobs hire join team work' },
-  { id: 'careers-values', label: 'Why Work at ISSA', description: 'Purpose-led compensation, absolute transparency, rooted in Uttarakhand', category: 'Careers', href: '/careers', elementId: 'careers-values', keywords: 'salary housing transparency values culture' },
+  { id: 'careers-values', label: 'Why Work at ISSA', description: 'Fair pay, open communication, and work based in Uttarakhand', category: 'Careers', href: '/careers', elementId: 'careers-values', keywords: 'salary housing transparency values culture' },
   { id: 'careers-list-sec', label: 'Open Staff Positions', description: 'Education Expert, Healthcare Camp Coordinator, Program Operations Manager', category: 'Careers', href: '/careers', elementId: 'careers-openings', keywords: 'openings vacancies positions hiring' },
   { id: 'careers-edu', label: 'Senior Education Expert', description: 'Curriculum, smart boards, teacher evaluation — Srinagar Garhwal, full-time', category: 'Careers', href: '/careers', elementId: 'job-edu-expert', keywords: 'education expert teacher curriculum pauri chamoli' },
   { id: 'careers-health', label: 'Healthcare Camp Coordinator', description: 'Mobile health camp logistics and specialist rosters — Pauri Garhwal', category: 'Careers', href: '/careers', elementId: 'job-health-practitioner', keywords: 'healthcare coordinator camp clinical outreach' },
-  { id: 'careers-ops', label: 'Program Operations Manager', description: 'Budgets, MoUs, and operations bridge — Dehradun / field hybrid', category: 'Careers', href: '/careers', elementId: 'job-program-manager', keywords: 'program manager operations mou budget admin' },
+  { id: 'careers-ops', label: 'Program Operations Manager', description: 'Budgets, formal agreements, and program coordination — Dehradun / field hybrid', category: 'Careers', href: '/careers', elementId: 'job-program-manager', keywords: 'program manager operations mou budget admin' },
   { id: 'careers-form-sec', label: 'Apply Online Form', description: 'Submit resume and statement of intent for open roles or volunteering', category: 'Careers', href: '/careers', elementId: 'application-form-card', keywords: 'apply application resume cv volunteer form' },
 
   // ── Contact ───────────────────────────────────────────────────────────
   { id: 'contact-root', label: 'Contact Us', description: 'Program adoptions, partnerships, volunteering — reach regional teams', category: 'Contact', href: '/contact', elementId: 'contact-view', keywords: 'contact reach inquire help' },
   { id: 'contact-offices-sec', label: 'Regional Office Locations', description: 'Dehradun HQ, Srinagar Medical Ward, Pauri Education Center', category: 'Contact', href: '/contact', elementId: 'contact-offices', keywords: 'office dehradun srinagar pauri address phone' },
-  { id: 'contact-form-sec', label: 'Regional Sourcing Desk Form', description: 'Send a secure inquiry — response within 48 operational hours', category: 'Contact', href: '/contact', elementId: 'contact-inquiry-form', keywords: 'message form inquiry csr volunteer clinical' },
+  { id: 'contact-form-sec', label: 'Contact Our Team', description: 'Send an inquiry — response within two working days', category: 'Contact', href: '/contact', elementId: 'contact-inquiry-form', keywords: 'message form inquiry csr volunteer clinical' },
   { id: 'contact-hours', label: 'Office Hours', description: 'Mon–Fri 09:00–18:00 IST, Saturday 10:00–14:00 IST', category: 'Contact', href: '/contact', elementId: 'contact-hours', keywords: 'hours schedule timing ist' },
   { id: 'contact-social', label: 'Official Social Channels', description: 'YouTube @ISSAClasses, Facebook ISSA Foundation, Instagram @issa.foundation', category: 'Contact', href: '/contact', elementId: 'contact-social', keywords: 'youtube facebook instagram social media' },
-  { id: 'contact-faq-sec', label: 'Operational FAQ', description: 'Locations, school volunteering, and state audit / MoU questions', category: 'Contact', href: '/contact', elementId: 'contact-faq', keywords: 'faq questions volunteer audit mou' },
+  { id: 'contact-faq-sec', label: 'Contact FAQ', description: 'Locations, school volunteering, and state audit questions', category: 'Contact', href: '/contact', elementId: 'contact-faq', keywords: 'faq questions volunteer audit mou' },
 
   // ── Governance ────────────────────────────────────────────────────────
   { id: 'gov-privacy', label: 'Privacy Policy', description: 'How ISSA collects, uses, and protects personal data (ISSA-PP-2026)', category: 'Governance', href: '/privacy', elementId: 'privacy-policy-section', keywords: 'privacy data protection donor volunteer 80g' },
   { id: 'gov-terms', label: 'Terms & Conditions', description: 'Website use, donations, and statutory compliance under Indian law', category: 'Governance', href: '/terms', elementId: 'terms-conditions-section', keywords: 'terms conditions legal donation compliance' },
 
   // ── Site-wide / footer ────────────────────────────────────────────────
-  { id: 'newsletter', label: 'Newsletter Signup', description: 'Subscribe for field dispatches and program updates from the footer', category: 'Site', href: '/', elementId: 'newsletter-section', keywords: 'newsletter email subscribe updates' },
+  { id: 'newsletter', label: 'Newsletter Signup', description: 'Subscribe for program updates from the footer', category: 'Site', href: '/', elementId: 'newsletter-section', keywords: 'newsletter email subscribe updates' },
 ];
 
 interface SearchPaletteProps {
@@ -298,7 +298,7 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
                   <div className="space-y-1">
                     <p className="text-base font-bold text-white font-serif">No matches found</p>
                     <p className="text-xs sm:text-sm text-neutral-300 font-sans max-w-xs mx-auto">
-                      Try searching for &quot;CIAS&quot;, &quot;UttaraCare&quot;, &quot;IEDP&quot;, &quot;Agniveer&quot;, or &quot;careers&quot;.
+                      Try searching for &quot;CIAS&quot;, &quot;UttaraCare&quot;, &quot;EDP&quot;, &quot;Agniveer&quot;, or &quot;careers&quot;.
                     </p>
                   </div>
                 </div>

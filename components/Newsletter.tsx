@@ -90,7 +90,7 @@ export default function Newsletter({
               Successfully Subscribed!
             </p>
             <p className={`text-xs mt-0.5 font-sans ${isDark ? 'text-neutral-300' : 'text-emerald-800'}`}>
-              Thank you for joining our journey. You will receive our next field dispatch shortly.
+              Thank you for subscribing. You will receive our next program update soon.
             </p>
           </div>
         </div>
@@ -147,4 +147,3 @@ export default function Newsletter({
     </div>
   );
 }
-

@@ -70,7 +70,7 @@ export default function ProgramsView({ initialPillar = 'education', view = 'deta
               <span className="italic font-normal text-accent">of ISSA&apos;s Mission.</span>
             </h1>
             <p className="text-neutral-300 text-sm sm:text-base max-w-xl leading-relaxed font-light">
-              We focus on delivering long-term, community-centric development in Uttarakhand through an integrated approach: educate people, keep communities healthy, and create livelihoods.
+              We provide long-term community support in Uttarakhand through education, healthcare, entrepreneurship, and digital inclusion programs.
             </p>
           </div>
         </div>
@@ -161,7 +161,7 @@ export default function ProgramsView({ initialPillar = 'education', view = 'deta
               <h3 className="text-2xl sm:text-3xl font-serif font-bold text-primary">Our Programmes</h3>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 {[
-                  { id: 'program-cias', title: 'CIAS – Cluster of ISSA Adopted Schools', desc: 'In collaboration with the Uttarakhand Education Department, we support government schools through a structured model. Highlights: 12 Government Schools adopted, smart classroom enablement, subject-specialist teachers, academic support, and technology integration.' },
+                  { id: 'program-cias', title: 'Cluster of ISSA-Adopted Schools (CIAS)', desc: 'In collaboration with the Uttarakhand Education Department, we support government schools through a structured model. Highlights: 12 government schools adopted, smart classrooms, subject-specialist teachers, academic support, and technology integration.' },
                   { id: 'program-smart-classrooms', title: 'Smart Classrooms & Digital Learning', desc: 'ISSA supports schools by providing digital learning infrastructure including Smart Boards and computers, helping students and teachers access engaging, interactive, and technology-enabled education.' },
                   { id: 'program-academic-excellence', title: 'Academic Excellence', desc: 'To strengthen classroom learning, ISSA supports government schools through the appointment of subject-specialist teachers who help improve academic outcomes and provide focused support in key subjects.' },
                   { id: 'program-computer-edu', title: 'Computer Education & Digital Literacy', desc: 'ISSA promotes computer education and digital literacy by providing structured learning opportunities that prepare students for higher education, employment, and the digital economy.' },
@@ -197,7 +197,7 @@ export default function ProgramsView({ initialPillar = 'education', view = 'deta
                 Our vision extends beyond strengthening schools. Over the coming years, ISSA aims to build a comprehensive education ecosystem that includes digital classrooms, STEM programmes, industry exposure, scholarships, and school-to-employment pathways.
               </p>
               <p className="text-base sm:text-lg text-neutral-800 leading-relaxed font-bold font-sans">
-                Join the Movement: Whether you are a teacher, student, parent, volunteer, corporate organisation, CSR partner, or technology provider, you can help create meaningful change. Together, we can build an education system that prepares every learner not only to succeed academically, but also to thrive in life.
+                Join us: Whether you are a teacher, student, parent, volunteer, corporate organisation, corporate social responsibility (CSR) partner, or technology provider, you can help improve education. Together, we can help learners succeed in school and prepare for work and life.
               </p>
             </div>
           </div>
@@ -273,13 +273,13 @@ export default function ProgramsView({ initialPillar = 'education', view = 'deta
               <div id="program-uttaracare" className="bg-gradient-to-b from-white to-emerald-50/20 p-6 rounded-2xl border border-neutral-200/80 border-t-2 border-t-primary shadow-sm hover:shadow-md transition-all group">
                 <h5 className="font-bold text-primary text-base sm:text-lg mb-2 group-hover:text-emerald-900 transition-colors">UttaraCare Hospital</h5>
                 <p className="text-sm text-neutral-700 leading-relaxed font-sans">
-                  ISSA established UttaraCare Hospital in Pauri Garhwal to improve access to affordable healthcare for surrounding communities. The hospital serves as the clinical backbone of our healthcare network by providing specialist consultation, inpatient care, diagnostics and referral support for rural health centres.
+                  ISSA established UttaraCare Hospital in Pauri Garhwal to improve access to affordable healthcare for surrounding communities. The hospital is the main hospital supporting our network, providing specialist consultations, inpatient care, diagnostics, and referrals for rural health centres.
                 </p>
               </div>
               <div id="program-bironkhal" className="bg-gradient-to-b from-white to-emerald-50/20 p-6 rounded-2xl border border-neutral-200/80 border-t-2 border-t-primary shadow-sm hover:shadow-md transition-all group">
                 <h5 className="font-bold text-primary text-base sm:text-lg mb-2 group-hover:text-emerald-900 transition-colors">Bironkhal Rural Health Hub</h5>
                 <p className="text-sm text-neutral-700 leading-relaxed font-sans">
-                  Located in one of the remote blocks of Uttarakhand, the Bironkhal Polyclinic provides OPD Consultation, Diagnostics, Pharmacy, Day-care Procedures, Telemedicine, and Referral Services. The hub coordinates mobile healthcare services for surrounding villages.
+                  Located in one of the remote blocks of Uttarakhand, the Bironkhal Polyclinic provides outpatient consultations, diagnostics, pharmacy services, day-care procedures, telemedicine, and referrals. The hub coordinates mobile healthcare services for surrounding villages.
                 </p>
               </div>
               <div id="program-mobile-health" className="bg-gradient-to-b from-white to-emerald-50/20 p-6 rounded-2xl border border-neutral-200/80 border-t-2 border-t-primary shadow-sm hover:shadow-md transition-all group">
@@ -299,7 +299,7 @@ export default function ProgramsView({ initialPillar = 'education', view = 'deta
             <div className="max-w-3xl space-y-6">
               <h3 className="text-2xl sm:text-3xl font-serif font-bold text-primary">Partner With Us</h3>
               <p className="text-base sm:text-lg text-neutral-700 leading-relaxed font-sans">
-                Improving rural healthcare requires collaboration. We invite hospitals, doctors, healthcare professionals, technology providers, educational institutions, CSR organisations and development partners to work with us in expanding healthcare access across Uttarakhand.
+                Improving rural healthcare requires collaboration. We invite hospitals, doctors, healthcare professionals, technology providers, educational institutions, corporate partners, volunteers, and donors to help expand healthcare access across Uttarakhand.
               </p>
               <p className="text-base sm:text-lg text-neutral-800 leading-relaxed font-bold font-sans">
                 At ISSA Foundation, we are committed to building a connected rural healthcare ecosystem that delivers quality healthcare closer to every home.
@@ -327,7 +327,7 @@ export default function ProgramsView({ initialPillar = 'education', view = 'deta
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 text-center divide-y sm:divide-y-0 sm:divide-x divide-neutral-200">
                 <div className="pt-2 sm:pt-0 sm:px-2">
                   <p className="font-serif text-3xl font-bold text-primary">20+</p>
-                  <p className="mt-1 text-[10px] font-bold uppercase tracking-wider text-neutral-500">Entrepreneurs Onboarded</p>
+                  <p className="mt-1 text-[10px] font-bold uppercase tracking-wider text-neutral-500">Entrepreneurs Supported</p>
                 </div>
                 <div className="pt-2 sm:pt-0 sm:px-2">
                   <p className="font-serif text-3xl font-bold text-primary">6</p>
@@ -369,7 +369,7 @@ export default function ProgramsView({ initialPillar = 'education', view = 'deta
 
             {/* 6 DISTRICTS & SECTORS */}
             <div className="space-y-6">
-              <h3 className="text-2xl sm:text-3xl font-serif font-bold text-primary">Geographic Footprint & Sectors Supported</h3>
+              <h3 className="text-2xl sm:text-3xl font-serif font-bold text-primary">Where We Work and What We Support</h3>
               <p className="text-sm text-neutral-600 font-sans">
                 Active in 6 districts: <strong>Pauri Garhwal, Tehri Garhwal, Rudraprayag, Uttarkashi, Dehradun, and Haridwar</strong>.
               </p>
@@ -412,11 +412,11 @@ export default function ProgramsView({ initialPillar = 'education', view = 'deta
                   <p className="text-xs text-neutral-300 leading-relaxed">Branding, Website Development, Digital Marketing, Social Media Strategy, Business Automation, and Tech Adoption.</p>
                 </div>
                 <div className="bg-white/10 p-6 rounded-2xl border border-white/15 space-y-2">
-                  <h4 className="font-serif text-lg font-bold text-accent">3. Market Linkages</h4>
+                  <h4 className="font-serif text-lg font-bold text-accent">3. Customer and Buyer Connections</h4>
                   <p className="text-xs text-neutral-300 leading-relaxed">Customer Networks, Business Partnerships, Industry Connections, Market Exposure, and Promotional Platforms.</p>
                 </div>
                 <div className="bg-white/10 p-6 rounded-2xl border border-white/15 space-y-2">
-                  <h4 className="font-serif text-lg font-bold text-accent">4. Financial Enablement</h4>
+                  <h4 className="font-serif text-lg font-bold text-accent">4. Funding and Financial Guidance</h4>
                   <p className="text-xs text-neutral-300 leading-relaxed">Responsible financial assistance supported by continuous monitoring, mentoring, and performance-based guidance.</p>
                 </div>
               </div>

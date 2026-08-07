@@ -3,7 +3,7 @@ import ContactView from '@/components/ContactView';
 
 export const metadata: Metadata = {
   title: 'Contact Us & Regional Inquiries',
-  description: 'Get in touch with ISSA Foundation for partnerships, volunteer opportunities, CSR collaborations, or general inquiries.',
+  description: 'Get in touch with ISSA Foundation for partnerships, volunteer opportunities, corporate social responsibility (CSR) collaborations, or general inquiries.',
   alternates: { canonical: 'https://issafoundation.co.in/contact' },
   openGraph: {
     type: 'website', url: 'https://issafoundation.co.in/contact',

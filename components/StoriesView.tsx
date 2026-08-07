@@ -19,7 +19,7 @@ export default function StoriesView() {
       subtitle: 'Bringing computer education to over 350 rural students.',
       desc: 'Our latest smart classroom cluster is official. In partnership with school authorities, we successfully completed the installation of five interactive smart boards and high-capacity computers. Students now engage in daily interactive coding modules and video-lectures.',
       fullContent: 'For years, students in high-altitude Pauri Garhwal had minimal exposure to digital infrastructure. Traditional blackboard teaching was the only pedagogical mode. Today, with the collaboration of village heads and government school boards, ISSA has equipped three high-altitude clusters with interactive satellite-connected classrooms. The response is unprecedented: student retention rates rose by 84%, and children frequently remain after school to explore digital map tools, code logic puzzles, and science videos.',
-      image: 'https://images.unsplash.com/photo-1577896851231-70ef18881754?q=80&w=800',
+      image: '/isssa-story-digital-inclusion-v2.png',
       author: 'Aarti Rawat, Education Lead'
     },
     {
@@ -27,11 +27,11 @@ export default function StoriesView() {
       category: 'Healthcare',
       date: 'February 28, 2024',
       readTime: '6 min read',
-      title: 'Reaching the unreachable peaks.',
+      title: 'Reaching remote mountain villages.',
       subtitle: 'Free medical camps delivering diagnostic checkups.',
       desc: 'Healthcare in high altitudes is often a luxury. This month, our mobile clinics visited three remote hamlets, bringing custom dental checkup rigs, vision scanners, and physical therapy aids directly to elder community weavers.',
       fullContent: 'Due to severe weather and steep terrain, seniors and children in remote Uttarakhand often postpone essential healthcare needs. ISSA’s Mobile Medical Camps provide on-site diagnostics, dental procedures, and optical prescriptions completely free of cost. Our team travels up to 40 kilometers off-paved roads to reach isolated villages. During this camp, over 300 individuals were screened, and 45 advanced cataract patients were scheduled for free transport and surgery at our partner hospital.',
-      image: 'https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?q=80&w=800',
+      image: '/isssa-healthcare-program-v2.png',
       author: 'Dr. Vivek Negi, Chief Medical Officer'
     },
     {
@@ -39,11 +39,11 @@ export default function StoriesView() {
       category: 'Skills',
       date: 'January 15, 2024',
       readTime: '5 min read',
-      title: 'Future-proofing youth skills.',
+      title: 'Preparing young people for work.',
       subtitle: 'Local Himalayan graduates completing industry technical certifications.',
       desc: 'Connecting mountain talent to digital livelihoods. Our vocational computer labs completed training for another cohort of 40 local girls and boys, focusing on office administration and software tools.',
       fullContent: 'Himalayan youth frequently migrate to cities looking for basic manual labor due to a lack of technical training. ISSA’s Vocational Skill Labs seek to reverse this by offering certified computer literacy, accounting systems training, and basic software development directly in the hills. Working alongside regional industries, we help link top-performing graduates with remote data-entry and online administrative opportunities, allowing them to support their families without leaving their ancestral homes.',
-      image: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?q=80&w=800',
+      image: '/isssa-entrepreneurship-program-v2.png',
       author: 'Rajesh Bist, Vocational Coordinator'
     },
     {
@@ -55,7 +55,7 @@ export default function StoriesView() {
       subtitle: 'Restoring traditional village springs for reliable winter supply.',
       desc: 'Sustained climate disruptions dried out natural water tables. Working with local groups, we helped clean and secure three natural mountain springs, safeguarding supply for 80+ families.',
       fullContent: 'In high altitudes, clean water relies on natural underground springs. Silt collection and climatic shifts have reduced output. By organizing local youth groups and funding safe masonry surrounds, we restored clean, constant supply to three farming hamlets. The water is tested regularly and filtered using local gravel filters to ensure purity.',
-      image: 'https://images.unsplash.com/photo-1542810634-71277d95dcbb?q=80&w=800',
+      image: '/isssa-story-water-v2.png',
       author: 'Sohan Singh, Field Supervisor'
     }
   ];
@@ -75,7 +75,7 @@ export default function StoriesView() {
         <div className="absolute inset-0 opacity-10 pointer-events-none bg-[radial-gradient(#E8B94C_1px,transparent_1px)] [background-size:24px_24px]" aria-hidden="true"></div>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="max-w-3xl space-y-4">
-            <p className="text-xs uppercase tracking-widest text-accent font-sans font-bold">Field Journals</p>
+      <p className="text-xs uppercase tracking-widest text-accent font-sans font-bold">Program Stories</p>
             <h1 className="text-4xl sm:text-5xl font-serif font-bold tracking-tight">
               Stories of <span className="italic font-normal text-accent">change.</span>
             </h1>
@@ -115,7 +115,7 @@ export default function StoriesView() {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search field reports..."
+              placeholder="Search program stories..."
               className="w-full bg-white border border-neutral-200 rounded-full pl-9 pr-4 py-2 text-xs focus:outline-none focus:border-primary transition-all"
             />
           </div>
@@ -264,7 +264,7 @@ function filteredArticlesCount(list: any[]) {
   if (list.length === 0) {
     return (
       <div className="py-12 text-center text-neutral-400 font-sans text-xs">
-        No field journals found matching the filters. Try another tab!
+        No program stories match these filters. Try another category.
       </div>
     );
   }

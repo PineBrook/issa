@@ -46,7 +46,7 @@ export default function ContactView() {
     },
     {
       q: "Is ISSA audited by state authorities?",
-      a: "Yes. All school adoptions, classroom renovations, and medical device distributions are executed under formal MoUs with respective state departments, subject to public auditing guidelines."
+      a: "Yes. All school adoptions, classroom renovations, and medical device distributions are carried out under formal agreements with the relevant state departments and are subject to public auditing guidelines."
     }
   ];
 
@@ -151,9 +151,9 @@ export default function ContactView() {
           <div className="lg:col-span-7 bg-white p-8 sm:p-10 rounded-3xl border border-neutral-200/80 shadow-md space-y-8">
             <div className="space-y-2">
               <p className="text-sm uppercase tracking-wider text-primary font-sans font-bold">Send a Message</p>
-              <h2 className="text-3xl sm:text-4xl font-serif font-bold text-primary">Regional Sourcing Desk</h2>
+              <h2 className="text-3xl sm:text-4xl font-serif font-bold text-primary">Contact Our Team</h2>
               <p className="text-sm text-neutral-700 font-sans max-w-lg leading-relaxed">
-                Fill out the secure form below to log a direct inquiry with our staff. Field representatives will verify details and reach out within 48 operational hours.
+                Fill out the secure form below to send an inquiry. Our team will review your message and respond within two working days.
               </p>
             </div>
 
@@ -200,7 +200,7 @@ export default function ContactView() {
                   <option value="General Inquiry">General Inquiry & Info</option>
                   <option value="School Volunteer">School Volunteering & Digital Mentorship</option>
                   <option value="Clinical Support">Clinical & Medical Camp Coordination</option>
-                  <option value="CSR Partnership">CSR Foundations & State MoUs</option>
+                    <option value="CSR Partnership">Corporate Partnerships & Government Agreements</option>
                 </select>
               </div>
 
@@ -281,7 +281,7 @@ export default function ContactView() {
             <div className="bg-white p-8 rounded-3xl border border-neutral-200/80 shadow-sm space-y-4" id="contact-social">
               <div>
                 <h3 className="text-xl font-serif font-bold text-primary">Official Channels</h3>
-                <p className="text-sm text-neutral-700 font-sans mt-1">Follow our field dispatches and educational video series across official platforms.</p>
+                <p className="text-sm text-neutral-700 font-sans mt-1">Follow our program stories and educational video series on our official platforms.</p>
               </div>
 
               <div className="grid grid-cols-1 gap-3 pt-2">
