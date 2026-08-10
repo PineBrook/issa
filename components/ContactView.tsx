@@ -113,11 +113,11 @@ export default function ContactView() {
         </div>
       </section>
 
-      {/* OFFICE LOCATIONS CARD GRID */}
+      {/* OFFICE LOCATIONS CARD GRID & MAP EMBED */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-16" id="contact-offices">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch">
           {offices.map((office, idx) => (
-            <div key={idx} className="bg-white p-8 rounded-3xl border border-neutral-200/80 shadow-sm flex flex-col justify-between space-y-8">
+            <div key={idx} className="bg-white p-8 rounded-3xl border border-neutral-200/80 shadow-sm flex flex-col justify-between space-y-8 h-full">
               <div className="space-y-4">
                 <div>
                   <span className="text-xs font-sans text-rust uppercase tracking-wider font-bold">{office.role}</span>
@@ -141,6 +141,20 @@ export default function ContactView() {
               </div>
             </div>
           ))}
+
+          {/* Dehradun Office Google Map Embed Card */}
+          <div className="bg-white p-2 rounded-3xl border border-neutral-200/80 shadow-sm flex flex-col h-full min-h-[350px] overflow-hidden">
+            <div className="relative w-full h-full rounded-[1.25rem] overflow-hidden">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!4v1786174155665!6m8!1m7!1sTAZGtFoNFj2Vj1jzDOCRHA!2m2!1d30.32148139723212!2d78.05089332118985!3f0!4f0!5f1.1924812503605782"
+                className="w-full h-full border-0 absolute inset-0 rounded-[1.25rem]"
+                allowFullScreen={true}
+                loading="lazy"
+                referrerPolicy="strict-origin-when-cross-origin"
+                title="Dehradun Office Google Street View & Map"
+              ></iframe>
+            </div>
+          </div>
         </div>
       </section>
 
