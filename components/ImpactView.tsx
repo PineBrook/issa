@@ -21,7 +21,7 @@ export default function ImpactView() {
       details: 'By deploying local mobile camp vans, over 72% of critical dental/diagnostic patients were saved from traveling 60+ km to cities.'
     },
     {
-      title: 'EDP Entrepreneurship',
+      title: 'IEDP Entrepreneurship',
       metric: '20+',
       sub: 'Entrepreneurs Supported',
       details: 'Mentoring, technology support, and market connections across 6 districts and 10+ sectors, targeting 100+ local employment opportunities.'

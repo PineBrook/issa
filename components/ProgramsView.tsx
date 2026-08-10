@@ -362,7 +362,7 @@ export default function ProgramsView({ initialPillar = 'education', view = 'deta
               <div className="bg-gradient-to-b from-white to-orange-50/30 p-8 rounded-2xl border border-orange-200/80 border-t-4 border-t-rust shadow-sm hover:shadow-md transition-all space-y-4">
                 <h4 className="text-xl font-serif font-bold text-primary">Beyond Funding</h4>
                 <p className="text-sm sm:text-base text-neutral-700 leading-relaxed font-sans">
-                  Financial assistance alone cannot create successful enterprises. Every entrepreneur in the EDP receives ongoing mentorship, strategic guidance, technology support, business reviews, and continuous engagement. Our relationship with entrepreneurs begins at onboarding—it does not end there.
+                  Financial assistance alone cannot create successful enterprises. Every entrepreneur in the IEDP receives ongoing mentorship, strategic guidance, technology support, business reviews, and continuous engagement. Our relationship with entrepreneurs begins at onboarding—it does not end there.
                 </p>
               </div>
             </div>

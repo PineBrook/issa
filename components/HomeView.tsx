@@ -282,7 +282,7 @@ export default function HomeView() {
                 href="/programs/entrepreneurship" 
                 className="text-xs sm:text-sm font-bold text-primary hover:text-rust transition-colors text-left pt-6 flex items-center gap-1 cursor-pointer"
               >
-                DISCOVER EDP <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                DISCOVER IEDP <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
 

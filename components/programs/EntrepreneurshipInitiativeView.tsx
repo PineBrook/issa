@@ -554,7 +554,7 @@ export default function EntrepreneurshipInitiativeView() {
                 Are you an aspiring or existing entrepreneur in Uttarakhand? Submit your business profile to join our upcoming cohort.
               </p>
               <span className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-accent">
-                Apply to EDP <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                Apply to IEDP <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
               </span>
             </a>
 
