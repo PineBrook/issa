@@ -89,7 +89,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     '@type': ['Organization', 'NGO'],
     name: 'ISSA Foundation',
     url: 'https://issafoundation.co.in',
-    logo: 'https://issafoundation.co.in/logo.webp',
+    logo: 'https://issafoundation.co.in/ISSA.svg',
     description: 'A grassroots non-profit committed to strengthening education, healthcare, and sustainable development across remote Himalayan communities.',
     telephone: '+91-0135-430-8180',
     email: 'career.issafoundation@gmail.com',

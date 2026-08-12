@@ -12,6 +12,7 @@ export default function Logo({ className = "h-10", iconOnly = false }: LogoProps
   // Extract custom sizing and spacing classes
   const classes = className.split(' ');
   const heightClass = classes.find(c => c.startsWith('h-')) || 'h-10';
+  const widthClass = classes.find(c => c.startsWith('w-')) || 'w-36';
   const otherClasses = classes.filter(c => !c.startsWith('h-') && !c.startsWith('w-') && !c.startsWith('aspect-')).join(' ');
 
   if (iconOnly) {
@@ -21,11 +22,11 @@ export default function Logo({ className = "h-10", iconOnly = false }: LogoProps
         id="logo-icon-only-container"
       >
         <Image
-          src="/logo.webp" 
+          src="/logo_new.png"
           alt="ISSA Foundation Shield" 
-          width={520}
-          height={164}
-          className="h-full w-auto max-w-none object-cover object-left pointer-events-none"
+          width={612}
+          height={408}
+          className="h-full w-auto max-w-none object-contain object-left pointer-events-none"
           id="logo-icon-only-img"
         />
       </div>
@@ -34,16 +35,15 @@ export default function Logo({ className = "h-10", iconOnly = false }: LogoProps
 
   return (
     <div 
-      className={`relative select-none shrink-0 ${heightClass} ${otherClasses}`}
+      className={`relative overflow-hidden select-none shrink-0 ${heightClass} ${widthClass} ${otherClasses}`}
       id="logo-full-container"
     >
       <Image
-        src="/logo.webp" 
+        src="/logo_new.png"
         alt="ISSA Foundation Logo" 
-        width={520}
-        height={164}
-        className="h-full w-auto object-contain pointer-events-none"
-        id="logo-full-img"
+        width={612}
+        height={408}
+        className="absolute inset-0 h-full w-full object-contain pointer-events-none"
       />
     </div>
   );

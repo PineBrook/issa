@@ -4,7 +4,7 @@ import React from 'react';
 import Link from 'next/link';
 import Logo from './Logo';
 import Newsletter from './Newsletter';
-import { Youtube, Facebook, Instagram } from 'lucide-react';
+import { Youtube, Facebook, Instagram, Linkedin, Twitter } from 'lucide-react';
 const currentYear = new Date().getFullYear();
 
 export default function Footer() {
@@ -14,7 +14,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-12 pb-12 border-b border-white/10">
           {/* Logo and Tagline */}
           <div className="md:col-span-4 space-y-4">
-            <Logo className="w-9 h-9 text-accent" />
+            <Logo className="w-[13.5rem] h-[5.25rem] text-accent" />
             <p className="text-sm text-neutral-300 leading-relaxed max-w-xs font-sans">
               A grassroots non-profit committed to strengthening educational infrastructure, digital literacy, and clinical care systems across remote Himalayan communities.
             </p>
@@ -30,7 +30,7 @@ export default function Footer() {
                 <Youtube className="w-4.5 h-4.5" />
               </a>
               <a 
-                href="https://www.facebook.com/people/ISSA-Foundation/61582300538326/" 
+                href="https://www.facebook.com/profile.php?id=61592854956791&sk=about"
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="w-9 h-9 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-neutral-200 hover:text-accent hover:border-accent hover:bg-accent/10 transition-all duration-300"
@@ -40,7 +40,7 @@ export default function Footer() {
                 <Facebook className="w-4.5 h-4.5" />
               </a>
               <a 
-                href="https://www.instagram.com/issa.foundation/" 
+                href="https://www.instagram.com/issa__foundation/"
                 target="_blank" 
                 rel="noopener noreferrer" 
                 className="w-9 h-9 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-neutral-200 hover:text-accent hover:border-accent hover:bg-accent/10 transition-all duration-300"
@@ -49,6 +49,8 @@ export default function Footer() {
               >
                 <Instagram className="w-4.5 h-4.5" />
               </a>
+              <a href="https://x.com/ISSAfoundation1" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-neutral-200 hover:text-accent hover:border-accent hover:bg-accent/10 transition-all duration-300" aria-label="Twitter / X" id="footer-social-x"><Twitter className="w-4.5 h-4.5" /></a>
+              <a href="https://www.linkedin.com/company/issa-foundation-uttarakhand/about/?viewAsMember=true" target="_blank" rel="noopener noreferrer" className="w-9 h-9 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-neutral-200 hover:text-accent hover:border-accent hover:bg-accent/10 transition-all duration-300" aria-label="LinkedIn" id="footer-social-linkedin"><Linkedin className="w-4.5 h-4.5" /></a>
             </div>
           </div>
 
@@ -112,7 +114,7 @@ export default function Footer() {
             <div className="pt-4 border-t border-white/10 space-y-2">
               <h5 className="text-xs font-sans uppercase tracking-wider text-white font-bold">Operations & Offices</h5>
               <p className="text-xs text-neutral-300 font-sans">
-                <strong className="text-white">Head Office:</strong> Pauri Garhwal | <strong className="text-white">Regional Office:</strong> Dehradun
+                <strong className="text-white">Head Office:</strong> Dehradun | <strong className="text-white">Regional Office:</strong> Pauri
               </p>
               <div className="flex flex-wrap items-baseline gap-x-3 pt-1">
                 <p className="text-xl font-serif text-accent font-bold">0135 430 8180</p>

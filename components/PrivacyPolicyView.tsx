@@ -93,7 +93,7 @@ export default function PrivacyPolicyView({ defaultSubTab = 'privacy' }: Privacy
             </div>
 
             <p className="text-sm sm:text-base text-neutral-600 leading-relaxed">
-              This Privacy Policy explains how ISSA Foundation (“we”, “us”, or “our”) collects, uses, stores, and discloses personal information from visitors to <a href="https://issafoundation.in/" target="_blank" rel="noopener noreferrer" className="text-primary font-medium hover:underline">https://issafoundation.in/</a> (the “Website”). We have written this policy in simple, clear language so donors, volunteers, beneficiaries, and visitors can understand what we do with data.
+              This Privacy Policy explains how ISSA Foundation (“we”, “us”, or “our”) collects, uses, stores, and discloses personal information from visitors to <a href="https://issafoundation.co.in/" target="_blank" rel="noopener noreferrer" className="text-primary font-medium hover:underline">https://issafoundation.co.in/</a> (the “Website”). We have written this policy in simple, clear language so donors, volunteers, beneficiaries, and visitors can understand what we do with data.
             </p>
 
             {/* Section 1 */}
@@ -255,11 +255,11 @@ export default function PrivacyPolicyView({ defaultSubTab = 'privacy' }: Privacy
                   <p className="text-xs text-neutral-300 mt-1">If you have questions regarding personal data processing or wish to exercise your data rights:</p>
                 </div>
                 <a
-                  href="mailto:info@issafoundation.in"
+                  href="mailto:career.issafoundation@gmail.com"
                   className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-accent text-primary text-xs font-bold hover:bg-accent-dark transition-all shrink-0 cursor-pointer"
                 >
                   <Mail className="w-4 h-4" />
-                  <span>info@issafoundation.in</span>
+                  <span>career.issafoundation@gmail.com</span>
                 </a>
               </div>
             </div>
@@ -279,7 +279,7 @@ export default function PrivacyPolicyView({ defaultSubTab = 'privacy' }: Privacy
             </div>
 
             <p className="text-sm sm:text-base text-neutral-600 leading-relaxed">
-              Welcome to <a href="https://issafoundation.in/" target="_blank" rel="noopener noreferrer" className="text-primary font-medium hover:underline">https://issafoundation.in/</a> (the “Website”), operated by ISSA Foundation (“we”, “us”, or “our”). These Terms & Conditions (“Terms”) explain the rules for using the Website. By accessing or using the Website you agree to these Terms. If you do not agree, please do not use the Website.
+              Welcome to <a href="https://issafoundation.co.in/" target="_blank" rel="noopener noreferrer" className="text-primary font-medium hover:underline">https://issafoundation.co.in/</a> (the “Website”), operated by ISSA Foundation (“we”, “us”, or “our”). These Terms & Conditions (“Terms”) explain the rules for using the Website. By accessing or using the Website you agree to these Terms. If you do not agree, please do not use the Website.
             </p>
 
             <div className="grid sm:grid-cols-2 gap-6">
@@ -402,11 +402,11 @@ export default function PrivacyPolicyView({ defaultSubTab = 'privacy' }: Privacy
                   <p className="text-xs text-neutral-300 mt-1">For official queries regarding these Terms & Conditions or website operations:</p>
                 </div>
                 <a
-                  href="mailto:info@issafoundation.in"
+                  href="mailto:career.issafoundation@gmail.com"
                   className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-accent text-primary text-xs font-bold hover:bg-accent-dark transition-all shrink-0 cursor-pointer"
                 >
                   <Mail className="w-4 h-4" />
-                  <span>info@issafoundation.in</span>
+                  <span>career.issafoundation@gmail.com</span>
                 </a>
               </div>
             </div>

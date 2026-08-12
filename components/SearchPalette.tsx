@@ -80,7 +80,7 @@ const SEARCH_ITEMS: SearchItem[] = [
   { id: 'contact-offices-sec', label: 'Regional Office Locations', description: 'Dehradun HQ, Srinagar Medical Ward, Pauri Education Center', category: 'Contact', href: '/contact', elementId: 'contact-offices', keywords: 'office dehradun srinagar pauri address phone' },
   { id: 'contact-form-sec', label: 'Contact Our Team', description: 'Send an inquiry — response within two working days', category: 'Contact', href: '/contact', elementId: 'contact-inquiry-form', keywords: 'message form inquiry csr volunteer clinical' },
   { id: 'contact-hours', label: 'Office Hours', description: 'Mon–Fri 09:00–18:00 IST, Saturday 10:00–14:00 IST', category: 'Contact', href: '/contact', elementId: 'contact-hours', keywords: 'hours schedule timing ist' },
-  { id: 'contact-social', label: 'Official Social Channels', description: 'YouTube @ISSAClasses, Facebook ISSA Foundation, Instagram @issa.foundation', category: 'Contact', href: '/contact', elementId: 'contact-social', keywords: 'youtube facebook instagram social media' },
+  { id: 'contact-social', label: 'Official Social Channels', description: 'YouTube, Facebook, Instagram, Twitter / X, and LinkedIn', category: 'Contact', href: '/contact', elementId: 'contact-social', keywords: 'youtube facebook instagram twitter x linkedin social media' },
   { id: 'contact-faq-sec', label: 'Contact FAQ', description: 'Locations, school volunteering, and state audit questions', category: 'Contact', href: '/contact', elementId: 'contact-faq', keywords: 'faq questions volunteer audit mou' },
 
   // ── Governance ────────────────────────────────────────────────────────

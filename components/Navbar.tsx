@@ -116,13 +116,13 @@ export default function Navbar() {
               </button>
             </div>
 
-            <div className="flex md:hidden items-center justify-between h-11 px-2 w-full">
+            <div className="flex md:hidden items-center justify-between h-14 px-2 w-full">
               <Link
                 href="/"
                 onClick={() => setIsOpen(false)}
                 className="cursor-pointer group transition-opacity duration-200 shrink-0"
               >
-                <Logo className="h-8" iconOnly={true} />
+                <Logo className="h-[3.75rem]" iconOnly={true} />
               </Link>
               <div className="flex items-center gap-1">
                 <button
@@ -153,7 +153,7 @@ export default function Navbar() {
                 onClick={() => setIsOpen(false)}
                 className="cursor-pointer group transition-opacity duration-200 whitespace-nowrap shrink-0"
               >
-                <Logo className="h-10 text-accent" />
+                <Logo className="h-[5.25rem] text-accent" />
               </Link>
             </div>
 
@@ -229,7 +229,7 @@ export default function Navbar() {
                     onClick={() => setIsOpen(false)}
                     className="flex items-center gap-2 cursor-pointer"
                   >
-                    <Logo className="h-8" />
+                    <Logo className="h-[4.5rem]" />
                   </Link>
                   <button
                     type="button"

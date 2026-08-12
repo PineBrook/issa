@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { MapPin, Phone, Mail, Clock, HelpCircle, ArrowRight, CheckCircle2, Send, Loader2, Youtube, Facebook, Instagram } from 'lucide-react';
+import { MapPin, Phone, Mail, Clock, HelpCircle, ArrowRight, CheckCircle2, Send, Loader2, Youtube, Facebook, Instagram, Linkedin, Twitter } from 'lucide-react';
 import { useToast } from '@/components/Toast';
 import Newsletter from '@/components/Newsletter';
 
@@ -20,16 +20,16 @@ export default function ContactView() {
 
   const offices = [
     {
-      city: 'Head Office (Pauri Garhwal)',
+      city: 'Head Office (Dehradun)',
       role: 'Headquarters',
-      address: 'Ward No 6, House No 33, C/o USHA RAWAT Agency Chowk, Kandoliya Mandir Road, Pauri Garhwal District Hospital, Pauri, Pauri Garhwal, Uttarakhand - 246001',
+      address: '3F, Municipal No. 23/1 E.C. Road, New Municipal No. 107, Rajeev Gandhi Marg-II, Dehradun, Uttarakhand - 248001',
       phone: '+91 135 430 8180',
       email: 'career.issafoundation@gmail.com',
     },
     {
-      city: 'Regional Office (Dehradun)',
+      city: 'Regional Office (Pauri)',
       role: 'Regional Administrative Hub',
-      address: '3F, Municipal No. 23/1 E.C. Road, New Municipal No. 107, Rajeev Gandhi Marg-II, Dehradun, Uttarakhand - 248001',
+      address: 'Ward No 6, House No 33, C/o USHA RAWAT Agency Chowk, Kandoliya Mandir Road, Pauri Garhwal District Hospital, Pauri, Pauri Garhwal, Uttarakhand - 246001',
       phone: '+91 135 430 8180',
       email: 'career.issafoundation@gmail.com',
     },
@@ -38,7 +38,7 @@ export default function ContactView() {
   const faqs = [
     {
       q: "Where is the ISSA Foundation located?",
-      a: "Our Head Office is located in Pauri Garhwal (near District Hospital) and our Regional Administrative Office is situated on E.C. Road in Dehradun, Uttarakhand."
+      a: "Our Head Office is located on E.C. Road in Dehradun, and our Regional Office is located near District Hospital in Pauri, Uttarakhand."
     },
     {
       q: "Can I volunteer directly in Uttarakhand schools?",
@@ -318,7 +318,7 @@ export default function ContactView() {
                 </a>
 
                 <a
-                  href="https://www.facebook.com/people/ISSA-Foundation/61582300538326/"
+                  href="https://www.facebook.com/profile.php?id=61592854956791&sk=about"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-between p-3.5 rounded-2xl bg-neutral-50 hover:bg-blue-50/60 border border-neutral-200 hover:border-blue-200 text-neutral-800 hover:text-blue-600 transition-all duration-300 text-sm font-semibold group"
@@ -336,7 +336,7 @@ export default function ContactView() {
                 </a>
 
                 <a
-                  href="https://www.instagram.com/issa.foundation/"
+                  href="https://www.instagram.com/issa__foundation/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center justify-between p-3.5 rounded-2xl bg-neutral-50 hover:bg-pink-50/60 border border-neutral-200 hover:border-pink-200 text-neutral-800 hover:text-pink-600 transition-all duration-300 text-sm font-semibold group"
@@ -347,10 +347,20 @@ export default function ContactView() {
                     </div>
                     <div>
                       <span className="block font-bold text-neutral-900">Instagram</span>
-                      <span className="text-xs text-neutral-600 font-sans font-medium">@issa.foundation</span>
+                      <span className="text-xs text-neutral-600 font-sans font-medium">@issa__foundation</span>
                     </div>
                   </div>
                   <ArrowRight className="w-4 h-4 text-neutral-400 group-hover:text-pink-600 group-hover:translate-x-0.5 transition-all" />
+                </a>
+
+                <a href="https://x.com/ISSAfoundation1" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-3.5 rounded-2xl bg-neutral-50 hover:bg-sky-50/60 border border-neutral-200 hover:border-sky-200 text-neutral-800 hover:text-sky-600 transition-all duration-300 text-sm font-semibold group">
+                  <div className="flex items-center gap-3"><div className="w-9 h-9 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center shrink-0"><Twitter className="w-5 h-5" /></div><div><span className="block font-bold text-neutral-900">Twitter / X</span><span className="text-xs text-neutral-600 font-sans font-medium">@ISSAfoundation1</span></div></div>
+                  <ArrowRight className="w-4 h-4 text-neutral-400 group-hover:text-sky-600 group-hover:translate-x-0.5 transition-all" />
+                </a>
+
+                <a href="https://www.linkedin.com/company/issa-foundation-uttarakhand/about/?viewAsMember=true" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-3.5 rounded-2xl bg-neutral-50 hover:bg-blue-50/60 border border-neutral-200 hover:border-blue-200 text-neutral-800 hover:text-blue-600 transition-all duration-300 text-sm font-semibold group">
+                  <div className="flex items-center gap-3"><div className="w-9 h-9 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shrink-0"><Linkedin className="w-5 h-5" /></div><div><span className="block font-bold text-neutral-900">LinkedIn</span><span className="text-xs text-neutral-600 font-sans font-medium">ISSA Foundation Uttarakhand</span></div></div>
+                  <ArrowRight className="w-4 h-4 text-neutral-400 group-hover:text-blue-600 group-hover:translate-x-0.5 transition-all" />
                 </a>
               </div>
             </div>

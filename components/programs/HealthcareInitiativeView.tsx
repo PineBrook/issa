@@ -157,6 +157,7 @@ export default function HealthcareInitiativeView() {
               <Icon className="mb-6 h-7 w-7 text-primary" aria-hidden="true" />
               <h3 className="font-serif text-xl font-bold text-primary">{title}</h3>
               <p className="mt-3 text-sm leading-relaxed text-neutral-600">{description}</p>
+              {title === 'UttaraCare Hospital' && <span className="mt-5 inline-flex cursor-not-allowed items-center gap-2 rounded-full border border-neutral-300 px-4 py-2 text-xs font-bold uppercase tracking-wider text-neutral-400" aria-disabled="true" title="Hospital website link will be added when the external site is live">Visit Hospital Website <ArrowRight className="h-4 w-4" aria-hidden="true" /></span>}
             </article>
           ))}
         </div>
