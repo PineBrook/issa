@@ -30,7 +30,7 @@ const SEARCH_ITEMS: SearchItem[] = [
   { id: 'prog-overview', label: 'Core Programs Overview', description: 'Three connected pillars: Education, Healthcare, and Entrepreneurship', category: 'Programs', href: '/programs', elementId: 'programs-view', keywords: 'programs pillars overview' },
 
   // Education (/programs/education)
-  { id: 'prog-edu', label: 'ISSA Education Initiative', description: 'Transform government schools, digital classrooms, and teacher support in Uttarakhand', category: 'Education', href: '/programs/education', elementId: 'program-education', keywords: 'education school learning teachers digital' },
+  { id: 'prog-edu', label: 'ISSA Education Initiative', description: 'Transform government schools, digital classrooms, and teacher support in Uttarakhand', category: 'Education', href: '/programs/education', elementId: 'education-initiative', keywords: 'education school learning teachers digital' },
   { id: 'prog-cias', label: 'Cluster of ISSA-Adopted Schools (CIAS)', description: '12 government schools supported with the Uttarakhand Education Department', category: 'Education', href: '/programs/education', elementId: 'program-cias', keywords: 'cias adopted schools cluster government' },
   { id: 'prog-smart', label: 'Smart Classrooms & Digital Learning', description: 'Smart Boards, computers, and interactive technology-enabled education', category: 'Education', href: '/programs/education', elementId: 'program-smart-classrooms', keywords: 'smart board classroom digital lab computer' },
   { id: 'prog-academic', label: 'Academic Excellence', description: 'Subject-specialist teachers improving outcomes in key subjects', category: 'Education', href: '/programs/education', elementId: 'program-academic-excellence', keywords: 'academic excellence specialist teachers' },
@@ -40,14 +40,14 @@ const SEARCH_ITEMS: SearchItem[] = [
   { id: 'prog-future', label: 'Future Ready Education', description: 'Communication, leadership, digital skills, financial literacy, entrepreneurship', category: 'Education', href: '/programs/education', elementId: 'program-future-skills', keywords: 'future ready soft skills leadership innovation' },
 
   // Healthcare (/programs/healthcare)
-  { id: 'prog-health', label: 'ISSA Rural Healthcare Initiative', description: 'Hospitals, rural hubs, mobile units, telemedicine, and community outreach', category: 'Healthcare', href: '/programs/healthcare', elementId: 'program-healthcare', keywords: 'healthcare health rural medical clinic hospital' },
+  { id: 'prog-health', label: 'ISSA Rural Healthcare Initiative', description: 'Hospitals, rural hubs, mobile units, telemedicine, and community outreach', category: 'Healthcare', href: '/programs/healthcare', elementId: 'healthcare-initiative', keywords: 'healthcare health rural medical clinic hospital' },
   { id: 'prog-uttara', label: 'UttaraCare Hospital (Pauri Garhwal)', description: 'Specialist consultations, inpatient care, diagnostics, and referral backbone', category: 'Healthcare', href: '/programs/healthcare', elementId: 'program-uttaracare', keywords: 'uttaracare uttara care hospital pauri' },
   { id: 'prog-bironkhal', label: 'Bironkhal Rural Health Hub', description: 'Outpatient consultations, diagnostics, pharmacy, day-care, and telemedicine in a remote block', category: 'Healthcare', href: '/programs/healthcare', elementId: 'program-bironkhal', keywords: 'bironkhal polyclinic hub spoke opd' },
   { id: 'prog-mobile', label: 'Mobile Healthcare Units & Camps', description: 'Weekly village visits, health camps, sample collection, medicine delivery', category: 'Healthcare', href: '/programs/healthcare', elementId: 'program-mobile-health', keywords: 'mobile medical unit camp village outreach' },
   { id: 'prog-beyond', label: 'Beyond Treatment – Preventive Care', description: 'Maternal care, school health, nutrition, elderly care, vaccination awareness', category: 'Healthcare', href: '/programs/healthcare', elementId: 'program-beyond-treatment', keywords: 'preventive screening maternal nutrition elderly vaccination' },
 
   // Entrepreneurship (/programs/entrepreneurship)
-  { id: 'prog-iedp', label: 'Entrepreneurship Development Program (EDP)', description: 'Mentorship, technology support, customer connections, and soft loans', category: 'Entrepreneurship', href: '/programs/entrepreneurship', elementId: 'program-entrepreneurship', keywords: 'iedp edp entrepreneurship business livelihood' },
+  { id: 'prog-iedp', label: 'Entrepreneurship Development Program (EDP)', description: 'Mentorship, technology support, customer connections, and soft loans', category: 'Entrepreneurship', href: '/programs/entrepreneurship', elementId: 'entrepreneurship-initiative', keywords: 'iedp edp entrepreneurship business livelihood' },
   { id: 'prog-iedp-eco', label: 'EDP Business Support', description: 'Mentors, industry specialists, technology, finance, and corporate partners', category: 'Entrepreneurship', href: '/programs/entrepreneurship', elementId: 'program-iedp-ecosystem', keywords: 'iedp edp ecosystem pinebrook mentor market branding' },
   { id: 'prog-iedp-ent', label: 'Meet Our Rural Entrepreneurs', description: 'First cohort: 19 of 40 shortlisted across agri, food, craft, and services', category: 'Entrepreneurship', href: '/programs/entrepreneurship', elementId: 'program-iedp-entrepreneurs', keywords: 'entrepreneurs cohort agriculture horticulture handicrafts women' },
   { id: 'prog-iedp-offers', label: 'What EDP Offers', description: 'Soft loans, branding, digital marketing, websites, and monitoring', category: 'Entrepreneurship', href: '/programs/entrepreneurship', elementId: 'program-iedp-offers', keywords: 'soft loan grant mentorship packaging digital marketing' },
@@ -138,9 +138,9 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
-  // Filter items based on query (label, description, category, keywords)
-  const filteredItems = query.trim() === ''
-    ? SEARCH_ITEMS.slice(0, 8) // Show featured items when empty
+  // Keep the complete site index searchable, but show only five suggestions at once.
+  const matchingItems = query.trim() === ''
+    ? SEARCH_ITEMS
     : SEARCH_ITEMS.filter(item => {
         const q = query.toLowerCase();
         return (
@@ -151,14 +151,17 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
           item.href.toLowerCase().includes(q)
         );
       });
+  const filteredItems = matchingItems.slice(0, 5);
 
   // Handle key navigation inside palette
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowDown') {
       e.preventDefault();
+      if (filteredItems.length === 0) return;
       setSelectedIndex(prev => (prev + 1) % filteredItems.length);
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
+      if (filteredItems.length === 0) return;
       setSelectedIndex(prev => (prev - 1 + filteredItems.length) % filteredItems.length);
     } else if (e.key === 'Enter') {
       e.preventDefault();
@@ -203,7 +206,7 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-primary-dark/80 backdrop-blur-md cursor-pointer"
+            className="fixed inset-0 bg-primary-dark/35 backdrop-blur-md cursor-pointer"
             id="search-palette-backdrop"
           />
 
@@ -213,12 +216,12 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: -20 }}
             transition={{ type: 'spring', duration: 0.4, bounce: 0.1 }}
-            className="relative w-full max-w-2xl bg-[#141210]/98 border border-white/20 rounded-2xl shadow-[0_32px_80px_rgba(0,0,0,0.75)] overflow-hidden backdrop-blur-2xl"
+            className="relative w-full max-w-2xl bg-white/95 border border-white/80 rounded-2xl shadow-[0_32px_80px_rgba(13,49,31,0.2)] overflow-hidden backdrop-blur-2xl backdrop-saturate-150"
             id="search-palette-modal"
             ref={containerRef}
           >
             {/* Search Input Bar */}
-            <div className="relative border-b border-white/15 flex items-center px-5 py-4 bg-white/[0.03]">
+            <div className="relative border-b border-primary/10 flex items-center px-5 py-4 bg-white/55">
               <Search className="w-5 h-5 text-accent shrink-0" />
               <input
                 ref={inputRef}
@@ -230,15 +233,15 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
                 }}
                 onKeyDown={handleKeyDown}
                 placeholder="Search programs, stories, careers, healthcare..."
-                className="w-full bg-transparent border-none text-white placeholder-neutral-400 focus:outline-none focus:ring-0 pl-3.5 text-base sm:text-lg font-sans font-medium"
+                className="w-full bg-transparent border-none text-primary placeholder-primary/45 focus:outline-none focus:ring-0 pl-3.5 text-base sm:text-lg font-sans font-medium"
               />
               <div className="flex items-center gap-2 shrink-0">
-                <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-white/10 border border-white/15 text-xs text-neutral-300 font-mono font-semibold">
+                  <span className="hidden sm:inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-primary/5 border border-primary/10 text-xs text-primary/65 font-mono font-semibold">
                   ESC
                 </span>
                 <button
                   onClick={onClose}
-                  className="p-1.5 rounded-xl text-neutral-300 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+                  className="p-1.5 rounded-xl text-primary/60 hover:text-primary hover:bg-primary/5 transition-colors cursor-pointer"
                   aria-label="Close search"
                 >
                   <X className="w-5 h-5" />
@@ -259,21 +262,21 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
                         onMouseEnter={() => setSelectedIndex(index)}
                         className={`flex items-center justify-between p-4 rounded-xl cursor-pointer transition-all duration-200 border ${
                           isSelected
-                            ? 'bg-accent/20 border-accent/40 text-white shadow-md'
-                            : 'bg-white/[0.02] hover:bg-white/[0.06] border-white/5 text-neutral-200'
+                            ? 'bg-accent/20 border-accent/50 text-primary shadow-md'
+                            : 'bg-primary/[0.02] hover:bg-primary/[0.05] border-primary/10 text-primary/85'
                         }`}
                         id={`search-item-${item.id}`}
                       >
                         <div className="flex flex-col gap-1 max-w-[82%]">
                           <div className="flex items-center gap-2.5 flex-wrap">
-                            <span className="text-base sm:text-lg font-bold font-serif text-white leading-tight">
+                            <span className="text-base sm:text-lg font-bold font-serif text-primary leading-tight">
                               {item.label}
                             </span>
                             <span className="px-2 py-0.5 rounded-md bg-accent/15 border border-accent/30 text-xs font-sans uppercase tracking-wider text-accent font-bold">
                               {item.category}
                             </span>
                           </div>
-                          <span className="text-xs sm:text-sm text-neutral-300 font-sans leading-relaxed line-clamp-1 font-normal">
+                          <span className="text-xs sm:text-sm text-primary/65 font-sans leading-relaxed line-clamp-1 font-normal">
                             {item.description}
                           </span>
                         </div>
@@ -284,7 +287,7 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
                             <CornerDownLeft className="w-4 h-4" />
                           </div>
                         ) : (
-                          <div className="text-neutral-500 hover:text-neutral-300 shrink-0">
+                          <div className="text-primary/35 hover:text-primary/60 shrink-0">
                             <CornerDownLeft className="w-4 h-4 opacity-40" />
                           </div>
                         )}
@@ -296,8 +299,8 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
                 <div className="py-14 flex flex-col items-center justify-center text-center gap-3">
                   <HelpCircle className="w-10 h-10 text-accent animate-pulse" />
                   <div className="space-y-1">
-                    <p className="text-base font-bold text-white font-serif">No matches found</p>
-                    <p className="text-xs sm:text-sm text-neutral-300 font-sans max-w-xs mx-auto">
+                  <p className="text-base font-bold text-primary font-serif">No matches found</p>
+                    <p className="text-xs sm:text-sm text-primary/65 font-sans max-w-xs mx-auto">
                       Try searching for &quot;CIAS&quot;, &quot;UttaraCare&quot;, &quot;EDP&quot;, &quot;Agniveer&quot;, or &quot;careers&quot;.
                     </p>
                   </div>
@@ -306,16 +309,16 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
             </div>
 
             {/* Footer Commands */}
-            <div className="px-5 py-3.5 bg-[#0e0c0b] border-t border-white/10 flex items-center justify-between text-xs font-sans text-neutral-300 font-medium">
+            <div className="px-5 py-3.5 bg-primary/[0.04] border-t border-primary/10 flex items-center justify-between text-xs font-sans text-primary/65 font-medium">
               <div className="flex items-center gap-5">
                 <span className="flex items-center gap-1.5">
-                  <span className="px-1.5 py-0.5 bg-white/10 rounded border border-white/15 font-mono text-white text-xs font-bold">↑↓</span> Move
+                  <span className="px-1.5 py-0.5 bg-primary/5 rounded border border-primary/10 font-mono text-primary text-xs font-bold">↑↓</span> Move
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <span className="px-1.5 py-0.5 bg-white/10 rounded border border-white/15 font-mono text-white text-xs font-bold">↵</span> Select
+                  <span className="px-1.5 py-0.5 bg-primary/5 rounded border border-primary/10 font-mono text-primary text-xs font-bold">↵</span> Select
                 </span>
               </div>
-              <div className="flex items-center gap-1.5 text-neutral-300 font-semibold">
+              <div className="flex items-center gap-1.5 text-primary/65 font-semibold">
                 <Command className="w-4 h-4 text-accent" />
                 <span>+ K</span>
               </div>

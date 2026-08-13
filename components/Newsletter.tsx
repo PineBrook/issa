@@ -15,7 +15,7 @@ interface NewsletterProps {
 export default function Newsletter({
   variant = 'dark',
   title = 'Stay Updated',
-  subtitle = 'Receive monthly dispatches, progress audits, and stories of direct impact from our teams in Uttarakhand.',
+  subtitle = 'Receive monthly newsletter, progress audits, and stories of direct impact from our teams in Uttarakhand.',
   className = '',
   id = 'newsletter-section',
 }: NewsletterProps) {

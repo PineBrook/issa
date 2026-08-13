@@ -78,8 +78,8 @@ export const metadata: Metadata = {
     canonical: 'https://issafoundation.co.in',
   },
   icons: {
-    icon: '/logo.webp',
-    apple: '/logo.webp',
+    icon: '/icon.png',
+    apple: '/apple-icon.png',
   },
 };
 

@@ -108,24 +108,24 @@ export default function ImpactView() {
             <div className="pt-4 bg-neutral-50 p-6 rounded-2xl border border-neutral-100">
               <div className="flex items-end justify-between h-48 gap-4 pt-4 border-b border-neutral-200">
                 {/* Bar 1 */}
-                <div className="flex-1 flex flex-col items-center gap-2">
-                  <div className="w-full bg-neutral-200 hover:bg-neutral-300 transition-all rounded-t-lg relative group h-[35%]">
+                <div className="flex-1 h-full flex flex-col items-center justify-end gap-2">
+                  <div className="w-full transition-all rounded-t-lg relative group h-[35%]">
                     <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-sans text-neutral-700 font-bold">35%</span>
                     <div className="absolute inset-x-0 bottom-0 bg-primary h-[85%] rounded-t-md"></div>
                   </div>
                   <span className="text-xs font-sans uppercase tracking-wider text-neutral-600 font-semibold mt-1">Pre-Adoption</span>
                 </div>
                 {/* Bar 2 */}
-                <div className="flex-1 flex flex-col items-center gap-2">
-                  <div className="w-full bg-neutral-200 hover:bg-neutral-300 transition-all rounded-t-lg relative group h-[60%]">
+                <div className="flex-1 h-full flex flex-col items-center justify-end gap-2">
+                  <div className="w-full transition-all rounded-t-lg relative group h-[60%]">
                     <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-sans text-neutral-700 font-bold">60%</span>
                     <div className="absolute inset-x-0 bottom-0 bg-rust h-[85%] rounded-t-md"></div>
                   </div>
                   <span className="text-xs font-sans uppercase tracking-wider text-neutral-600 font-semibold mt-1">Term 1 (CIAS)</span>
                 </div>
                 {/* Bar 3 */}
-                <div className="flex-1 flex flex-col items-center gap-2">
-                  <div className="w-full bg-neutral-200 hover:bg-neutral-300 transition-all rounded-t-lg relative group h-[88%]">
+                <div className="flex-1 h-full flex flex-col items-center justify-end gap-2">
+                  <div className="w-full transition-all rounded-t-lg relative group h-[88%]">
                     <span className="absolute -top-6 left-1/2 -translate-x-1/2 text-xs font-sans text-neutral-700 font-bold">88%</span>
                     <div className="absolute inset-x-0 bottom-0 bg-accent h-full rounded-t-md"></div>
                   </div>

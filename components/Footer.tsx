@@ -130,10 +130,6 @@ export default function Footer() {
               Privacy Policy
             </Link>
             <span>•</span>
-            <Link href="/terms" className="hover:text-accent transition-colors cursor-pointer">
-              Terms & Conditions
-            </Link>
-            <span>•</span>
             <a 
               href="https://pinebrooktechnologies.com" 
               target="_blank" 
@@ -142,6 +138,10 @@ export default function Footer() {
             >
             By PineBrook
             </a>
+            <span>•</span>
+            <Link href="/terms" className="hover:text-accent transition-colors cursor-pointer">
+              Terms & Conditions
+            </Link>
           </div>
           <div className="hidden md:block"></div>
         </div>
