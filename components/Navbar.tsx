@@ -79,16 +79,18 @@ export default function Navbar() {
 
   const linkBase =
     'text-sm font-medium tracking-wide transition-colors duration-200 relative px-4 py-2 rounded-full cursor-pointer';
-  const linkIdle = 'text-white/75 hover:text-white hover:bg-white/8';
-  const linkActive = 'bg-accent text-primary font-semibold shadow-sm';
+  const linkIdle = isScrolled
+    ? 'text-white/75 hover:text-white hover:bg-white/10'
+    : 'text-primary hover:text-primary-dark hover:bg-primary/5';
+  const linkActive = 'bg-accent text-primary font-semibold shadow-[0_3px_10px_rgba(232,185,76,0.24)]';
 
   return (
     <>
       <nav
-        className={`fixed z-50 left-1/2 -translate-x-1/2 text-white transition-[top,background-color,border-color,box-shadow,border-radius,padding] duration-400 ease-out ${
+        className={`fixed z-50 left-1/2 -translate-x-1/2 transition-[top,background-color,border-color,box-shadow,border-radius,padding] duration-400 ease-out ${
           isScrolled
-            ? 'top-4 w-[calc(100%-2rem)] md:w-auto max-w-[calc(100%-2rem)] p-1.5 rounded-full border border-white/12 bg-[#1a1714]/92 backdrop-blur-xl shadow-[0_12px_40px_rgba(18,16,14,0.45)]'
-            : 'top-0 w-full rounded-none border-b border-white/10 bg-[#12100e]/55 backdrop-blur-md shadow-none px-6 sm:px-6 lg:px-8'
+            ? 'top-4 w-[calc(100%-2rem)] md:w-auto max-w-[calc(100%-2rem)] p-1.5 rounded-full border border-white/15 bg-[#1a1714]/92 text-white backdrop-blur-xl backdrop-saturate-150 shadow-[0_12px_40px_rgba(18,16,14,0.45)]'
+            : 'top-0 w-full rounded-none border-b border-white/70 bg-white/68 text-primary backdrop-blur-md backdrop-saturate-150 shadow-[0_6px_24px_rgba(13,49,31,0.08)] px-6 sm:px-6 lg:px-8'
         }`}
       >
         {isScrolled ? (
@@ -171,9 +173,9 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={() => setIsSearchOpen(true)}
-                className="flex items-center gap-2 bg-white/10 hover:bg-white/15 border border-white/15 rounded-full px-3 py-1.5 cursor-pointer transition-colors duration-200 text-xs text-white/70"
+                className="flex items-center gap-2 bg-white/55 hover:bg-white/80 border border-primary/15 rounded-full px-3 py-1.5 cursor-pointer transition-all duration-200 text-xs text-primary shadow-sm hover:shadow-md"
               >
-                <span className="text-sm text-white/50 w-28 lg:w-36 text-left">Search...</span>
+                <span className="text-sm text-primary/70 w-28 lg:w-36 text-left">Search...</span>
                 <Search className="w-4 h-4 text-accent shrink-0" />
               </button>
             </div>
@@ -182,7 +184,7 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={() => setIsSearchOpen(true)}
-                className="inline-flex items-center justify-center p-2 rounded-xl text-white/70 hover:text-white hover:bg-white/10 focus:outline-none transition-colors duration-200 cursor-pointer"
+                className="inline-flex items-center justify-center p-2 rounded-xl text-primary hover:text-primary-dark hover:bg-primary/5 focus:outline-none transition-colors duration-200 cursor-pointer"
                 aria-label="Open search palette"
               >
                 <Search className="h-5 w-5 text-accent" />
@@ -190,7 +192,7 @@ export default function Navbar() {
               <button
                 type="button"
                 onClick={() => setIsOpen(true)}
-                className="inline-flex items-center justify-center p-2 rounded-xl text-white/70 hover:text-white hover:bg-white/10 focus:outline-none transition-colors duration-200 cursor-pointer"
+                className="inline-flex items-center justify-center p-2 rounded-xl text-primary hover:text-primary-dark hover:bg-primary/5 focus:outline-none transition-colors duration-200 cursor-pointer"
                 id="mobile-menu-trigger"
                 aria-label="Open main menu"
               >
@@ -219,11 +221,11 @@ export default function Navbar() {
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 220 }}
-              className="fixed top-0 right-0 bottom-0 w-[300px] bg-[#1a1714] border-l border-white/10 z-[101] md:hidden shadow-2xl p-6 flex flex-col justify-between"
+              className="fixed top-0 right-0 bottom-0 w-[300px] bg-white/90 backdrop-blur-xl border-l border-primary/10 z-[101] md:hidden shadow-2xl p-6 flex flex-col justify-between"
               id="mobile-menu-drawer"
             >
               <div className="space-y-8">
-                <div className="flex items-center justify-between pb-4 border-b border-white/8">
+                <div className="flex items-center justify-between pb-4 border-b border-primary/10">
                   <Link
                     href="/"
                     onClick={() => setIsOpen(false)}
@@ -234,7 +236,7 @@ export default function Navbar() {
                   <button
                     type="button"
                     onClick={() => setIsOpen(false)}
-                    className="p-2 rounded-xl text-white/70 hover:text-white hover:bg-white/10 transition-colors duration-200 cursor-pointer"
+                    className="p-2 rounded-xl text-primary hover:text-primary-dark hover:bg-primary/5 transition-colors duration-200 cursor-pointer"
                     aria-label="Close menu"
                     id="mobile-menu-close"
                   >
@@ -251,15 +253,15 @@ export default function Navbar() {
                       className={`block w-full text-left px-4 py-3 rounded-xl text-sm font-medium transition-colors duration-200 cursor-pointer ${
                         isActive(item.href)
                           ? 'bg-accent text-primary font-semibold shadow-md'
-                          : 'text-white/75 hover:bg-white/8 hover:text-white'
+                          : 'text-primary hover:bg-primary/5 hover:text-primary-dark'
                       }`}
                     />
                   ))}
                 </div>
               </div>
 
-              <div className="space-y-4 pt-6 border-t border-white/8">
-                <p className="text-[10px] text-white/50 leading-normal font-sans">
+              <div className="space-y-4 pt-6 border-t border-primary/10">
+                <p className="text-[10px] text-primary/50 leading-normal font-sans">
                   Supporting primary schools, smart labs, and medical clinics in remote Himalayan communities.
                 </p>
                 <Link
