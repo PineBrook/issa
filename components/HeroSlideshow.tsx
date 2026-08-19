@@ -26,56 +26,67 @@ export const HERO_SLIDES: HeroSlide[] = [
   {
     id: 'ecosystem',
     eyebrow: 'Integrated Development',
-    title: 'One connected',
-    highlight: 'impact ecosystem.',
+    title: 'One Connected Ecosystem',
+    highlight: 'for Holistic Impact.',
     description:
-      'Connecting Healthcare, Digital Education, and Entrepreneurship to support long-term community development.',
+      'Connecting Healthcare, Education, Entrepreneurship and Career Aspirations with Digital Inclusion to build a stronger Uttarakhand.',
     image: '/isssa-local-ownership-v2.png',
     cta: { label: 'Explore Ecosystem', href: '/programs' },
-    donate: { label: 'Support Our Mission', href: '/contact' },
-  },
-  {
-    id: 'education',
-    eyebrow: 'Education & Smart Classrooms',
-    title: 'Digital literacy for',
-    highlight: 'every hill school.',
-    description:
-      'Upgrading mountain schools with satellite e-learning labs, computer literacy, and certified teacher training.',
-    image: '/isssa-education-program-v2.png',
-    cta: { label: 'Explore Education', href: '/programs/education' },
     donate: { label: 'Support Our Mission', href: '/contact' },
   },
   {
     id: 'healthcare',
     eyebrow: 'Healthcare Systems',
     title: 'Care that reaches',
-    highlight: 'remote mountain villages.',
+    highlight: 'to the last mile.',
     description:
-      'Deploying specialist doctor rosters, diagnostic health camps, and clinical equipment to remote villages.',
+      'Connecting remote communities with specialist care, diagnostics and essential health services.',
     image: '/isssa-healthcare-program-v2.png',
     cta: { label: 'Explore Healthcare', href: '/programs/healthcare' },
     donate: { label: 'Support Our Mission', href: '/contact' },
   },
   {
+    id: 'education',
+    eyebrow: 'Smart Classrooms & Education',
+    title: 'Smart learning',
+    highlight: 'for every student.',
+    description:
+      'Bringing quality education, teacher support and better learning opportunities to students across Uttarakhand.',
+    image: '/isssa-education-program-v2.png',
+    cta: { label: 'Explore Education', href: '/programs/education' },
+    donate: { label: 'Support Our Mission', href: '/contact' },
+  },
+  {
     id: 'entrepreneurship',
     eyebrow: 'Entrepreneurship Development',
-    title: 'Preparing young people',
-    highlight: 'for work and business.',
+    title: 'Growing local businesses,',
+    highlight: 'Creating local livelihoods.',
     description:
-      'Certifying local youth in digital administration and connecting regional artisans to sustainable markets.',
+      'Supporting rural entrepreneurs with financial assistance, mentorship, technology and market access to build sustainable businesses.',
     image: '/isssa-entrepreneurship-program-v2.png',
     cta: { label: 'Explore Entrepreneurship', href: '/programs/entrepreneurship' },
     donate: { label: 'Support Our Mission', href: '/contact' },
   },
   {
-    id: 'socialwork',
-    eyebrow: 'Social Work & NGO Action',
-    title: 'Working with local',
-    highlight: 'communities.',
+    id: 'careers',
+    eyebrow: 'Career & Opportunities',
+    title: 'Turning aspirations',
+    highlight: 'into opportunities.',
     description:
-      'Partnering with village authorities and women self-help groups to foster enduring community self-reliance.',
+      'Enabling people across Uttarakhand prepare for careers, access employment opportunities and build sustainable futures.',
     image: '/isssa-community-dispatch-v2.png',
-    cta: { label: 'Explore Community Action', href: '/programs' },
+    cta: { label: 'Explore Careers', href: '/careers' },
+    donate: { label: 'Support Our Mission', href: '/contact' },
+  },
+  {
+    id: 'digital',
+    eyebrow: 'Digital Transformation',
+    title: 'Connecting technology',
+    highlight: 'to community needs.',
+    description:
+      'Building technology solutions that enable smarter healthcare, education and livelihoods across Uttarakhand.',
+    image: '/isssa-digital-inclusion.png',
+    cta: { label: 'Explore IT Solutions', href: 'https://pinebrooktechnologies.com/' },
     donate: { label: 'Support Our Mission', href: '/contact' },
   },
 ];
@@ -134,7 +145,7 @@ export default function HeroSlideshow({
             aria-hidden={!isActive}
             role="group"
             aria-roledescription="slide"
-            aria-label={`Slide ${i + 1} of 5: ${s.eyebrow}`}
+            aria-label={`Slide ${i + 1} of ${HERO_SLIDES.length}: ${s.eyebrow}`}
           >
             <motion.div
               className="absolute inset-0"
@@ -179,8 +190,8 @@ export default function HeroSlideshow({
       />
 
       {/* 3. Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-24 sm:pt-32 sm:pb-28 lg:pt-36 lg:pb-28 w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-        <div className="lg:col-span-7 space-y-6 sm:space-y-8">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-28 pb-24 sm:pt-32 sm:pb-28 lg:pt-36 lg:pb-28 w-full">
+        <div className="max-w-4xl space-y-6 sm:space-y-8">
           <AnimatePresence mode="wait">
             <motion.div
               key={slide.id}
@@ -199,12 +210,12 @@ export default function HeroSlideshow({
                 {slide.eyebrow}
               </span>
 
-              <h1 className="text-3xl sm:text-5xl md:text-6xl font-serif font-bold tracking-tight text-white leading-[1.1]">
-                {slide.title} <br className="hidden sm:inline" />
-                <span className="text-accent italic font-normal">{slide.highlight}</span>
+              <h1 className="text-3xl sm:text-5xl md:text-6xl font-serif font-bold tracking-tight text-white leading-[1.15]">
+                <span className="block">{slide.title}</span>
+                <span className="text-accent italic font-normal block">{slide.highlight}</span>
               </h1>
 
-              <p className="text-base sm:text-lg md:text-xl text-white/90 max-w-2xl leading-relaxed font-sans font-light">
+              <p className="text-base sm:text-lg md:text-xl text-white/90 max-w-2xl leading-relaxed font-sans font-light line-clamp-2">
                 {slide.description}
               </p>
 
@@ -252,7 +263,7 @@ export default function HeroSlideshow({
                 type="button"
                 role="tab"
                 onClick={() => onSelect(i)}
-                aria-label={`Slide ${i + 1} of 5: ${s.eyebrow}`}
+                aria-label={`Slide ${i + 1} of ${HERO_SLIDES.length}: ${s.eyebrow}`}
                 aria-selected={isActive}
                 aria-controls={`hero-slide-panel-${s.id}`}
                 className="group relative h-3 flex items-center cursor-pointer p-1 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"

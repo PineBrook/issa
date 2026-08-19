@@ -2,15 +2,16 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { BookOpen, Stethoscope, Briefcase, CheckCircle2, ArrowRight } from 'lucide-react';
+import BlurImage from './BlurImage';
+import { BookOpen, Stethoscope, Briefcase, Compass, CheckCircle2, ArrowRight, Sparkles, GraduationCap, Laptop, ShieldCheck } from 'lucide-react';
 
 interface ProgramsViewProps {
-  initialPillar?: 'education' | 'healthcare' | 'entrepreneurship';
+  initialPillar?: 'education' | 'healthcare' | 'entrepreneurship' | 'careers';
   view?: 'overview' | 'detail';
 }
 
 export default function ProgramsView({ initialPillar = 'education', view = 'detail' }: ProgramsViewProps) {
-  const [activePillar, setActivePillar] = React.useState<'education' | 'healthcare' | 'entrepreneurship'>(initialPillar);
+  const [activePillar, setActivePillar] = React.useState<'education' | 'healthcare' | 'entrepreneurship' | 'careers'>(initialPillar);
 
   React.useEffect(() => {
     const handleJump = (e: CustomEvent) => {
@@ -27,6 +28,7 @@ export default function ProgramsView({ initialPillar = 'education', view = 'deta
       { href: '/programs/education', title: 'Education', description: 'Empowering every learner through stronger schools, digital access, and future-ready skills.', Icon: BookOpen },
       { href: '/programs/healthcare', title: 'Healthcare', description: 'Bringing connected, affordable healthcare closer to rural communities across Uttarakhand.', Icon: Stethoscope },
       { href: '/programs/entrepreneurship', title: 'Entrepreneurship', description: 'Helping local entrepreneurs build sustainable businesses, jobs, and livelihoods.', Icon: Briefcase },
+      { href: '/careers', title: 'Career & Opportunities', description: 'Enabling youth across Uttarakhand prepare for careers, Agniveer, and IT job pathways.', Icon: Compass },
     ];
 
     return (
@@ -36,18 +38,20 @@ export default function ProgramsView({ initialPillar = 'education', view = 'deta
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
             <div className="max-w-3xl space-y-4">
               <p className="text-xs uppercase tracking-widest text-accent font-sans font-bold">Our Programs</p>
-              <h1 className="text-4xl sm:text-5xl font-serif font-bold tracking-tight">Three connected pillars of ISSA&apos;s mission.</h1>
-              <p className="text-neutral-300 text-sm sm:text-base max-w-xl leading-relaxed font-light">Explore the programs that help communities learn, live healthier, and build sustainable livelihoods.</p>
+              <h1 className="text-4xl sm:text-5xl font-serif font-bold tracking-tight">Four connected pillars of ISSA&apos;s mission.</h1>
+              <p className="text-neutral-300 text-sm sm:text-base max-w-xl leading-relaxed font-light">Explore the programs that help communities learn, live healthier, build sustainable livelihoods, and access career opportunities.</p>
             </div>
           </div>
         </section>
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid gap-6 md:grid-cols-3">
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {pillars.map(({ href, title, description, Icon }) => (
-              <Link key={href} href={href} className="group bg-white p-8 rounded-2xl border border-neutral-200 shadow-sm hover:border-primary hover:shadow-md transition-all">
-                <Icon className="w-7 h-7 text-primary mb-6" aria-hidden="true" />
-                <h2 className="text-2xl font-serif font-bold text-primary">{title}</h2>
-                <p className="text-sm text-neutral-600 leading-relaxed mt-3">{description}</p>
+              <Link key={href} href={href} className="group bg-white p-8 rounded-2xl border border-neutral-200 shadow-sm hover:border-primary hover:shadow-md transition-all flex flex-col justify-between">
+                <div>
+                  <Icon className="w-7 h-7 text-primary mb-6" aria-hidden="true" />
+                  <h2 className="text-2xl font-serif font-bold text-primary">{title}</h2>
+                  <p className="text-sm text-neutral-600 leading-relaxed mt-3">{description}</p>
+                </div>
                 <span className="inline-flex items-center gap-2 text-sm font-bold text-primary mt-8 group-hover:gap-3 transition-all">Explore program <ArrowRight className="w-4 h-4" aria-hidden="true" /></span>
               </Link>
             ))}
@@ -66,11 +70,11 @@ export default function ProgramsView({ initialPillar = 'education', view = 'deta
           <div className="max-w-3xl space-y-4">
             <p className="text-xs uppercase tracking-widest text-accent font-sans font-bold">Our Pillars</p>
             <h1 className="text-4xl sm:text-5xl font-serif font-bold tracking-tight">
-              Three Connected Pillars <br />
+              Four Connected Pillars <br />
               <span className="italic font-normal text-accent">of ISSA&apos;s Mission.</span>
             </h1>
             <p className="text-neutral-300 text-sm sm:text-base max-w-xl leading-relaxed font-light">
-              We provide long-term community support in Uttarakhand through education, healthcare, entrepreneurship, and digital inclusion programs.
+              We provide long-term community support in Uttarakhand through education, healthcare, entrepreneurship, career opportunities, and digital inclusion programs.
             </p>
           </div>
         </div>
@@ -78,44 +82,57 @@ export default function ProgramsView({ initialPillar = 'education', view = 'deta
 
       {/* PILLAR NAVIGATION */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-12">
-        <div className="flex flex-col sm:flex-row gap-4 border-b border-neutral-200 pb-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 border-b border-neutral-200 pb-6">
           <button
             onClick={() => setActivePillar('education')}
-            className={`flex-1 text-left sm:text-center p-4 rounded-2xl border transition-all ${
+            className={`text-left sm:text-center p-4 rounded-2xl border transition-all ${
               activePillar === 'education'
-                ? 'bg-white border-primary shadow-sm'
+                ? 'bg-white border-primary shadow-sm ring-1 ring-primary/20'
                 : 'bg-neutral-50 border-neutral-200 hover:border-primary/50 text-neutral-600 hover:bg-white'
             }`}
           >
             <BookOpen className={`w-6 h-6 mb-3 mx-auto hidden sm:block ${activePillar === 'education' ? 'text-primary' : 'text-neutral-500'}`} />
             <h3 className={`font-serif font-bold text-base sm:text-lg ${activePillar === 'education' ? 'text-primary' : 'text-neutral-800'}`}>Education</h3>
-            <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider font-sans mt-1 text-neutral-600">Empowering Every Learner</p>
+            <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider font-sans mt-1 text-neutral-600">Empowering Learners</p>
           </button>
           
           <button
             onClick={() => setActivePillar('healthcare')}
-            className={`flex-1 text-left sm:text-center p-4 rounded-2xl border transition-all ${
+            className={`text-left sm:text-center p-4 rounded-2xl border transition-all ${
               activePillar === 'healthcare'
-                ? 'bg-white border-primary shadow-sm'
+                ? 'bg-white border-primary shadow-sm ring-1 ring-primary/20'
                 : 'bg-neutral-50 border-neutral-200 hover:border-primary/50 text-neutral-600 hover:bg-white'
             }`}
           >
             <Stethoscope className={`w-6 h-6 mb-3 mx-auto hidden sm:block ${activePillar === 'healthcare' ? 'text-primary' : 'text-neutral-500'}`} />
             <h3 className={`font-serif font-bold text-base sm:text-lg ${activePillar === 'healthcare' ? 'text-primary' : 'text-neutral-800'}`}>Healthcare</h3>
-            <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider font-sans mt-1 text-neutral-600">Healthy Communities, Better Futures</p>
+            <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider font-sans mt-1 text-neutral-600">Healthy Communities</p>
           </button>
 
           <button
             onClick={() => setActivePillar('entrepreneurship')}
-            className={`flex-1 text-left sm:text-center p-4 rounded-2xl border transition-all ${
+            className={`text-left sm:text-center p-4 rounded-2xl border transition-all ${
               activePillar === 'entrepreneurship'
-                ? 'bg-white border-primary shadow-sm'
+                ? 'bg-white border-primary shadow-sm ring-1 ring-primary/20'
                 : 'bg-neutral-50 border-neutral-200 hover:border-primary/50 text-neutral-600 hover:bg-white'
             }`}
           >
             <Briefcase className={`w-6 h-6 mb-3 mx-auto hidden sm:block ${activePillar === 'entrepreneurship' ? 'text-primary' : 'text-neutral-500'}`} />
             <h3 className={`font-serif font-bold text-base sm:text-lg ${activePillar === 'entrepreneurship' ? 'text-primary' : 'text-neutral-800'}`}>Entrepreneurship</h3>
-            <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider font-sans mt-1 text-neutral-600">Building Sustainable Livelihoods</p>
+            <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider font-sans mt-1 text-neutral-600">Sustainable Livelihoods</p>
+          </button>
+
+          <button
+            onClick={() => setActivePillar('careers')}
+            className={`text-left sm:text-center p-4 rounded-2xl border transition-all ${
+              activePillar === 'careers'
+                ? 'bg-white border-primary shadow-sm ring-1 ring-primary/20'
+                : 'bg-neutral-50 border-neutral-200 hover:border-primary/50 text-neutral-600 hover:bg-white'
+            }`}
+          >
+            <Compass className={`w-6 h-6 mb-3 mx-auto hidden sm:block ${activePillar === 'careers' ? 'text-primary' : 'text-neutral-500'}`} />
+            <h3 className={`font-serif font-bold text-base sm:text-lg ${activePillar === 'careers' ? 'text-primary' : 'text-neutral-800'}`}>Careers & Opportunities</h3>
+            <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider font-sans mt-1 text-neutral-600">Aspirations to Reality</p>
           </button>
         </div>
       </section>
@@ -126,15 +143,29 @@ export default function ProgramsView({ initialPillar = 'education', view = 'deta
         {/* EDUCATION */}
         {activePillar === 'education' && (
           <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500" id="program-education">
-            <div className="max-w-3xl space-y-6">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-primary">ISSA Education Initiative</h2>
-              <h3 className="text-xl sm:text-2xl font-semibold text-primary/90">Empowering Young Minds. Building Future Leaders. Strengthening Uttarakhand.</h3>
-              <p className="text-base sm:text-lg text-neutral-700 leading-relaxed font-sans">
-                The ISSA Education Initiative is a flagship programme of ISSA Foundation dedicated to transforming education in Uttarakhand by improving learning outcomes, strengthening government schools, empowering teachers, and preparing young people with the knowledge, skills, and opportunities they need to succeed.
-              </p>
-              <p className="text-base sm:text-lg text-neutral-700 leading-relaxed font-sans">
-                We believe education is not limited to classrooms. It is about creating confident learners, responsible citizens, skilled professionals, and future entrepreneurs. Working closely with the Government of Uttarakhand, educators, communities, volunteers, and technology partners, ISSA is building an education ecosystem that combines quality teaching, digital learning, career guidance, skill development, and real-world exposure.
-              </p>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+              <div className="lg:col-span-7 space-y-6">
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-primary tracking-tight">ISSA Education Initiative</h2>
+                <h3 className="text-xl sm:text-2xl font-semibold text-primary/90">Empowering Young Minds. Building Future Leaders. Strengthening Uttarakhand.</h3>
+                <p className="text-base sm:text-lg text-neutral-700 leading-relaxed font-sans">
+                  The ISSA Education Initiative is a flagship programme of ISSA Foundation dedicated to transforming education in Uttarakhand by improving learning outcomes, strengthening government schools, empowering teachers, and preparing young people with the knowledge, skills, and opportunities they need to succeed.
+                </p>
+                <p className="text-base sm:text-lg text-neutral-700 leading-relaxed font-sans">
+                  We believe education is not limited to classrooms. It is about creating confident learners, responsible citizens, skilled professionals, and future entrepreneurs. Working closely with the Government of Uttarakhand, educators, communities, volunteers, and technology partners, ISSA is building an education ecosystem that combines quality teaching, digital learning, career guidance, skill development, and real-world exposure.
+                </p>
+              </div>
+              <div className="lg:col-span-5 relative">
+                <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-xl border border-neutral-200/80 relative">
+                  <BlurImage
+                    src="/isssa-education-program-v2.png"
+                    alt="Smart classroom and computer lab in rural Uttarakhand school"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 40vw"
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-transparent pointer-events-none" />
+                </div>
+              </div>
             </div>
 
             <div className="grid md:grid-cols-2 gap-8">
@@ -206,15 +237,29 @@ export default function ProgramsView({ initialPillar = 'education', view = 'deta
         {/* HEALTHCARE */}
         {activePillar === 'healthcare' && (
           <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500" id="program-healthcare">
-            <div className="max-w-3xl space-y-6">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-primary">ISSA Rural Healthcare Initiative</h2>
-              <h3 className="text-xl sm:text-2xl font-semibold text-primary/90">Transforming Rural Healthcare Through Connected Communities</h3>
-              <p className="text-base sm:text-lg text-neutral-700 leading-relaxed font-sans">
-                Healthcare should never be limited by geography. Yet thousands of families living in the remote hills of Uttarakhand continue to travel long distances for even basic medical care. Limited medical infrastructure, shortage of specialists, delayed diagnosis and difficult terrain often prevent timely treatment.
-              </p>
-              <p className="text-base sm:text-lg text-neutral-700 leading-relaxed font-sans">
-                The ISSA Rural Healthcare Initiative was established to bridge this gap by creating an integrated healthcare ecosystem that combines hospitals, rural health hubs, mobile healthcare, telemedicine and community outreach into one connected model. Rather than expecting patients to travel to healthcare, we bring healthcare closer to every village.
-              </p>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+              <div className="lg:col-span-7 space-y-6">
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-primary tracking-tight">ISSA Rural Healthcare Initiative</h2>
+                <h3 className="text-xl sm:text-2xl font-semibold text-primary/90">Transforming Rural Healthcare Through Connected Communities</h3>
+                <p className="text-base sm:text-lg text-neutral-700 leading-relaxed font-sans">
+                  Healthcare should never be limited by geography. Yet thousands of families living in the remote hills of Uttarakhand continue to travel long distances for even basic medical care. Limited medical infrastructure, shortage of specialists, delayed diagnosis and difficult terrain often prevent timely treatment.
+                </p>
+                <p className="text-base sm:text-lg text-neutral-700 leading-relaxed font-sans">
+                  The ISSA Rural Healthcare Initiative was established to bridge this gap by creating an integrated healthcare ecosystem that combines hospitals, rural health hubs, mobile healthcare, telemedicine and community outreach into one connected model. Rather than expecting patients to travel to healthcare, we bring healthcare closer to every village.
+                </p>
+              </div>
+              <div className="lg:col-span-5 relative">
+                <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-xl border border-neutral-200/80 relative">
+                  <BlurImage
+                    src="/isssa-healthcare-program-v2.png"
+                    alt="Doctor providing compassionate care in remote Uttarakhand medical camp"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 40vw"
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-transparent pointer-events-none" />
+                </div>
+              </div>
             </div>
 
             <div className="grid md:grid-cols-2 gap-8">
@@ -311,15 +356,29 @@ export default function ProgramsView({ initialPillar = 'education', view = 'deta
         {/* ENTREPRENEURSHIP */}
         {activePillar === 'entrepreneurship' && (
           <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500" id="program-entrepreneurship">
-            <div className="max-w-3xl space-y-6">
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-primary">Entrepreneurship Development Program (EDP)</h2>
-              <h3 className="text-xl sm:text-2xl font-semibold text-rust">Creating Entrepreneurs. Generating Employment. Building a Self-Reliant Uttarakhand.</h3>
-              <p className="text-base sm:text-lg text-neutral-700 leading-relaxed font-sans">
-                Employment is not created only by offering jobs—it is created by empowering individuals to become entrepreneurs who build businesses, create opportunities, and inspire others.
-              </p>
-              <p className="text-base sm:text-lg text-neutral-700 leading-relaxed font-sans">
-                The ISSA Foundation Entrepreneurship Development Program (EDP) is a flagship initiative designed to identify, mentor, and support aspiring and existing entrepreneurs across Uttarakhand. Our mission is to transform innovative ideas and local skills into sustainable enterprises that generate employment, strengthen local economies, and improve livelihoods.
-              </p>
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+              <div className="lg:col-span-7 space-y-6">
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-primary tracking-tight">Entrepreneurship Development Program (EDP)</h2>
+                <h3 className="text-xl sm:text-2xl font-semibold text-rust">Creating Entrepreneurs. Generating Employment. Building a Self-Reliant Uttarakhand.</h3>
+                <p className="text-base sm:text-lg text-neutral-700 leading-relaxed font-sans">
+                  Employment is not created only by offering jobs—it is created by empowering individuals to become entrepreneurs who build businesses, create opportunities, and inspire others.
+                </p>
+                <p className="text-base sm:text-lg text-neutral-700 leading-relaxed font-sans">
+                  The ISSA Foundation Entrepreneurship Development Program (EDP) is a flagship initiative designed to identify, mentor, and support aspiring and existing entrepreneurs across Uttarakhand. Our mission is to transform innovative ideas and local skills into sustainable enterprises that generate employment, strengthen local economies, and improve livelihoods.
+                </p>
+              </div>
+              <div className="lg:col-span-5 relative">
+                <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-xl border border-neutral-200/80 relative">
+                  <BlurImage
+                    src="/isssa-entrepreneurship-program-v2.png"
+                    alt="Rural entrepreneurs and local businesses in Uttarakhand"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 40vw"
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-transparent pointer-events-none" />
+                </div>
+              </div>
             </div>
 
             {/* IMPACT COUNTERS STRIP */}
@@ -419,6 +478,166 @@ export default function ProgramsView({ initialPillar = 'education', view = 'deta
                   <h4 className="font-serif text-lg font-bold text-accent">4. Funding and Financial Guidance</h4>
                   <p className="text-xs text-neutral-300 leading-relaxed">Responsible financial assistance supported by continuous monitoring, mentoring, and performance-based guidance.</p>
                 </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* CAREER & OPPORTUNITIES */}
+        {activePillar === 'careers' && (
+          <div className="space-y-12 animate-in fade-in slide-in-from-bottom-4 duration-500" id="program-careers">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-center">
+              <div className="lg:col-span-7 space-y-6">
+                <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-primary tracking-tight">ISSA Career & Opportunities Initiative</h2>
+                <h3 className="text-xl sm:text-2xl font-semibold text-primary/90">Turning Aspirations into Opportunities. Preparing Youth for Employment, Public Service, and the Digital Economy.</h3>
+                <p className="text-base sm:text-lg text-neutral-700 leading-relaxed font-sans">
+                  Talent and ambition exist in abundance across the hills and valleys of Uttarakhand. What young people often lack is access to structured guidance, high-quality coaching for competitive examinations, modern technical skills, and reliable bridges to sustainable employment.
+                </p>
+                <p className="text-base sm:text-lg text-neutral-700 leading-relaxed font-sans">
+                  The ISSA Career & Opportunities Initiative connects youth with structured career coaching, defence preparation, technical upskilling, and direct employment pathways—empowering them to build rewarding careers while strengthening the economic foundation of Uttarakhand.
+                </p>
+              </div>
+              <div className="lg:col-span-5 relative">
+                <div className="aspect-[4/3] rounded-3xl overflow-hidden shadow-xl border border-neutral-200/80 relative">
+                  <BlurImage
+                    src="/isssa-career-program-v2.png"
+                    alt="Students attending interactive career coaching and technology workshop in Pauri Garhwal"
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 40vw"
+                    className="object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-transparent pointer-events-none" />
+                </div>
+              </div>
+            </div>
+
+            {/* IMPACT SNAPSHOT */}
+            <div className="bg-white rounded-2xl p-6 border border-neutral-200 shadow-sm">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center divide-y sm:divide-y-0 sm:divide-x divide-neutral-200">
+                <div className="pt-2 sm:pt-0 sm:px-2">
+                  <p className="font-serif text-3xl font-bold text-primary">3</p>
+                  <p className="mt-1 text-[10px] font-bold uppercase tracking-wider text-neutral-500">Core Pathways</p>
+                </div>
+                <div className="pt-2 sm:pt-0 sm:px-2">
+                  <p className="font-serif text-3xl font-bold text-primary">100%</p>
+                  <p className="mt-1 text-[10px] font-bold uppercase tracking-wider text-neutral-500">Guidance & Support</p>
+                </div>
+                <div className="pt-2 sm:pt-0 sm:px-2">
+                  <p className="font-serif text-3xl font-bold text-primary">Pauri</p>
+                  <p className="mt-1 text-[10px] font-bold uppercase tracking-wider text-neutral-500">Coaching Hub</p>
+                </div>
+                <div className="pt-2 sm:pt-0 sm:px-2">
+                  <p className="font-serif text-xl font-bold text-primary">PineBrook</p>
+                  <p className="mt-1 text-[10px] font-bold uppercase tracking-wider text-neutral-500">Tech Industry Linkage</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-8">
+              <div className="bg-gradient-to-b from-white to-amber-50/30 p-8 rounded-2xl border border-amber-200/80 border-t-4 border-t-primary shadow-sm hover:shadow-md transition-all space-y-4">
+                <h4 className="text-xl font-serif font-bold text-primary">Why We Started</h4>
+                <p className="text-sm sm:text-base text-neutral-700 leading-relaxed font-sans">
+                  Youth in remote hill districts often travel long distances or migrate to distant cities to access coaching centres and job opportunities, incurring high financial burdens. Without localized career mentorship, many struggle to navigate competitive exam processes or access high-growth industries like software, digital operations, and modern services.
+                </p>
+                <p className="text-sm sm:text-base text-neutral-700 leading-relaxed font-sans">
+                  ISSA bridges this gap by bringing world-class career coaching, physical training, and industry linkages directly to mountain communities.
+                </p>
+              </div>
+              <div className="bg-gradient-to-b from-white to-amber-50/30 p-8 rounded-2xl border border-amber-200/80 border-t-4 border-t-primary shadow-sm hover:shadow-md transition-all space-y-4">
+                <h4 className="text-xl font-serif font-bold text-primary">Our Vision & Mission</h4>
+                <p className="text-sm sm:text-base text-neutral-700 leading-relaxed font-sans">
+                  <strong>Vision:</strong> A thriving Uttarakhand where every young person has the skills, guidance, and direct opportunity pathways to secure sustainable livelihoods and achieve their career potential without involuntary distress migration.
+                </p>
+                <p className="text-sm sm:text-base text-neutral-700 leading-relaxed font-sans">
+                  <strong>Mission:</strong> To provide accessible coaching for defence and government exams, industry-aligned technical training, soft skill development, and employment linkages through trusted industry partners.
+                </p>
+              </div>
+            </div>
+
+            {/* KEY PROGRAMMES */}
+            <div className="space-y-6">
+              <h3 className="text-2xl sm:text-3xl font-serif font-bold text-primary">Key Focus Areas & Programmes</h3>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="bg-gradient-to-b from-white to-amber-50/20 p-6 rounded-2xl border border-neutral-200/80 border-t-2 border-t-primary shadow-sm hover:shadow-md transition-all group">
+                  <div className="w-10 h-10 rounded-xl bg-accent/20 text-primary flex items-center justify-center mb-4">
+                    <ShieldCheck className="w-5 h-5" />
+                  </div>
+                  <h5 className="font-bold text-primary text-base sm:text-lg mb-2.5 group-hover:text-amber-900 transition-colors">Agniveer & Defence Services</h5>
+                  <p className="text-sm text-neutral-700 leading-relaxed font-sans">
+                    Structured preparation programmes for youth aspiring to serve in the armed forces, covering physical fitness regimens, mock tests, written exam strategies, and expert defence mentorship.
+                  </p>
+                </div>
+
+                <div className="bg-gradient-to-b from-white to-amber-50/20 p-6 rounded-2xl border border-neutral-200/80 border-t-2 border-t-primary shadow-sm hover:shadow-md transition-all group">
+                  <div className="w-10 h-10 rounded-xl bg-accent/20 text-primary flex items-center justify-center mb-4">
+                    <GraduationCap className="w-5 h-5" />
+                  </div>
+                  <h5 className="font-bold text-primary text-base sm:text-lg mb-2.5 group-hover:text-amber-900 transition-colors">Career Coaching at Pauri</h5>
+                  <p className="text-sm text-neutral-700 leading-relaxed font-sans">
+                    Specialized guidance and regular study cohorts for state civil services, banking, SSC, and central government examinations, helping local candidates prepare with confidence right from Pauri.
+                  </p>
+                </div>
+
+                <div className="bg-gradient-to-b from-white to-amber-50/20 p-6 rounded-2xl border border-neutral-200/80 border-t-2 border-t-primary shadow-sm hover:shadow-md transition-all group">
+                  <div className="w-10 h-10 rounded-xl bg-accent/20 text-primary flex items-center justify-center mb-4">
+                    <Laptop className="w-5 h-5" />
+                  </div>
+                  <h5 className="font-bold text-primary text-base sm:text-lg mb-2.5 group-hover:text-amber-900 transition-colors">IT Jobs via PineBrook</h5>
+                  <p className="text-sm text-neutral-700 leading-relaxed font-sans">
+                    Direct technical upskilling and placement pathways connecting Uttarakhand graduates to software development, data operations, and IT support careers in partnership with PineBrook Technologies.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* INDUSTRY READINESS BANNER */}
+            <div className="bg-primary-dark text-white p-8 md:p-12 rounded-3xl space-y-8">
+              <div className="max-w-3xl space-y-4">
+                <h3 className="text-2xl sm:text-3xl font-serif font-bold text-accent">Career Readiness & Future Skills</h3>
+                <p className="text-sm sm:text-base text-neutral-200 leading-relaxed font-sans">
+                  We ensure candidates are fully prepared for competitive corporate and government hiring environments:
+                </p>
+              </div>
+              <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
+                {[
+                  'Resume Building & Portfolio',
+                  'Mock Interviews & GDs',
+                  'Digital Communication',
+                  'Aptitude & Logical Reasoning',
+                  'Technical Problem Solving',
+                  'Workplace Ethics & Leadership',
+                  'Govt Scheme Navigation',
+                  'Job Application Support'
+                ].map((skill, idx) => (
+                  <div key={idx} className="flex items-center gap-2.5 bg-white/10 p-3.5 rounded-xl border border-white/10">
+                    <CheckCircle2 className="w-4 h-4 text-accent shrink-0" />
+                    <span className="text-xs sm:text-sm font-semibold text-white">{skill}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* ACTION LINKS */}
+            <div className="bg-white rounded-2xl p-8 border border-neutral-200 shadow-sm flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+              <div className="space-y-2 max-w-xl">
+                <h4 className="text-xl font-serif font-bold text-primary">Explore Open Opportunities</h4>
+                <p className="text-sm text-neutral-600 font-sans">
+                  Looking to join our field teams, apply for coaching cohorts, or partner with us to hire local talent from Uttarakhand?
+                </p>
+              </div>
+              <div className="flex flex-wrap gap-4 shrink-0">
+                <Link
+                  href="/careers"
+                  className="bg-primary hover:bg-primary-light text-white font-bold text-sm px-6 py-3.5 rounded-xl transition-all inline-flex items-center gap-2 shadow-sm cursor-pointer"
+                >
+                  View Open Roles <ArrowRight className="w-4 h-4" />
+                </Link>
+                <Link
+                  href="/contact"
+                  className="border border-neutral-300 hover:border-primary text-primary font-bold text-sm px-6 py-3.5 rounded-xl transition-all inline-flex items-center gap-2 hover:bg-neutral-50 cursor-pointer"
+                >
+                  Partner With Us <ArrowRight className="w-4 h-4" />
+                </Link>
               </div>
             </div>
           </div>

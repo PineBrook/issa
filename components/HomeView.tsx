@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import BlurImage from './BlurImage';
-import { ArrowRight, BookOpen, Stethoscope, Briefcase, Cpu, CheckCircle2, Calendar } from 'lucide-react';
+import { ArrowRight, BookOpen, Stethoscope, Briefcase, Cpu, CheckCircle2, Calendar, Compass } from 'lucide-react';
 import HeroSlideshow, { HERO_SLIDES } from './HeroSlideshow';
 
 export default function HomeView() {
@@ -204,77 +204,80 @@ export default function HomeView() {
         </div>
       </section>
 
-      {/* 4. FOUR FOCUSED PILLARS SECTION */}
-      <section className="py-24 bg-neutral-100 border-t border-b border-neutral-200" id="home-pillars">
+      {/* 4. CONNECTED IMPACT ECOSYSTEM SECTION */}
+      <section className="py-20 bg-neutral-100 border-t border-b border-neutral-200" id="home-pillars">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-6xl mx-auto text-center space-y-4 mb-16">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-primary tracking-tight">
-              Four Areas of Long-Term Community Support
+              One Connected Ecosystem for Holistic Impact.
             </h2>
-            <p className="text-neutral-700 text-base sm:text-lg max-w-8xl mx-auto leading-relaxed">
-              Programs that meet urgent needs while creating long-term opportunities for remote Himalayan families.
+            <p className="text-neutral-700 text-base sm:text-lg max-w-6xl mx-auto leading-relaxed">
+              Connecting Healthcare, Education, Entrepreneurship and Career Aspirations with Digital Inclusion to build a stronger Uttarakhand.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="group bg-white rounded-2xl p-8 border border-neutral-200/80 shadow-sm hover:shadow-md hover:border-neutral-300 transition-all duration-300 flex flex-col justify-between">
-              <div className="space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* 1. Healthcare */}
+            <div className="group bg-white rounded-2xl p-6 sm:p-7 border border-neutral-200/80 shadow-sm hover:shadow-md hover:border-neutral-300 transition-all duration-300 flex flex-col justify-between">
+              <div className="space-y-5">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-sans font-semibold uppercase tracking-wider text-neutral-700 bg-neutral-100 px-3 py-1 rounded-full">Education</span>
-                </div>
-                <div className="w-12 h-12 rounded-xl bg-neutral-100 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors duration-300">
-                  <BookOpen className="w-6 h-6" />
-                </div>
-                <div className="space-y-2">
-                  <h3 className="text-xl font-serif font-bold text-primary">Education Support</h3>
-                  <p className="text-sm text-neutral-700 leading-relaxed font-sans">
-                    Smart classrooms, trained teachers, and academic support through the Cluster of ISSA-Adopted Schools (CIAS) initiative.
-                  </p>
-                </div>
-              </div>
-              <Link 
-                href="/programs?pillar=education" 
-                className="text-xs sm:text-sm font-bold text-primary hover:text-rust transition-colors text-left pt-6 flex items-center gap-1 cursor-pointer"
-              >
-                DISCOVER EDUCATION <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
-
-            <div className="group bg-white rounded-2xl p-8 border border-neutral-200/80 shadow-sm hover:shadow-md hover:border-neutral-300 transition-all duration-300 flex flex-col justify-between">
-              <div className="space-y-6">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs font-sans font-semibold uppercase tracking-wider text-neutral-700 bg-neutral-100 px-3 py-1 rounded-full">Healthcare</span>
+                  <span className="text-xs font-sans font-bold uppercase tracking-wider text-primary bg-accent px-3 py-1 rounded-full shadow-xs">Healthcare</span>
                 </div>
                 <div className="w-12 h-12 rounded-xl bg-neutral-100 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                   <Stethoscope className="w-6 h-6" />
                 </div>
-                <div className="space-y-2">
-                  <h3 className="text-xl font-serif font-bold text-primary">Healthcare Access</h3>
-                  <p className="text-sm text-neutral-700 leading-relaxed font-sans">
-                    Affordable care, mobile outreach, and Uttara Care Hospital support for remote mountain districts.
+                <div className="space-y-2.5">
+                  <h3 className="text-xl sm:text-[1.35rem] font-serif font-extrabold text-primary tracking-tight leading-snug group-hover:text-rust transition-colors">Care that reaches to last mile</h3>
+                  <p className="text-xs sm:text-sm text-neutral-700 leading-relaxed font-sans">
+                    Connecting remote communities with specialist care, diagnostics and essential health services.
                   </p>
                 </div>
               </div>
               <Link 
-                href="/programs?pillar=healthcare" 
+                href="/programs/healthcare" 
                 className="text-xs sm:text-sm font-bold text-primary hover:text-rust transition-colors text-left pt-6 flex items-center gap-1 cursor-pointer"
               >
                 DISCOVER HEALTHCARE <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
 
-            <div className="group bg-white rounded-2xl p-8 border border-neutral-200/80 shadow-sm hover:shadow-md hover:border-neutral-300 transition-all duration-300 flex flex-col justify-between">
-              <div className="space-y-6">
+            {/* 2. Education */}
+            <div className="group bg-white rounded-2xl p-6 sm:p-7 border border-neutral-200/80 shadow-sm hover:shadow-md hover:border-neutral-300 transition-all duration-300 flex flex-col justify-between">
+              <div className="space-y-5">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-sans font-semibold uppercase tracking-wider text-neutral-700 bg-neutral-100 px-3 py-1 rounded-full">Entrepreneurship</span>
+                  <span className="text-xs font-sans font-bold uppercase tracking-wider text-primary bg-accent px-3 py-1 rounded-full shadow-xs">Education</span>
+                </div>
+                <div className="w-12 h-12 rounded-xl bg-neutral-100 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                  <BookOpen className="w-6 h-6" />
+                </div>
+                <div className="space-y-2.5">
+                  <h3 className="text-xl sm:text-[1.35rem] font-serif font-extrabold text-primary tracking-tight leading-snug group-hover:text-rust transition-colors">Smart learning for students</h3>
+                  <p className="text-xs sm:text-sm text-neutral-700 leading-relaxed font-sans">
+                    Bringing quality education, teacher support and better learning opportunities to students across Uttarakhand.
+                  </p>
+                </div>
+              </div>
+              <Link 
+                href="/programs/education" 
+                className="text-xs sm:text-sm font-bold text-primary hover:text-rust transition-colors text-left pt-6 flex items-center gap-1 cursor-pointer"
+              >
+                DISCOVER EDUCATION <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+
+            {/* 3. Entrepreneurship */}
+            <div className="group bg-white rounded-2xl p-6 sm:p-7 border border-neutral-200/80 shadow-sm hover:shadow-md hover:border-neutral-300 transition-all duration-300 flex flex-col justify-between">
+              <div className="space-y-5">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-sans font-bold uppercase tracking-wider text-primary bg-accent px-3 py-1 rounded-full shadow-xs">Entrepreneurship</span>
                 </div>
                 <div className="w-12 h-12 rounded-xl bg-neutral-100 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors duration-300">
                   <Briefcase className="w-6 h-6" />
                 </div>
-                <div className="space-y-2">
-                    <h3 className="text-xl font-serif font-bold text-primary">Entrepreneurship (EDP)</h3>
-                  <p className="text-sm text-neutral-700 leading-relaxed font-sans">
-                    Structured mentoring, technology support, and connections to customers across 6 districts and 10+ business sectors.
+                <div className="space-y-2.5">
+                  <h3 className="text-xl sm:text-[1.35rem] font-serif font-extrabold text-primary tracking-tight leading-snug group-hover:text-rust transition-colors">Growing local businesses, Creating local livelihoods.</h3>
+                  <p className="text-xs sm:text-sm text-neutral-700 leading-relaxed font-sans">
+                    Supporting rural entrepreneurs with financial assistance, mentorship, technology and market access to build sustainable businesses.
                   </p>
                 </div>
               </div>
@@ -282,35 +285,80 @@ export default function HomeView() {
                 href="/programs/entrepreneurship" 
                 className="text-xs sm:text-sm font-bold text-primary hover:text-rust transition-colors text-left pt-6 flex items-center gap-1 cursor-pointer"
               >
-                DISCOVER IEDP <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                DISCOVER EDP <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
 
-            <div className="group md:col-span-3 bg-white rounded-2xl p-8 border border-neutral-200/80 shadow-sm hover:shadow-md hover:border-neutral-300 transition-all duration-300 flex flex-col justify-between md:flex-row md:items-center md:gap-8">
-              <div className="space-y-1">
+            {/* 4. Career & Opportunities */}
+            <div className="group bg-white rounded-2xl p-6 sm:p-7 border border-neutral-200/80 shadow-sm hover:shadow-md hover:border-neutral-300 transition-all duration-300 flex flex-col justify-between">
+              <div className="space-y-5">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-sans font-bold uppercase tracking-wider text-primary bg-accent px-3 py-1 rounded-full shadow-xs">Career & Opportunities</span>
+                </div>
                 <div className="w-12 h-12 rounded-xl bg-neutral-100 text-primary flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-colors duration-300">
+                  <Compass className="w-6 h-6" />
+                </div>
+                <div className="space-y-2.5">
+                  <h3 className="text-xl sm:text-[1.35rem] font-serif font-extrabold text-primary tracking-tight leading-snug group-hover:text-rust transition-colors">Turning aspirations into opportunities.</h3>
+                  <p className="text-xs sm:text-sm text-neutral-700 leading-relaxed font-sans">
+                    Enabling people across Uttarakhand prepare for careers, access employment opportunities and build sustainable futures.
+                  </p>
+                  {/* <div className="pt-2 flex flex-wrap gap-1.5">
+                    <span className="text-[10px] font-sans font-semibold bg-neutral-100 text-neutral-800 border border-neutral-200 px-2 py-0.5 rounded-full">
+                      Agniveer Preparation
+                    </span>
+                    <span className="text-[10px] font-sans font-semibold bg-neutral-100 text-neutral-800 border border-neutral-200 px-2 py-0.5 rounded-full">
+                      Career Coaching at Pauri
+                    </span>
+                    <span className="text-[10px] font-sans font-semibold bg-neutral-100 text-neutral-800 border border-neutral-200 px-2 py-0.5 rounded-full">
+                      IT Jobs via PineBrook
+                    </span>
+                  </div> */}
+                </div>
+              </div>
+              <Link 
+                href="/careers" 
+                className="text-xs sm:text-sm font-bold text-primary hover:text-rust transition-colors text-left pt-6 flex items-center gap-1 cursor-pointer"
+              >
+                EXPLORE CAREERS <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+          </div>
+
+          {/* Digital Transformation Feature Card */}
+          <div className="mt-8 group bg-white rounded-2xl p-7 sm:p-8 border border-neutral-200/80 shadow-sm hover:shadow-md hover:border-neutral-300 transition-all duration-300 flex flex-col md:flex-row md:items-center justify-between gap-6">
+            <div className="space-y-3 max-w-3xl">
+              <div className="flex items-center gap-3">
+                <span className="text-xs font-sans font-bold uppercase tracking-wider text-primary bg-accent px-3 py-1 rounded-full shadow-xs">Digital Transformation</span>
+              </div>
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-xl bg-neutral-100 text-primary flex items-center justify-center shrink-0 group-hover:bg-primary group-hover:text-white transition-colors duration-300 mt-1">
                   <Cpu className="w-6 h-6" />
                 </div>
-
-                <div className="space-y-2">
-                    <h3 className="text-xl font-serif font-bold text-primary">Digital Inclusion</h3>
-                  <p className="text-sm text-neutral-700 leading-relaxed font-sans">
-                    Village-level technology labs that make modern learning opportunities accessible to everyone.
+                <div className="space-y-1.5">
+                  <h3 className="text-xl sm:text-2xl font-serif font-extrabold text-primary tracking-tight group-hover:text-rust transition-colors">Connecting technology to community needs.</h3>
+                  <p className="text-xs sm:text-sm text-neutral-700 leading-relaxed font-sans">
+                    Building technology solutions that enable smarter healthcare, education and livelihoods across Uttarakhand.
                   </p>
                 </div>
               </div>
+            </div>
+            <div className="flex flex-wrap items-center gap-4 shrink-0 pt-2 md:pt-0">
               <Link
                 href="https://pinebrooktechnologies.com/"
                 target="_blank"
-                className="text-xs sm:text-sm font-bold text-primary hover:text-rust transition-colors text-left pt-6 flex items-center gap-1 cursor-pointer"
+                rel="noopener noreferrer"
+                className="text-xs sm:text-sm font-bold text-primary hover:text-rust transition-colors flex items-center gap-1 cursor-pointer"
               >
                 DISCOVER IT SOLUTIONS <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </Link>
               <Link
                 href="https://classes.issafoundation.in" 
-                className="text-xs sm:text-sm font-bold text-primary hover:text-rust transition-colors text-left pt-6 flex items-center gap-1 cursor-pointer"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs sm:text-sm font-bold text-primary hover:text-rust transition-colors flex items-center gap-1 cursor-pointer"
               >
-                ISSA CLASSES <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                ISSA CLASSES LMS <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
           </div>
