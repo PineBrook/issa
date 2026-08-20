@@ -182,7 +182,7 @@ export default function StoriesView({ journals }: { journals: BlogPost[] }) {
 
               <div className="text-sm text-neutral-700 leading-relaxed font-sans space-y-4 pt-2">
                 <p className="font-semibold text-primary">{readingStory.excerpt}</p>
-                <p>{readingStory.content}</p>
+                <MarkdownContent content={readingStory.content} />
                 <p className="text-xs text-neutral-500 italic bg-neutral-50 p-4 rounded-xl border border-neutral-100">
                   Transparency Notice: All reports published in ISSA Journals represent verified local initiatives. Budgets, materials, and participant indices are available to approved program sponsors.
                 </p>
@@ -194,6 +194,67 @@ export default function StoriesView({ journals }: { journals: BlogPost[] }) {
       )}
     </div>
   );
+}
+
+function MarkdownContent({ content }: { content: string }) {
+  const blocks: React.ReactNode[] = [];
+  const paragraph: string[] = [];
+  const list: string[] = [];
+
+  const flushParagraph = () => {
+    if (paragraph.length > 0) {
+      blocks.push(<p key={`paragraph-${blocks.length}`}>{renderInlineMarkdown(paragraph.join(' '))}</p>);
+      paragraph.length = 0;
+    }
+  };
+
+  const flushList = () => {
+    if (list.length > 0) {
+      blocks.push(
+        <ul key={`list-${blocks.length}`} className="list-disc space-y-2 pl-5">
+          {list.map((item, index) => <li key={`${item}-${index}`}>{renderInlineMarkdown(item)}</li>)}
+        </ul>,
+      );
+      list.length = 0;
+    }
+  };
+
+  content.split(/\r?\n/).forEach((line) => {
+    const trimmed = line.trim();
+    const heading = trimmed.match(/^#{1,6}\s+(.+)$/);
+    const bullet = trimmed.match(/^[-*]\s+(.+)$/);
+
+    if (!trimmed) {
+      flushParagraph();
+      flushList();
+    } else if (heading) {
+      flushParagraph();
+      flushList();
+      blocks.push(<h4 key={`heading-${blocks.length}`} className="pt-2 font-semibold text-primary">{renderInlineMarkdown(heading[1])}</h4>);
+    } else if (bullet) {
+      flushParagraph();
+      list.push(bullet[1]);
+    } else {
+      flushList();
+      paragraph.push(trimmed);
+    }
+  });
+
+  flushParagraph();
+  flushList();
+  return <div className="space-y-4">{blocks}</div>;
+}
+
+function renderInlineMarkdown(text: string): React.ReactNode[] {
+  return text.split(/(\*\*\*[^*]+\*\*\*|\*\*[^*]+\*\*)/g).map((part, index) => {
+    if (part.startsWith('***') && part.endsWith('***')) {
+      return <strong key={index}>{part.slice(3, -3)}</strong>;
+    }
+    if (part.startsWith('**') && part.endsWith('**')) {
+      return <strong key={index}>{part.slice(2, -2)}</strong>;
+    }
+    return <React.Fragment key={index}>{part}</React.Fragment>;
+  });
 }
 
 function filteredArticlesCount(list: any[]) {
