@@ -1,10 +1,10 @@
 import { readFile } from 'node:fs/promises';
 import { neon } from '@neondatabase/serverless';
 
-const connectionString = process.env.DB_CONN_KEY;
+const connectionString = process.env.DATABASE_URL ?? process.env.DB_CONN_KEY;
 
 if (!connectionString) {
-  throw new Error('DB_CONN_KEY must contain the Neon connection string.');
+  throw new Error('DATABASE_URL or DB_CONN_KEY must contain the Neon connection string.');
 }
 
 const migration = await readFile(new URL('../db/migrations/20260820_blog_posts.sql', import.meta.url), 'utf8');

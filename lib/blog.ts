@@ -3,10 +3,10 @@ import 'server-only';
 import { neon } from '@neondatabase/serverless';
 import type { BlogPost } from './blog-types';
 
-const connectionString = process.env.DB_CONN_KEY;
+const connectionString = process.env.DATABASE_URL ?? process.env.DB_CONN_KEY;
 
 if (!connectionString) {
-  throw new Error('DB_CONN_KEY must contain the Neon connection string.');
+  throw new Error('DATABASE_URL or DB_CONN_KEY must contain the Neon connection string.');
 }
 
 const sql = neon(connectionString);
