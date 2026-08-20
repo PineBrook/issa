@@ -18,7 +18,7 @@ test('blog migration creates five published posts with local media', async () =>
     '/isssa-healthcare-program-v2.png',
     '/isssa-entrepreneurship-program-v2.png',
     '/isssa-story-water-v2.png',
-    '/isssa-career-program-v2.png',
+    '/isssa-healthcare-program-v2.png',
   ];
 
   assert.match(migration, /CREATE TABLE IF NOT EXISTS blog_posts/);

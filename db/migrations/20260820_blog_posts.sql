@@ -109,7 +109,7 @@ ISSA Foundation द्वारा अग्निवीर योजना क�
 **पाबौ कैंप:** 7454954904
 
 **गैरसैंण कैंप:** 7063917273$$,
-    '/isssa-career-program-v2.png',
+    '/isssa-healthcare-program-v2.png',
     'ISSA Foundation',
     3,
     'published',
