@@ -61,10 +61,6 @@ const SEARCH_ITEMS: SearchItem[] = [
 
   // ── Stories ───────────────────────────────────────────────────────────
   { id: 'stories-root', label: 'Program Stories', description: 'Reports from educators, medical professionals, and community organizers', category: 'Stories', href: '/stories', elementId: 'stories-view', keywords: 'stories journals field reports dispatches' },
-  { id: 'story-digital-pauri', label: 'Digital Empowerment in Pauri', description: 'Smart classrooms for 350+ rural students — Education, March 2024', category: 'Stories', href: '/stories', elementId: 'story-digital-pauri', keywords: 'pauri smart classroom aarti rawat digital' },
-  { id: 'story-medical-peaks', label: 'Reaching Remote Mountain Villages', description: 'Free mobile medical camps in high altitudes — Healthcare, Feb 2024', category: 'Stories', href: '/stories', elementId: 'story-medical-peaks', keywords: 'medical camp peaks vivek negi cataract dental' },
-  { id: 'story-youth-skills', label: 'Preparing Young People for Work', description: 'Industry technical certifications for Himalayan graduates — Skills, Jan 2024', category: 'Stories', href: '/stories', elementId: 'story-youth-skills', keywords: 'skills vocational rajesh bist certification' },
-  { id: 'story-water', label: 'Reclaiming Ancestral Water Bodies', description: 'Restoring mountain springs for 80+ families — Communities, Dec 2023', category: 'Stories', href: '/stories', elementId: 'story-water-bodies', keywords: 'water springs sanitation climate sohan singh' },
 
   // ── Careers ───────────────────────────────────────────────────────────
   { id: 'careers-root', label: 'Careers & Field Opportunities', description: 'Purpose-led roles across Dehradun, Pauri, Srinagar, and field hubs', category: 'Careers', href: '/careers', elementId: 'careers-view', keywords: 'careers jobs hire join team work' },

@@ -5,8 +5,9 @@ import Link from 'next/link';
 import BlurImage from './BlurImage';
 import { ArrowRight, BookOpen, Stethoscope, Briefcase, Cpu, CheckCircle2, Calendar, Compass } from 'lucide-react';
 import HeroSlideshow, { HERO_SLIDES } from './HeroSlideshow';
+import type { BlogPost } from '@/lib/blog-types';
 
-export default function HomeView() {
+export default function HomeView({ stories }: { stories: BlogPost[] }) {
   const [activeSlide, setActiveSlide] = React.useState(0);
   const [isHeroPaused, setIsHeroPaused] = React.useState(false);
 
@@ -21,33 +22,6 @@ export default function HomeView() {
   const handleSelectSlide = (index: number) => {
     setActiveSlide(index);
   };
-
-  const stories = [
-    {
-      id: 1,
-      category: 'Education',
-      date: 'March 2024',
-      title: 'Digital empowerment in remote Pauri.',
-      desc: 'Launching our fifth smart-classroom cluster in rural Uttarakhand, bringing computer training and high-speed satellite learning to over 350 students.',
-      image: '/isssa-story-digital-inclusion-v2.png',
-    },
-    {
-      id: 2,
-      category: 'Healthcare',
-      date: 'February 2024',
-      title: 'Reaching remote mountain villages.',
-      desc: 'Free medical camps provide essential diagnostic care, dental checkups, and optical health tools to remote, high-altitude villages.',
-      image: '/isssa-healthcare-program-v2.png',
-    },
-    {
-      id: 3,
-      category: 'Entrepreneurship',
-      date: 'January 2024',
-      title: 'Preparing young people for work.',
-      desc: 'A new cohort completes industry-ready digital and technical certification, linking local Himalayan graduates to remote job opportunities.',
-      image: '/isssa-entrepreneurship-program-v2.png',
-    }
-  ];
 
   const [formSubmitted, setFormSubmitted] = React.useState(false);
   const [formData, setFormData] = React.useState({
@@ -416,11 +390,11 @@ export default function HomeView() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {stories.map((story) => (
-              <div key={story.id} className="bg-neutral-50 rounded-2xl overflow-hidden border border-neutral-200/80 shadow-sm flex flex-col justify-between group hover:shadow-lg transition-all duration-300">
+              <div key={story.slug} className="bg-neutral-50 rounded-2xl overflow-hidden border border-neutral-200/80 shadow-sm flex flex-col justify-between group hover:shadow-lg transition-all duration-300">
                 <div>
                   <div className="relative aspect-[16/10] overflow-hidden">
                     <BlurImage 
-                      src={story.image} 
+                      src={story.coverImagePath}
                       alt={story.title} 
                       fill
                       sizes="(max-width: 768px) 100vw, 33vw"
@@ -434,19 +408,19 @@ export default function HomeView() {
                   <div className="p-6 space-y-4">
                     <div className="flex items-center gap-2 text-sm text-neutral-500 font-medium">
                       <Calendar className="w-4 h-4 text-primary/70" />
-                      <span>{story.date}</span>
+                      <span>{story.displayDate}</span>
                     </div>
                     <h3 className="text-xl font-serif font-bold text-primary group-hover:text-rust transition-colors leading-snug">
                       {story.title}
                     </h3>
                     <p className="text-sm text-neutral-700 leading-relaxed line-clamp-3">
-                      {story.desc}
+                      {story.excerpt}
                     </p>
                   </div>
                 </div>
                 <div className="px-6 pb-6 pt-2">
                   <Link 
-                    href="/stories"
+                    href={`/stories#story-${story.slug}`}
                     className="text-xs sm:text-sm font-bold text-primary hover:text-rust transition-colors flex items-center gap-1 group/btn cursor-pointer"
                   >
                     READ STORY <ArrowRight className="w-3.5 h-3.5 group-hover/btn:translate-x-1 transition-transform" />

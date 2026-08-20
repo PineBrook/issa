@@ -1,6 +1,9 @@
 import { Metadata } from 'next';
 import HomeView from '@/components/HomeView';
 import { Analytics } from "@vercel/analytics/next"
+import { getPublishedBlogPosts } from '@/lib/blog';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Supporting Communities Across Uttarakhand',
@@ -21,10 +24,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function HomePage() {
+export default async function HomePage() {
+  const stories = await getPublishedBlogPosts(3);
+
   return (
     <>
-      <HomeView />
+      <HomeView stories={stories} />
       <Analytics />
     </>
   );

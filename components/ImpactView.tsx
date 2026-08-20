@@ -1,10 +1,12 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import BlurImage from './BlurImage';
 import { Award, ShieldAlert, CheckCircle, BarChart3, TrendingUp, HelpCircle, FileSpreadsheet, ArrowUpRight } from 'lucide-react';
+import type { BlogPost } from '@/lib/blog-types';
 
-export default function ImpactView() {
+export default function ImpactView({ stories }: { stories: BlogPost[] }) {
   const [activeStoryIdx, setActiveStoryIdx] = React.useState(0);
 
   const featuredImpacts = [
@@ -34,22 +36,7 @@ export default function ImpactView() {
     }
   ];
 
-  const storiesOfTheMonth = [
-    {
-      title: "A New Vision: Meera's Journey to Sight",
-      village: "Mana Outskirts",
-      quote: "I thought my blurry vision was just a side effect of growing old in the hills. ISSA's medical van proved me wrong and gifted my needlework back.",
-      narrative: "Meera, a 64-year-old traditional shawl weaver in high-altitude Mana, started losing her vision in 2022. Due to the high cost of traveling to Dehradun, she discontinued her craft. During our December Himalayan Mobile Camp, a specialist diagnostician diagnosed her cataracts. Two weeks later, she underwent completely free surgery funded directly by ISSA. Today, she is back to training young village girls in handloom weaving.",
-      image: "/isssa-healthcare-program-v2.png"
-    },
-    {
-      title: "A Class of Her Own: Renu's Academic Ascent",
-      village: "Pauri School Cluster",
-      quote: "Seeing a computer for the first time changed how I study. Now I want to become a software engineer right here in the hills.",
-      narrative: "Renu, an eighth-grade student at Pauri Government High School, had never experienced interactive smart learning. After ISSA's CIAS schools initiative adopted her classroom and provided satellite internet connection, she scored 94% on the regional mathematics board assessments, top among her peer cluster. She now leads the village student computer circle every Saturday afternoon.",
-      image: "/isssa-education-program-v2.png"
-    }
-  ];
+  const activeStory = stories[activeStoryIdx] ?? stories[0];
 
   return (
     <div className="pb-24 bg-neutral-50 font-sans" id="impact-view">
@@ -178,7 +165,7 @@ export default function ImpactView() {
         </div>
       </section>
 
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24" id="impact-story-month">
+      {activeStory && <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24" id="impact-story-month">
         <div className="space-y-3 mb-12">
           <h2 className="text-3xl sm:text-4xl font-serif font-bold text-primary">Stories from ISSA</h2>
         </div>
@@ -189,7 +176,7 @@ export default function ImpactView() {
             <div className="space-y-6">
               {/* Tabs */}
               <div className="flex gap-2 bg-white/10 p-1.5 rounded-full max-w-sm">
-                {storiesOfTheMonth.map((st, idx) => (
+                {stories.map((story, idx) => (
                   <button
                     key={idx}
                     onClick={() => setActiveStoryIdx(idx)}
@@ -199,41 +186,41 @@ export default function ImpactView() {
                         : 'text-neutral-300 hover:text-white'
                     }`}
                   >
-                    {st.village}
+                    {story.category}
                   </button>
                 ))}
               </div>
 
               <div className="space-y-4">
                 <h3 className="text-2xl sm:text-3xl font-serif font-bold text-accent leading-snug">
-                  {storiesOfTheMonth[activeStoryIdx].title}
+                  {activeStory.title}
                 </h3>
                 <blockquote className="border-l-2 border-accent pl-4 text-lg italic text-neutral-200 font-serif font-normal">
-                  &ldquo;{storiesOfTheMonth[activeStoryIdx].quote}&rdquo;
+                  &ldquo;{activeStory.excerpt}&rdquo;
                 </blockquote>
                 <p className="text-sm sm:text-base text-neutral-200 leading-relaxed font-sans">
-                  {storiesOfTheMonth[activeStoryIdx].narrative}
+                  {activeStory.content}
                 </p>
               </div>
             </div>
 
             <div className="pt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-4">
               <span className="text-xs font-sans text-neutral-300 uppercase tracking-wider font-semibold">Featured Himalayan Journal</span>
-              <button 
-                onClick={() => alert(`Sustained community programs are completely funded by donors and managed locally by ISSA partners. Thank you for your support.`)}
+              <Link
+                href={`/stories#story-${activeStory.slug}`}
                 className="bg-accent hover:bg-accent-dark text-primary px-5 py-2.5 rounded-full text-sm font-bold uppercase tracking-wider flex items-center gap-1.5 transition-all cursor-pointer"
               >
                 Learn More
                 <ArrowUpRight className="w-4 h-4" />
-              </button>
+              </Link>
             </div>
           </div>
 
           {/* Right Image */}
           <div className="lg:col-span-5 relative min-h-[300px]">
             <BlurImage 
-              src={storiesOfTheMonth[activeStoryIdx].image} 
-              alt={storiesOfTheMonth[activeStoryIdx].title} 
+              src={activeStory.coverImagePath}
+              alt={activeStory.title}
               fill
               sizes="(max-width: 1024px) 100vw, 40vw"
               className="object-cover"
@@ -241,7 +228,7 @@ export default function ImpactView() {
             />
           </div>
         </div>
-      </section>
+      </section>}
     </div>
   );
 }

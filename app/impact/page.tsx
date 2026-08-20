@@ -1,5 +1,8 @@
 import { Metadata } from 'next';
 import ImpactView from '@/components/ImpactView';
+import { getPublishedBlogPosts } from '@/lib/blog';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Our Impact Metrics',
@@ -16,6 +19,8 @@ export const metadata: Metadata = {
 
 const breadcrumbJsonLd = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Home', item: 'https://issafoundation.co.in/' }, { '@type': 'ListItem', position: 2, name: 'Impact', item: 'https://issafoundation.co.in/impact' }] };
 
-export default function ImpactPage() {
-  return <><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, '\\u003c') }} /><ImpactView /></>;
+export default async function ImpactPage() {
+  const stories = await getPublishedBlogPosts(2);
+
+  return <><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, '\\u003c') }} /><ImpactView stories={stories} /></>;
 }

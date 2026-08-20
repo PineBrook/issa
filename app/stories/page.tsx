@@ -1,5 +1,8 @@
 import { Metadata } from 'next';
 import StoriesView from '@/components/StoriesView';
+import { getPublishedBlogPosts } from '@/lib/blog';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Program Stories',
@@ -16,6 +19,8 @@ export const metadata: Metadata = {
 
 const breadcrumbJsonLd = { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Home', item: 'https://issafoundation.co.in/' }, { '@type': 'ListItem', position: 2, name: 'Stories', item: 'https://issafoundation.co.in/stories' }] };
 
-export default function StoriesPage() {
-  return <><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, '\\u003c') }} /><StoriesView /></>;
+export default async function StoriesPage() {
+  const stories = await getPublishedBlogPosts(100);
+
+  return <><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, '\\u003c') }} /><StoriesView journals={stories} /></>;
 }

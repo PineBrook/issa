@@ -2,68 +2,18 @@
 
 import React from 'react';
 import BlurImage from './BlurImage';
-import { Calendar, Clock, ArrowRight, BookOpen, Share2, Search, CheckCircle2 } from 'lucide-react';
+import { Calendar, Clock, ArrowRight, BookOpen, Search, CheckCircle2 } from 'lucide-react';
+import type { BlogPost } from '@/lib/blog-types';
 
-export default function StoriesView() {
+export default function StoriesView({ journals }: { journals: BlogPost[] }) {
   const [activeCategory, setActiveCategory] = React.useState('all');
   const [searchQuery, setSearchQuery] = React.useState('');
   const [readingStory, setReadingStory] = React.useState<any | null>(null);
 
-  const journals = [
-    {
-      id: 1,
-      category: 'Education',
-      date: 'March 14, 2024',
-      readTime: '4 min read',
-      title: 'Digital empowerment in remote Pauri.',
-      subtitle: 'Bringing computer education to over 350 rural students.',
-      desc: 'Our latest smart classroom cluster is official. In partnership with school authorities, we successfully completed the installation of five interactive smart boards and high-capacity computers. Students now engage in daily interactive coding modules and video-lectures.',
-      fullContent: 'For years, students in high-altitude Pauri Garhwal had minimal exposure to digital infrastructure. Traditional blackboard teaching was the only pedagogical mode. Today, with the collaboration of village heads and government school boards, ISSA has equipped three high-altitude clusters with interactive satellite-connected classrooms. The response is unprecedented: student retention rates rose by 84%, and children frequently remain after school to explore digital map tools, code logic puzzles, and science videos.',
-      image: '/isssa-story-digital-inclusion-v2.png',
-      author: 'Aarti Rawat, Education Lead'
-    },
-    {
-      id: 2,
-      category: 'Healthcare',
-      date: 'February 28, 2024',
-      readTime: '6 min read',
-      title: 'Reaching remote mountain villages.',
-      subtitle: 'Free medical camps delivering diagnostic checkups.',
-      desc: 'Healthcare in high altitudes is often a luxury. This month, our mobile clinics visited three remote hamlets, bringing custom dental checkup rigs, vision scanners, and physical therapy aids directly to elder community weavers.',
-      fullContent: 'Due to severe weather and steep terrain, seniors and children in remote Uttarakhand often postpone essential healthcare needs. ISSA’s Mobile Medical Camps provide on-site diagnostics, dental procedures, and optical prescriptions completely free of cost. Our team travels up to 40 kilometers off-paved roads to reach isolated villages. During this camp, over 300 individuals were screened, and 45 advanced cataract patients were scheduled for free transport and surgery at our partner hospital.',
-      image: '/isssa-healthcare-program-v2.png',
-      author: 'Dr. Vivek Negi, Chief Medical Officer'
-    },
-    {
-      id: 3,
-      category: 'Skills',
-      date: 'January 15, 2024',
-      readTime: '5 min read',
-      title: 'Preparing young people for work.',
-      subtitle: 'Local Himalayan graduates completing industry technical certifications.',
-      desc: 'Connecting mountain talent to digital livelihoods. Our vocational computer labs completed training for another cohort of 40 local girls and boys, focusing on office administration and software tools.',
-      fullContent: 'Himalayan youth frequently migrate to cities looking for basic manual labor due to a lack of technical training. ISSA’s Vocational Skill Labs seek to reverse this by offering certified computer literacy, accounting systems training, and basic software development directly in the hills. Working alongside regional industries, we help link top-performing graduates with remote data-entry and online administrative opportunities, allowing them to support their families without leaving their ancestral homes.',
-      image: '/isssa-entrepreneurship-program-v2.png',
-      author: 'Rajesh Bist, Vocational Coordinator'
-    },
-    {
-      id: 4,
-      category: 'Communities',
-      date: 'December 10, 2023',
-      readTime: '3 min read',
-      title: 'Reclaiming ancestral water bodies.',
-      subtitle: 'Restoring traditional village springs for reliable winter supply.',
-      desc: 'Sustained climate disruptions dried out natural water tables. Working with local groups, we helped clean and secure three natural mountain springs, safeguarding supply for 80+ families.',
-      fullContent: 'In high altitudes, clean water relies on natural underground springs. Silt collection and climatic shifts have reduced output. By organizing local youth groups and funding safe masonry surrounds, we restored clean, constant supply to three farming hamlets. The water is tested regularly and filtered using local gravel filters to ensure purity.',
-      image: '/isssa-story-water-v2.png',
-      author: 'Sohan Singh, Field Supervisor'
-    }
-  ];
-
   const filteredJournals = journals.filter((item) => {
     const matchesCategory = activeCategory === 'all' || item.category.toLowerCase() === activeCategory.toLowerCase();
     const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          item.desc.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                          item.excerpt.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           item.category.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesCategory && matchesSearch;
   });
@@ -129,20 +79,16 @@ export default function StoriesView() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 mt-8">
           {filteredJournals.map((story) => (
             <article 
-              key={story.id}
+              key={story.slug}
               id={
-                story.id === 1 ? 'story-digital-pauri' :
-                story.id === 2 ? 'story-medical-peaks' :
-                story.id === 3 ? 'story-youth-skills' :
-                story.id === 4 ? 'story-water-bodies' :
-                `story-${story.id}`
+                `story-${story.slug}`
               }
               className="bg-white rounded-3xl overflow-hidden border border-neutral-200/60 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between group"
             >
               <div>
                 <div className="relative aspect-[16/9] overflow-hidden bg-neutral-100">
                   <BlurImage 
-                    src={story.image} 
+                    src={story.coverImagePath}
                     alt={story.title} 
                     fill
                     sizes="(max-width: 768px) 100vw, 50vw"
@@ -158,11 +104,11 @@ export default function StoriesView() {
                   <div className="flex items-center gap-4 text-xs text-neutral-400 font-sans">
                     <span className="flex items-center gap-1">
                       <Calendar className="w-3.5 h-3.5" />
-                      {story.date}
+                      {story.displayDate}
                     </span>
                     <span className="flex items-center gap-1">
                       <Clock className="w-3.5 h-3.5" />
-                      {story.readTime}
+                      {story.readingTimeMinutes} min read
                     </span>
                   </div>
 
@@ -175,13 +121,13 @@ export default function StoriesView() {
                   </p>
 
                   <p className="text-xs text-neutral-500 leading-relaxed font-sans">
-                    {story.desc}
+                    {story.excerpt}
                   </p>
                 </div>
               </div>
 
               <div className="px-8 pb-8 pt-2 flex items-center justify-between border-t border-neutral-100 mt-4">
-                <span className="text-xs font-semibold text-neutral-500 italic">By {story.author}</span>
+                <span className="text-xs font-semibold text-neutral-500 italic">By {story.authorName}</span>
                 <button
                   onClick={() => setReadingStory(story)}
                   className="text-xs font-bold text-primary hover:text-rust transition-colors flex items-center gap-1 cursor-pointer"
@@ -216,16 +162,16 @@ export default function StoriesView() {
               </div>
 
               <div className="flex items-center gap-4 text-xs text-neutral-400 font-sans py-2 border-y border-neutral-100">
-                <span>Published: {readingStory.date}</span>
+                <span>Published: {readingStory.displayDate}</span>
                 <span>•</span>
-                <span>Estimate: {readingStory.readTime}</span>
+                <span>Estimate: {readingStory.readingTimeMinutes} min read</span>
                 <span>•</span>
-                <span>Report by: {readingStory.author}</span>
+                <span>Report by: {readingStory.authorName}</span>
               </div>
 
               <div className="aspect-[16/9] rounded-2xl overflow-hidden relative">
                 <BlurImage 
-                  src={readingStory.image} 
+                  src={readingStory.coverImagePath}
                   alt={readingStory.title} 
                   fill
                   sizes="(max-width: 1024px) 100vw, 80vw"
@@ -235,23 +181,13 @@ export default function StoriesView() {
               </div>
 
               <div className="text-sm text-neutral-700 leading-relaxed font-sans space-y-4 pt-2">
-                <p className="font-semibold text-primary">{readingStory.desc}</p>
-                <p>{readingStory.fullContent}</p>
+                <p className="font-semibold text-primary">{readingStory.excerpt}</p>
+                <p>{readingStory.content}</p>
                 <p className="text-xs text-neutral-500 italic bg-neutral-50 p-4 rounded-xl border border-neutral-100">
                   Transparency Notice: All reports published in ISSA Journals represent verified local initiatives. Budgets, materials, and participant indices are available to approved program sponsors.
                 </p>
               </div>
 
-              <div className="pt-4 flex justify-end">
-                <button 
-                  onClick={() => {
-                    alert('Share link copied to clipboard.');
-                  }}
-                  className="bg-primary hover:bg-primary-light text-white font-semibold text-xs uppercase tracking-wider px-6 py-3 rounded-full flex items-center gap-2 transition-colors cursor-pointer"
-                >
-                  <Share2 className="w-3.5 h-3.5" /> Share Report
-                </button>
-              </div>
             </div>
           </div>
         </div>

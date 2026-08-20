@@ -1,8 +1,12 @@
 import { MetadataRoute } from 'next';
+import { getPublishedBlogPosts } from '@/lib/blog';
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export const dynamic = 'force-dynamic';
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = 'https://issafoundation.co.in';
   const lastModified = new Date();
+  const [latestPost] = await getPublishedBlogPosts(1);
 
   return [
     {
@@ -43,7 +47,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     {
       url: `${baseUrl}/stories`,
-      lastModified,
+      lastModified: latestPost ? new Date(latestPost.publishedAt) : lastModified,
       changeFrequency: 'weekly',
       priority: 0.8,
     },
@@ -73,4 +77,3 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 }
-
