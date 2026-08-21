@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import CareersView from '@/components/CareersView';
+import { getActiveJobOpenings } from '@/lib/careers';
 
 export const metadata: Metadata = {
   title: 'Join Our Team & Careers',
@@ -21,13 +22,24 @@ export const metadata: Metadata = {
 };
 
 const breadcrumbJsonLd = {
-  '@context': 'https://schema.org', '@type': 'BreadcrumbList',
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
   itemListElement: [
     { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://issafoundation.co.in/' },
     { '@type': 'ListItem', position: 2, name: 'Careers', item: 'https://issafoundation.co.in/careers' },
   ],
 };
 
-export default function CareersPage() {
-  return <><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, '\\u003c') }} /><CareersView /></>;
+export default async function CareersPage() {
+  const jobs = await getActiveJobOpenings();
+
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, '\\u003c') }}
+      />
+      <CareersView initialJobs={jobs} />
+    </>
+  );
 }

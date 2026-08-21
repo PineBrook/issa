@@ -9,7 +9,10 @@
     "lint": "eslint .",
     "clean": "next clean",
     "migrate:blog": "node --env-file=.env scripts/migrate-blog.mjs",
-    "test:blog-migration": "node --test tests/blog-migration.test.mjs"
+    "migrate:careers": "node --env-file=.env scripts/migrate-careers.mjs",
+    "test:blog-migration": "node --test tests/blog-migration.test.mjs",
+    "test:careers": "node --test tests/careers-migration.test.mjs",
+    "test": "node --test tests/*.test.mjs"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",
