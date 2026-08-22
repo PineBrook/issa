@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { MapPin, Phone, Mail, Clock, HelpCircle, ArrowRight, CheckCircle2, Send, Loader2, Youtube, Facebook, Instagram, Linkedin, Twitter } from 'lucide-react';
 import { useToast } from '@/components/Toast';
 import Newsletter from '@/components/Newsletter';
+import { submitContactAction } from '@/app/forms/actions';
 
 export default function ContactView() {
   const [activeFaq, setActiveFaq] = React.useState<number | null>(null);
@@ -17,6 +18,7 @@ export default function ContactView() {
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formError, setFormError] = useState('');
 
   const offices = [
     {
@@ -55,34 +57,12 @@ export default function ContactView() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleContactSubmit = (e: React.FormEvent) => {
+  const handleContactSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    if (!formData.name.trim()) {
-      toast('Please enter your name.', 'error');
-      return;
-    }
-
-    if (!formData.email.trim()) {
-      toast('Please enter your email address.', 'error');
-      return;
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-      toast('Please enter a valid email address.', 'error');
-      return;
-    }
-
-    if (!formData.message.trim() || formData.message.trim().length < 10) {
-      toast('Message must be at least 10 characters long.', 'error');
-      return;
-    }
-
     setIsSubmitting(true);
-
-    // Simulate sending message
-    setTimeout(() => {
+    setFormError('');
+    const result = await submitContactAction(new FormData(e.currentTarget));
+    if (result.success) {
       setIsSubmitting(false);
       toast(`Thank you, ${formData.name}! Your inquiry has been sent. We'll be in touch.`, 'success');
       setFormData({
@@ -91,7 +71,10 @@ export default function ContactView() {
         subject: 'General Inquiry',
         message: ''
       });
-    }, 1500);
+    } else {
+      setIsSubmitting(false);
+      setFormError(result.message);
+    }
   };
 
   return (
@@ -172,6 +155,7 @@ export default function ContactView() {
             </div>
 
             <form onSubmit={handleContactSubmit} className="space-y-6" id="contact-inquiry-form">
+              <input name="website" tabIndex={-1} autoComplete="off" className="sr-only" aria-hidden="true" />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label htmlFor="contact-name" className="block text-xs font-sans uppercase tracking-wider text-neutral-700 font-bold">Your Name</label>
@@ -182,7 +166,7 @@ export default function ContactView() {
                     value={formData.name}
                     onChange={handleInputChange}
                     disabled={isSubmitting}
-                    placeholder="Enter your full name"
+                    placeholder="Aarav Sharma"
                     className="w-full bg-neutral-50 border border-neutral-300 rounded-xl px-4 py-3 text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-300 font-sans disabled:opacity-55"
                   />
                 </div>
@@ -195,7 +179,7 @@ export default function ContactView() {
                     value={formData.email}
                     onChange={handleInputChange}
                     disabled={isSubmitting}
-                    placeholder="your.name@domain.com"
+                    placeholder="aarav.sharma@example.com"
                     className="w-full bg-neutral-50 border border-neutral-300 rounded-xl px-4 py-3 text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-300 font-sans disabled:opacity-55"
                   />
                 </div>
@@ -250,6 +234,7 @@ export default function ContactView() {
                   </>
                 )}
               </button>
+              {formError && <p role="status" className="text-sm text-red-700 font-medium">{formError}</p>}
             </form>
           </div>
 

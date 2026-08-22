@@ -6,6 +6,7 @@ import BlurImage from './BlurImage';
 import { ArrowRight, BookOpen, Stethoscope, Briefcase, Cpu, CheckCircle2, Calendar, Compass } from 'lucide-react';
 import HeroSlideshow, { HERO_SLIDES } from './HeroSlideshow';
 import type { BlogPost } from '@/lib/blog-types';
+import { submitContactAction } from '@/app/forms/actions';
 
 export default function HomeView({ stories }: { stories: BlogPost[] }) {
   const [activeSlide, setActiveSlide] = React.useState(0);
@@ -24,20 +25,25 @@ export default function HomeView({ stories }: { stories: BlogPost[] }) {
   };
 
   const [formSubmitted, setFormSubmitted] = React.useState(false);
+  const [formError, setFormError] = React.useState('');
   const [formData, setFormData] = React.useState({
     name: '',
     email: '',
     message: ''
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (formData.name && formData.email) {
+    setFormError('');
+    const result = await submitContactAction(new FormData(e.currentTarget));
+    if (result.success) {
       setFormSubmitted(true);
       setTimeout(() => {
         setFormSubmitted(false);
         setFormData({ name: '', email: '', message: '' });
       }, 5000);
+    } else {
+      setFormError(result.message);
     }
   };
 
@@ -466,15 +472,18 @@ export default function HomeView({ stories }: { stories: BlogPost[] }) {
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-6">
+                  <input type="hidden" name="subject" value="Homepage collaboration" />
+                  <input name="website" tabIndex={-1} autoComplete="off" className="sr-only" aria-hidden="true" />
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <label className="text-xs font-sans uppercase tracking-wider text-neutral-500 block">Full Name</label>
                       <input 
                         type="text" 
+                        name="name"
                         required
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        placeholder="John Doe" 
+                        placeholder="Aarav Sharma" 
                         className="w-full bg-neutral-50 border border-neutral-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary focus:bg-white transition-all"
                       />
                     </div>
@@ -482,10 +491,11 @@ export default function HomeView({ stories }: { stories: BlogPost[] }) {
                       <label className="text-xs font-sans uppercase tracking-wider text-neutral-500 block">Email Address</label>
                       <input 
                         type="email" 
+                        name="email"
                         required
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        placeholder="you@example.com" 
+                        placeholder="aarav.sharma@example.com" 
                         className="w-full bg-neutral-50 border border-neutral-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary focus:bg-white transition-all"
                       />
                     </div>
@@ -494,6 +504,7 @@ export default function HomeView({ stories }: { stories: BlogPost[] }) {
                   <div className="space-y-2">
                     <label className="text-xs font-sans uppercase tracking-wider text-neutral-500 block">How would you like to help?</label>
                     <textarea 
+                      name="message"
                       rows={4}
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
@@ -509,6 +520,7 @@ export default function HomeView({ stories }: { stories: BlogPost[] }) {
                     Send message
                     <ArrowRight className="w-4 h-4" />
                   </button>
+                  {formError && <p role="status" className="text-sm text-red-700 font-medium">{formError}</p>}
                 </form>
               )}
             </div>

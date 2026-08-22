@@ -10,8 +10,10 @@
     "clean": "next clean",
     "migrate:blog": "node --env-file=.env scripts/migrate-blog.mjs",
     "migrate:careers": "node --env-file=.env scripts/migrate-careers.mjs",
+    "migrate:public-forms": "node --env-file=.env scripts/migrate-public-forms.mjs",
     "test:blog-migration": "node --test tests/blog-migration.test.mjs",
     "test:careers": "node --test tests/careers-migration.test.mjs",
+    "test:public-forms": "node --test tests/public-forms.test.mjs",
     "test": "node --test tests/*.test.mjs"
   },
   "dependencies": {

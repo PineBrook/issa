@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { Send, Check, AlertCircle, Loader2 } from 'lucide-react';
-import { useToast } from '@/components/Toast';
+import { subscribeNewsletterAction } from '@/app/forms/actions';
 
 interface NewsletterProps {
   variant?: 'dark' | 'light';
@@ -22,38 +22,18 @@ export default function Newsletter({
   const [email, setEmail] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
-  const { toast } = useToast();
-
-  const validateEmail = (emailStr: string) => {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailStr);
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setErrorMessage('');
-
-    if (!email.trim()) {
-      setStatus('error');
-      setErrorMessage('Please enter your email address.');
-      toast('Please enter your email address to subscribe.', 'error');
-      return;
-    }
-
-    if (!validateEmail(email.trim())) {
-      setStatus('error');
-      setErrorMessage('Please enter a valid email address.');
-      toast('Invalid email address format.', 'error');
-      return;
-    }
-
     setStatus('loading');
-
-    // Simulate API request
-    setTimeout(() => {
+    const result = await subscribeNewsletterAction(new FormData(e.currentTarget));
+    if (result.success) {
       setStatus('success');
-      toast('Subscription successful! Thank you for joining the ISSA Foundation community.', 'success');
       setEmail('');
-    }, 1200);
+    } else {
+      setStatus('error');
+      setErrorMessage(result.message);
+    }
   };
 
   const isDark = variant === 'dark';
@@ -96,10 +76,13 @@ export default function Newsletter({
         </div>
       ) : (
         <form onSubmit={handleSubmit} className="space-y-2">
+          <input type="hidden" name="source" value={id} />
+          <input name="website" tabIndex={-1} autoComplete="off" className="sr-only" aria-hidden="true" />
           <div className="flex gap-2 relative">
             <input
               type="email"
-              placeholder="your.email@domain.com"
+              name="email"
+              placeholder="aarav.sharma@example.com"
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
@@ -113,6 +96,7 @@ export default function Newsletter({
                   : 'bg-neutral-50 border border-neutral-300 text-neutral-800 placeholder-neutral-400 focus:border-primary focus:ring-1 focus:ring-primary'
               }`}
               id={`${id}-email-input`}
+              aria-describedby={status === 'error' ? `${id}-error` : undefined}
             />
             <button
               type="submit"
@@ -137,6 +121,7 @@ export default function Newsletter({
             <div 
               className="flex items-center gap-1.5 text-xs text-red-400 animate-fade-in pl-1 font-medium"
               id={`${id}-error`}
+              role="status"
             >
               <AlertCircle className="w-3.5 h-3.5" />
               <span>{errorMessage}</span>

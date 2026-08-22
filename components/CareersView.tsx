@@ -299,7 +299,7 @@ export default function CareersView({ initialJobs = [] }: CareersViewProps) {
                         required
                         value={formState.name}
                         onChange={(e) => setFormState({ ...formState, name: e.target.value })}
-                        placeholder="John Doe"
+                        placeholder="Aarav Sharma"
                         className={`w-full bg-neutral-50 border rounded-xl px-4 py-3 text-sm text-neutral-800 focus:outline-none focus:border-primary focus:bg-white transition-all font-sans ${
                           state.errors?.fullName ? 'border-red-400 bg-red-50/50' : 'border-neutral-300'
                         }`}
@@ -321,7 +321,7 @@ export default function CareersView({ initialJobs = [] }: CareersViewProps) {
                         required
                         value={formState.email}
                         onChange={(e) => setFormState({ ...formState, email: e.target.value })}
-                        placeholder="john@example.com"
+                        placeholder="aarav.sharma@example.com"
                         className={`w-full bg-neutral-50 border rounded-xl px-4 py-3 text-sm text-neutral-800 focus:outline-none focus:border-primary focus:bg-white transition-all font-sans ${
                           state.errors?.email ? 'border-red-400 bg-red-50/50' : 'border-neutral-300'
                         }`}
