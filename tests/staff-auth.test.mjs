@@ -28,3 +28,11 @@ test('new staff profiles start with no access and derive first name without a re
   assert.match(staff, /return email\.split\('@'\)\[0\]\.split\('\.'\)\[0\];/);
   assert.match(staff, /\$\{email\}, 'no_access', 'active', NOW\(\)/);
 });
+
+test('auth proxy permits only company email OTP sign-in', async () => {
+  const route = await readFile(new URL('../app/api/auth/[...path]/route.ts', import.meta.url), 'utf8');
+  assert.match(route, /email-otp\/send-verification-otp/);
+  assert.match(route, /sign-in\/email-otp/);
+  assert.match(route, /parts\.length === 2 && Boolean\(parts\[0\]\) && parts\[1\] === companyDomain/);
+  assert.doesNotMatch(route, /sign-in\/magic-link|magic-link\/verify/);
+});
