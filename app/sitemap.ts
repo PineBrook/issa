@@ -47,7 +47,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
     {
       url: `${baseUrl}/stories`,
-      lastModified: latestPost ? new Date(latestPost.publishedAt) : lastModified,
+      lastModified: latestPost?.publishedAt ? new Date(latestPost.publishedAt) : lastModified,
       changeFrequency: 'weekly',
       priority: 0.8,
     },
