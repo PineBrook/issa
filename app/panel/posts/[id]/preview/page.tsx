@@ -4,6 +4,7 @@ import { redirect, notFound } from 'next/navigation';
 import { getAuthSessionUser, getCurrentStaff } from '@/lib/staff';
 import { getPanelBlogPostById } from '@/lib/cms';
 import BlurImage from '@/components/BlurImage';
+import SignOutButton from '@/app/panel/sign-out-button';
 import { ArrowLeft, Calendar, Clock, Eye, AlertTriangle } from 'lucide-react';
 import React from 'react';
 
@@ -146,6 +147,8 @@ export default async function PostPreviewPage(props: { params: Promise<{ id: str
             >
               <ArrowLeft className="h-3.5 w-3.5" /> Back to Editor
             </Link>
+
+            <SignOutButton />
           </div>
         </div>
       </div>

@@ -5,23 +5,25 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import SignOutButton from './sign-out-button';
 import type { StaffProfile, StaffRole } from '@/lib/staff';
-import type { BlogPost, BlogStatus } from '@/lib/blog-types';
+import type { BlogPost } from '@/lib/blog-types';
 import {
+  LayoutDashboard,
   FileText,
   Users,
   Plus,
   Edit,
   Eye,
-  Calendar,
-  Clock,
   Search,
   RefreshCw,
   ExternalLink,
   Shield,
-  CheckCircle,
+  Sparkles,
+  ArrowRight,
+  Clock,
+  CheckCircle2,
   AlertCircle,
-  Archive,
-  RotateCcw,
+  FileEdit,
+  Calendar,
 } from 'lucide-react';
 
 interface SessionUserInfo {
@@ -48,8 +50,8 @@ export default function StaffPanel({
   const [users, setUsers] = useState<StaffProfile[]>(initialUsers);
   const [posts, setPosts] = useState<BlogPost[]>(initialPosts);
 
-  // Active navigation tab: 'posts' | 'users'
-  const [currentTab, setCurrentTab] = useState<'posts' | 'users'>('posts');
+  // Active navigation tab: 'overview' (Greeting / Dashboard default) | 'posts' | 'users'
+  const [currentTab, setCurrentTab] = useState<'overview' | 'posts' | 'users'>('overview');
 
   // Posts Filter & Search State
   const [postStatusFilter, setPostStatusFilter] = useState<string>('all');
@@ -215,6 +217,11 @@ export default function StaffPanel({
     archived: 'bg-neutral-200 text-neutral-700 border-neutral-300',
   };
 
+  // Greeting calculation based on India Standard Time (IST)
+  const currentHour = new Date().getHours();
+  const greetingTime = currentHour < 12 ? 'Good morning' : currentHour < 17 ? 'Good afternoon' : 'Good evening';
+  const displayName = staff?.firstName || staff?.fullName?.split(' ')[0] || initialUser.name || 'Team';
+
   // Authorized View
   if (hasAuthorizedRole && staff) {
     return (
@@ -224,13 +231,13 @@ export default function StaffPanel({
           <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#E5E0D8] bg-white p-6 shadow-sm">
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-2xl sm:text-3xl font-semibold">Welcome, {staff.fullName}</h1>
+                <h1 className="text-2xl sm:text-3xl font-semibold">{greetingTime}, {displayName}</h1>
                 <span className="inline-flex items-center rounded-full bg-[#0D311F]/10 px-2.5 py-0.5 text-xs font-semibold text-[#0D311F]">
                   {staff.role}
                 </span>
               </div>
               <p className="mt-1 text-sm text-neutral-600">
-                ISSA Operations & Content Panel &bull; Signed in as <span className="font-medium text-[#071E13]">{staff.email}</span>
+                Signed in as <span className="font-medium text-[#071E13]">{staff.email}</span>
               </p>
             </div>
             <div className="flex items-center gap-3">
@@ -247,6 +254,19 @@ export default function StaffPanel({
 
           {/* Navigation Tabs */}
           <div className="flex flex-wrap items-center gap-2 border-b border-[#E5E0D8] pb-1">
+            <button
+              type="button"
+              onClick={() => setCurrentTab('overview')}
+              className={`inline-flex items-center gap-2 rounded-t-xl px-4 py-2.5 text-sm font-semibold transition cursor-pointer border-b-2 ${
+                currentTab === 'overview'
+                  ? 'border-[#0D311F] bg-white text-[#0D311F] shadow-xs'
+                  : 'border-transparent text-neutral-600 hover:text-[#071E13]'
+              }`}
+            >
+              <LayoutDashboard className="h-4 w-4" />
+              Overview
+            </button>
+
             <button
               type="button"
               onClick={() => setCurrentTab('posts')}
@@ -280,6 +300,215 @@ export default function StaffPanel({
             </button>
           </div>
 
+          {/* TAB 0: DEFAULT GREETING / OVERVIEW DASHBOARD */}
+          {currentTab === 'overview' && (
+            <div className="space-y-6">
+              {/* Greeting Hero Card */}
+              <div className="rounded-2xl border border-[#E5E0D8] bg-gradient-to-br from-[#0D311F] to-[#071E13] p-8 text-white shadow-sm">
+                <div className="flex flex-wrap items-center justify-between gap-6">
+                  <div className="space-y-2 max-w-2xl">
+                    <div className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-[#E8B94C]">
+                      <Sparkles className="h-3.5 w-3.5" />
+                      ISSA Foundation Operations Panel
+                    </div>
+                    <h2 className="text-2xl sm:text-3xl font-serif font-bold tracking-tight">
+                      Welcome to your daily workspace, {displayName}.
+                    </h2>
+                    <p className="text-sm text-neutral-200 leading-relaxed font-light">
+                      Manage program stories, review content submissions, and oversee operational access across Uttarakhand initiatives.
+                    </p>
+                  </div>
+
+                  <div className="flex flex-wrap gap-3">
+                    <Link
+                      href="/panel/posts/new"
+                      className="inline-flex items-center gap-2 rounded-xl bg-[#E8B94C] px-4 py-2.5 text-xs font-bold text-[#071E13] hover:bg-[#DCAB3D] transition shadow-xs cursor-pointer"
+                    >
+                      <Plus className="h-4 w-4" /> New Blog Post
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => setCurrentTab('posts')}
+                      className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 py-2.5 text-xs font-semibold text-white hover:bg-white/20 transition cursor-pointer"
+                    >
+                      View All Posts <ArrowRight className="h-3.5 w-3.5" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Actionable Metrics Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {/* Published Stories */}
+                <div
+                  onClick={() => { setPostStatusFilter('published'); setCurrentTab('posts'); }}
+                  className="rounded-2xl border border-[#E5E0D8] bg-white p-5 shadow-xs hover:border-[#0D311F] transition cursor-pointer group"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold uppercase tracking-wider text-neutral-500">
+                      Live on Site
+                    </span>
+                    <span className="rounded-full bg-emerald-100 p-2 text-emerald-800">
+                      <CheckCircle2 className="h-4 w-4" />
+                    </span>
+                  </div>
+                  <div className="mt-3">
+                    <div className="text-3xl font-serif font-bold text-[#071E13]">
+                      {postCounts.published}
+                    </div>
+                    <p className="mt-1 text-xs text-neutral-500 flex items-center gap-1">
+                      Published stories <ArrowRight className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </p>
+                  </div>
+                </div>
+
+                {/* In Review */}
+                <div
+                  onClick={() => { setPostStatusFilter('in_review'); setCurrentTab('posts'); }}
+                  className="rounded-2xl border border-[#E5E0D8] bg-white p-5 shadow-xs hover:border-[#0D311F] transition cursor-pointer group"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold uppercase tracking-wider text-neutral-500">
+                      In Review
+                    </span>
+                    <span className="rounded-full bg-blue-100 p-2 text-blue-800">
+                      <Clock className="h-4 w-4" />
+                    </span>
+                  </div>
+                  <div className="mt-3">
+                    <div className="text-3xl font-serif font-bold text-[#071E13]">
+                      {postCounts.in_review}
+                    </div>
+                    <p className="mt-1 text-xs text-neutral-500 flex items-center gap-1">
+                      Awaiting admin review <ArrowRight className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </p>
+                  </div>
+                </div>
+
+                {/* Drafts */}
+                <div
+                  onClick={() => { setPostStatusFilter('draft'); setCurrentTab('posts'); }}
+                  className="rounded-2xl border border-[#E5E0D8] bg-white p-5 shadow-xs hover:border-[#0D311F] transition cursor-pointer group"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold uppercase tracking-wider text-neutral-500">
+                      Drafts
+                    </span>
+                    <span className="rounded-full bg-amber-100 p-2 text-amber-800">
+                      <FileEdit className="h-4 w-4" />
+                    </span>
+                  </div>
+                  <div className="mt-3">
+                    <div className="text-3xl font-serif font-bold text-[#071E13]">
+                      {postCounts.draft}
+                    </div>
+                    <p className="mt-1 text-xs text-neutral-500 flex items-center gap-1">
+                      Works in progress <ArrowRight className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </p>
+                  </div>
+                </div>
+
+                {/* Registered Staff */}
+                <div
+                  onClick={() => setCurrentTab('users')}
+                  className="rounded-2xl border border-[#E5E0D8] bg-white p-5 shadow-xs hover:border-[#0D311F] transition cursor-pointer group"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold uppercase tracking-wider text-neutral-500">
+                      Team Members
+                    </span>
+                    <span className="rounded-full bg-[#0D311F]/10 p-2 text-[#0D311F]">
+                      <Users className="h-4 w-4" />
+                    </span>
+                  </div>
+                  <div className="mt-3">
+                    <div className="text-3xl font-serif font-bold text-[#071E13]">
+                      {users.length}
+                    </div>
+                    <p className="mt-1 text-xs text-neutral-500 flex items-center gap-1">
+                      Staff accounts <ArrowRight className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Quick Jump Sections */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Recent Activity / Recent Posts */}
+                <div className="rounded-2xl border border-[#E5E0D8] bg-white p-6 shadow-sm space-y-4">
+                  <div className="flex items-center justify-between border-b border-[#E5E0D8] pb-3">
+                    <h3 className="text-base font-semibold text-[#071E13] flex items-center gap-2">
+                      <FileText className="h-4 w-4 text-[#0D311F]" /> Recent Stories
+                    </h3>
+                    <button
+                      type="button"
+                      onClick={() => setCurrentTab('posts')}
+                      className="text-xs font-semibold text-[#0D311F] hover:underline cursor-pointer"
+                    >
+                      View All
+                    </button>
+                  </div>
+
+                  <div className="divide-y divide-[#E5E0D8]">
+                    {posts.slice(0, 4).map((p) => (
+                      <div key={p.id || p.slug} className="py-3 flex items-center justify-between gap-3">
+                        <div className="min-w-0 flex-1">
+                          <p className="text-xs font-semibold text-[#071E13] truncate">{p.title}</p>
+                          <p className="text-[11px] text-neutral-500">{p.category} &bull; By {p.authorName}</p>
+                        </div>
+                        <div className="flex items-center gap-2 flex-shrink-0">
+                          <span className={`rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase ${statusBadgeClasses[p.status || 'draft']}`}>
+                            {p.status?.replace('_', ' ')}
+                          </span>
+                          {p.id && (
+                            <Link
+                              href={`/panel/posts/${p.id}`}
+                              className="rounded-md border border-[#E5E0D8] bg-white p-1 text-neutral-600 hover:bg-[#F7F6F3]"
+                              title="Edit post"
+                            >
+                              <Edit className="h-3 w-3" />
+                            </Link>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* System & Permissions Summary */}
+                <div className="rounded-2xl border border-[#E5E0D8] bg-white p-6 shadow-sm space-y-4">
+                  <div className="flex items-center justify-between border-b border-[#E5E0D8] pb-3">
+                    <h3 className="text-base font-semibold text-[#071E13] flex items-center gap-2">
+                      <Shield className="h-4 w-4 text-[#0D311F]" /> Account & Security
+                    </h3>
+                    <span className="text-xs text-neutral-500 font-mono">IST (UTC+5:30)</span>
+                  </div>
+
+                  <div className="space-y-3 text-xs text-neutral-700 leading-relaxed">
+                    <div className="rounded-xl border border-neutral-200 bg-[#FAF9F7] p-3.5 space-y-1.5">
+                      <p className="font-semibold text-[#071E13]">Your Role: {staff.role}</p>
+                      <p className="text-neutral-600">
+                        {isAdmin
+                          ? 'You have administrative permissions: publish live stories, schedule posts, restore revisions, and manage staff access.'
+                          : 'You have content authoring permissions: create drafts, edit stories, and submit dispatches for editorial review.'}
+                      </p>
+                    </div>
+
+                    <div className="flex justify-between items-center pt-2">
+                      <span className="text-neutral-500">Domain access restriction:</span>
+                      <strong className="text-[#0D311F]">@pinebrooktechnologies.com</strong>
+                    </div>
+
+                    <div className="flex justify-between items-center">
+                      <span className="text-neutral-500">Authentication mode:</span>
+                      <strong className="text-[#0D311F]">Email OTP (Magic Code)</strong>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* TAB 1: BLOG POSTS (CMS) */}
           {currentTab === 'posts' && (
             <div className="rounded-2xl border border-[#E5E0D8] bg-white shadow-sm overflow-hidden space-y-0">
@@ -305,7 +534,7 @@ export default function StaffPanel({
 
                   <Link
                     href="/panel/posts/new"
-                    className="inline-flex items-center gap-1.5 rounded-lg bg-[#0D311F] px-4 py-2 text-xs font-semibold text-white hover:bg-[#17452F] transition shadow-xs"
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-[#0D311F] px-4 py-2 text-xs font-semibold text-white hover:bg-[#17452F] transition shadow-xs cursor-pointer"
                   >
                     <Plus className="h-4 w-4" /> New Blog Post
                   </Link>
@@ -416,14 +645,14 @@ export default function StaffPanel({
                                 <>
                                   <Link
                                     href={`/panel/posts/${post.id}`}
-                                    className="inline-flex items-center gap-1 rounded-md border border-[#E5E0D8] bg-white px-2.5 py-1 text-xs font-medium text-neutral-700 hover:bg-[#F7F6F3] transition"
+                                    className="inline-flex items-center gap-1 rounded-md border border-[#E5E0D8] bg-white px-2.5 py-1 text-xs font-medium text-neutral-700 hover:bg-[#F7F6F3] transition cursor-pointer"
                                   >
                                     <Edit className="h-3 w-3" /> Edit
                                   </Link>
                                   <Link
                                     href={`/panel/posts/${post.id}/preview`}
                                     target="_blank"
-                                    className="inline-flex items-center gap-1 rounded-md border border-[#E5E0D8] bg-white px-2.5 py-1 text-xs font-medium text-neutral-700 hover:bg-[#F7F6F3] transition"
+                                    className="inline-flex items-center gap-1 rounded-md border border-[#E5E0D8] bg-white px-2.5 py-1 text-xs font-medium text-neutral-700 hover:bg-[#F7F6F3] transition cursor-pointer"
                                   >
                                     <Eye className="h-3 w-3" /> Preview
                                   </Link>

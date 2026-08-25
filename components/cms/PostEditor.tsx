@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import BlurImage from '@/components/BlurImage';
 import type { BlogPost, BlogPostRevision, BlogStatus } from '@/lib/blog-types';
 import type { StaffProfile } from '@/lib/staff';
+import SignOutButton from '@/app/panel/sign-out-button';
 import {
   ArrowLeft,
   Eye,
@@ -408,6 +409,8 @@ export default function PostEditor({
 
           {/* Action Buttons */}
           <div className="flex flex-wrap items-center gap-2">
+            <SignOutButton />
+
             {!isNew && postId && (
               <>
                 <Link
