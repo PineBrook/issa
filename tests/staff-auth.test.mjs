@@ -36,3 +36,10 @@ test('auth proxy permits only company email OTP sign-in', async () => {
   assert.match(route, /parts\.length === 2 && Boolean\(parts\[0\]\) && parts\[1\] === companyDomain/);
   assert.doesNotMatch(route, /sign-in\/magic-link|magic-link\/verify/);
 });
+
+test('auth server derives Neon Auth base URL from database URL when env var is absent', async () => {
+  const server = await readFile(new URL('../lib/auth/server.ts', import.meta.url), 'utf8');
+  assert.match(server, /deriveNeonAuthBaseUrl/);
+  assert.match(server, /resolveBaseUrl/);
+  assert.match(server, /ep-falling-cell-b3uyu248/);
+});
