@@ -43,3 +43,9 @@ test('auth server derives Neon Auth base URL from database URL when env var is a
   assert.match(server, /resolveBaseUrl/);
   assert.match(server, /ep-falling-cell-b3uyu248/);
 });
+
+test('staff requests require an unexpired signed session limit', async () => {
+  const staff = await readFile(new URL('../lib/staff.ts', import.meta.url), 'utf8');
+  assert.match(staff, /await cookies\(\)/);
+  assert.match(staff, /hasValidSessionLimit\(cookieStore\.get\(SESSION_LIMIT_COOKIE\)\?\.value\)/);
+});

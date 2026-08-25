@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import SignOutButton from './sign-out-button';
+import { authClient } from '@/lib/auth/client';
 import type { StaffProfile, StaffRole } from '@/lib/staff';
 import type { BlogPost } from '@/lib/blog-types';
 import {
@@ -67,6 +68,20 @@ export default function StaffPanel({
   const hasAuthorizedRole = staff && (staff.role === 'ADMIN' || staff.role === 'CONTENT');
   const isPendingAccess = !hasAuthorizedRole;
   const isAdmin = staff?.role === 'ADMIN';
+
+  useEffect(() => {
+    const expiresAt = Number(document.cookie.match(/(?:^|; )issa_session_limit=(\d+)\./)?.[1]);
+    if (!expiresAt) return;
+
+    const timeout = window.setTimeout(async () => {
+      try {
+        await authClient.signOut();
+      } finally {
+        window.location.assign('/login?expired=1');
+      }
+    }, Math.max(0, expiresAt * 1000 - Date.now()));
+    return () => window.clearTimeout(timeout);
+  }, []);
 
   const checkStatus = useCallback(async () => {
     try {
@@ -225,7 +240,7 @@ export default function StaffPanel({
   // Authorized View
   if (hasAuthorizedRole && staff) {
     return (
-      <div className="min-h-[calc(100vh-160px)] bg-[#F7F6F3] px-4 sm:px-6 py-10 text-[#071E13]">
+      <div className="min-h-[calc(100vh-160px)] bg-[#F7F6F3] px-4 pb-10 pt-28 sm:px-6 text-[#071E13]">
         <div className="mx-auto max-w-6xl space-y-6">
           {/* Header Bar */}
           <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#E5E0D8] bg-white p-6 shadow-sm">

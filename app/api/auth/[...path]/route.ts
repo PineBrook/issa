@@ -1,4 +1,5 @@
 import { auth } from '@/lib/auth/server';
+import { createSessionLimit, SESSION_LIMIT_COOKIE, SESSION_LIMIT_SECONDS } from '@/lib/auth/session-limit';
 
 export const runtime = 'nodejs';
 const handler = auth.handler();
@@ -48,7 +49,15 @@ export async function POST(request: Request, { params }: { params: Promise<Param
         return Response.json({ error: 'Enter the six-digit code.' }, { status: 400 });
       }
     }
-    return await handler.POST(request, { params: Promise.resolve(result.path) });
+    const response = await handler.POST(request, { params: Promise.resolve(result.path) });
+    if (path !== 'sign-in/email-otp' || !response.ok) return response;
+
+    const limited = new Response(response.body, response);
+    limited.headers.append(
+      'Set-Cookie',
+      `${SESSION_LIMIT_COOKIE}=${createSessionLimit()}; Max-Age=${SESSION_LIMIT_SECONDS}; Path=/; SameSite=Lax${process.env.NODE_ENV === 'production' ? '; Secure' : ''}`,
+    );
+    return limited;
   } catch (err: any) {
     return Response.json({ error: err.message || 'Authentication service temporarily unavailable' }, { status: 503 });
   }

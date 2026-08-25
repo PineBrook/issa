@@ -47,6 +47,6 @@ function resolveBaseUrl(): string {
 }
 
 const baseUrl = resolveBaseUrl();
-const secret = resolveCookieSecret();
+export const authCookieSecret = resolveCookieSecret();
 
-export const auth = createNeonAuth({ baseUrl, cookies: { secret }, logLevel: 'silent' });
+export const auth = createNeonAuth({ baseUrl, cookies: { secret: authCookieSecret }, logLevel: 'silent' });

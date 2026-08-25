@@ -1,7 +1,9 @@
 import 'server-only';
 
 import { neon } from '@neondatabase/serverless';
+import { cookies } from 'next/headers';
 import { auth } from '@/lib/auth/server';
+import { hasValidSessionLimit, SESSION_LIMIT_COOKIE } from '@/lib/auth/session-limit';
 
 export type StaffRole = 'ADMIN' | 'CONTENT' | 'NO_ACCESS';
 
@@ -34,6 +36,9 @@ function extractFirstName(_fullName: string, email: string): string {
 }
 
 export async function getAuthSessionUser() {
+  const cookieStore = await cookies();
+  if (!hasValidSessionLimit(cookieStore.get(SESSION_LIMIT_COOKIE)?.value)) return null;
+
   const { data: session } = await auth.getSession();
   return session?.user ?? null;
 }
