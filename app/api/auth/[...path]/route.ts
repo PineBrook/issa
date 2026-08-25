@@ -22,26 +22,34 @@ async function resolvePath(params: Promise<Params>) {
 }
 
 export async function GET(request: Request, { params }: { params: Promise<Params> }) {
-  const result = await resolvePath(params);
-  return result.allowed ? handler.GET(request, { params: Promise.resolve(result.path) }) : new Response(null, { status: 404 });
+  try {
+    const result = await resolvePath(params);
+    return result.allowed ? handler.GET(request, { params: Promise.resolve(result.path) }) : new Response(null, { status: 404 });
+  } catch (err: any) {
+    return Response.json({ error: err.message || 'Authentication service temporarily unavailable' }, { status: 503 });
+  }
 }
 
 export async function POST(request: Request, { params }: { params: Promise<Params> }) {
-  const result = await resolvePath(params);
-  if (!result.allowed) return new Response(null, { status: 404 });
-  const path = result.path.path.join('/');
-  if (path === 'email-otp/send-verification-otp' || path === 'sign-in/email-otp') {
-    const body = await request.clone().json().catch(() => null) as { email?: unknown; otp?: unknown; type?: unknown } | null;
-    if (!isCompanyEmail(body?.email)) {
-      return Response.json({ error: 'Only Pinebrook Technologies email addresses are allowed.' }, { status: 403 });
+  try {
+    const result = await resolvePath(params);
+    if (!result.allowed) return new Response(null, { status: 404 });
+    const path = result.path.path.join('/');
+    if (path === 'email-otp/send-verification-otp' || path === 'sign-in/email-otp') {
+      const body = await request.clone().json().catch(() => null) as { email?: unknown; otp?: unknown; type?: unknown } | null;
+      if (!isCompanyEmail(body?.email)) {
+        return Response.json({ error: 'Only Pinebrook Technologies email addresses are allowed.' }, { status: 403 });
+      }
+      if (path === 'email-otp/send-verification-otp' && body?.type !== 'sign-in') {
+        return Response.json({ error: 'Only sign-in codes are allowed.' }, { status: 400 });
+      }
+      if (path === 'sign-in/email-otp' &&
+        (typeof body?.otp !== 'string' || body.otp.length !== 6 || ![...body.otp].every((digit) => digit >= '0' && digit <= '9'))) {
+        return Response.json({ error: 'Enter the six-digit code.' }, { status: 400 });
+      }
     }
-    if (path === 'email-otp/send-verification-otp' && body?.type !== 'sign-in') {
-      return Response.json({ error: 'Only sign-in codes are allowed.' }, { status: 400 });
-    }
-    if (path === 'sign-in/email-otp' &&
-      (typeof body?.otp !== 'string' || body.otp.length !== 6 || ![...body.otp].every((digit) => digit >= '0' && digit <= '9'))) {
-      return Response.json({ error: 'Enter the six-digit code.' }, { status: 400 });
-    }
+    return await handler.POST(request, { params: Promise.resolve(result.path) });
+  } catch (err: any) {
+    return Response.json({ error: err.message || 'Authentication service temporarily unavailable' }, { status: 503 });
   }
-  return handler.POST(request, { params: Promise.resolve(result.path) });
 }

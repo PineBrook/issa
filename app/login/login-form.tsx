@@ -64,7 +64,7 @@ export default function LoginForm() {
           ✉️
         </div>
         <h1 className="text-2xl font-semibold">Staff Sign In</h1>
-        <p className="text-sm text-neutral-600">{email ? `Enter the code sent to ${email}.` : 'Enter your Pinebrook username to receive a six-digit sign-in code.'}</p>
+        <p className="text-sm text-neutral-600">{email ? `Enter the code sent to ${email}.` : 'Enter your username to receive an OTP on mail.'}</p>
 
         {!email ? (
           <label className="grid gap-1.5 text-left text-sm font-medium">
