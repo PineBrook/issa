@@ -321,19 +321,6 @@ export default function StaffPanel({
               {/* Greeting Hero Card */}
               <div className="rounded-2xl border border-[#E5E0D8] bg-gradient-to-br from-[#0D311F] to-[#071E13] p-8 text-white shadow-sm">
                 <div className="flex flex-wrap items-center justify-between gap-6">
-                  <div className="space-y-2 max-w-2xl">
-                    <div className="inline-flex items-center gap-1.5 rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-[#E8B94C]">
-                      <Sparkles className="h-3.5 w-3.5" />
-                      ISSA Foundation Operations Panel
-                    </div>
-                    <h2 className="text-2xl sm:text-3xl font-serif font-bold tracking-tight">
-                      Welcome to your daily workspace, {displayName}.
-                    </h2>
-                    <p className="text-sm text-neutral-200 leading-relaxed font-light">
-                      Manage program stories, review content submissions, and oversee operational access across Uttarakhand initiatives.
-                    </p>
-                  </div>
-
                   <div className="flex flex-wrap gap-3">
                     <Link
                       href="/panel/posts/new"
