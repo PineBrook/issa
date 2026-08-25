@@ -116,7 +116,7 @@ export default async function PostPreviewPage(props: { params: Promise<{ id: str
   return (
     <div className="min-h-screen bg-[#F7F6F3] text-[#071E13]">
       {/* Sticky Preview Banner */}
-      <div className="sticky top-0 z-50 border-b border-amber-300 bg-amber-50 px-4 py-3 shadow-sm">
+      <div className="sticky top-20 z-40 border-b border-amber-300 bg-amber-50 px-4 py-3 shadow-sm">
         <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-amber-200 text-amber-900">

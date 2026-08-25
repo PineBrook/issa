@@ -74,7 +74,7 @@ export default function LoginForm() {
                 name="userId"
                 autoComplete="username"
                 required
-                placeholder="e.g. anoop.singh"
+                placeholder="e.g. yashvardhan.singh"
                 className="min-w-0 flex-1 px-3.5 py-2.5 text-sm text-[#071E13] outline-none"
               />
               <span className="select-none border-l border-[#E5E0D8] bg-[#F7F6F3] px-3.5 py-2.5 text-sm text-neutral-600">

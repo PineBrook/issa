@@ -83,7 +83,6 @@ export default function PostEditor({
   const [errorMsg, setErrorMsg] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
   const [conflictError, setConflictError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'write' | 'preview' | 'split'>('split');
   const [showRevisionsDrawer, setShowRevisionsDrawer] = useState(false);
   const [showScheduleModal, setShowScheduleModal] = useState(false);
   const [scheduledDateTime, setScheduledDateTime] = useState('');
@@ -374,7 +373,7 @@ export default function PostEditor({
   return (
     <div className="min-h-screen bg-[#F7F6F3] text-[#071E13]">
       {/* Top Header & Actions Bar */}
-      <header className="sticky top-0 z-40 border-b border-[#E5E0D8] bg-white px-6 py-3.5 shadow-sm">
+      <header className="sticky top-20 z-40 border-b border-[#E5E0D8] bg-white px-6 py-3.5 shadow-sm">
         <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4">
           <div className="flex items-center gap-3">
             <Link
@@ -585,31 +584,9 @@ export default function PostEditor({
 
           {/* Markdown Content & Editor */}
           <div className="rounded-2xl border border-[#E5E0D8] bg-white shadow-sm overflow-hidden">
-            {/* Editor Header & Tabs */}
+            {/* Editor Header */}
             <div className="flex flex-wrap items-center justify-between border-b border-[#E5E0D8] bg-[#FAF9F7] px-6 py-3 gap-2">
-              <div className="flex items-center gap-1 bg-neutral-200/60 p-1 rounded-lg text-xs font-semibold">
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('write')}
-                  className={`rounded px-2.5 py-1 transition cursor-pointer ${activeTab === 'write' ? 'bg-white text-[#071E13] shadow-xs' : 'text-neutral-600'}`}
-                >
-                  Write Markdown
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('split')}
-                  className={`rounded px-2.5 py-1 transition cursor-pointer ${activeTab === 'split' ? 'bg-white text-[#071E13] shadow-xs' : 'text-neutral-600'}`}
-                >
-                  Split View
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setActiveTab('preview')}
-                  className={`rounded px-2.5 py-1 transition cursor-pointer ${activeTab === 'preview' ? 'bg-white text-[#071E13] shadow-xs' : 'text-neutral-600'}`}
-                >
-                  Preview
-                </button>
-              </div>
+              <span className="text-xs font-semibold text-neutral-600">Write &amp; preview</span>
 
               {/* Formatting Toolbar */}
               <div className="flex items-center gap-1 text-xs">
@@ -657,38 +634,34 @@ export default function PostEditor({
             </div>
 
             {/* Editor Body */}
-            <div className={`p-6 ${activeTab === 'split' ? 'grid grid-cols-1 md:grid-cols-2 gap-6' : ''}`}>
+            <div className="grid grid-cols-1 gap-6 p-6 md:grid-cols-2">
               {/* Textarea */}
-              {(activeTab === 'write' || activeTab === 'split') && (
-                <div className="space-y-2">
-                  <textarea
-                    id="post-content-textarea"
-                    rows={20}
-                    value={content}
-                    onChange={(e) => handleContentChange(e.target.value)}
-                    placeholder="Write your story content here in Markdown format..."
-                    className="w-full rounded-xl border border-[#E5E0D8] bg-[#FDFCFB] p-4 font-mono text-sm leading-relaxed text-[#071E13] outline-none transition focus:border-[#0D311F]"
-                  />
-                  <div className="flex justify-between text-xs text-neutral-500">
-                    <span>Markdown supported. Dangerous HTML tags are automatically sanitized.</span>
-                    <span>{content.trim().split(/\s+/).filter(Boolean).length} words</span>
-                  </div>
+              <div className="space-y-2">
+                <textarea
+                  id="post-content-textarea"
+                  rows={20}
+                  value={content}
+                  onChange={(e) => handleContentChange(e.target.value)}
+                  placeholder="Write your story content here in Markdown format..."
+                  className="w-full rounded-xl border border-[#E5E0D8] bg-[#FDFCFB] p-4 font-mono text-sm leading-relaxed text-[#071E13] outline-none transition focus:border-[#0D311F]"
+                />
+                <div className="flex justify-between text-xs text-neutral-500">
+                  <span>Markdown supported. Dangerous HTML tags are automatically sanitized.</span>
+                  <span>{content.trim().split(/\s+/).filter(Boolean).length} words</span>
                 </div>
-              )}
+              </div>
 
               {/* Live Preview Pane */}
-              {(activeTab === 'preview' || activeTab === 'split') && (
-                <div className="rounded-xl border border-[#E5E0D8] bg-[#FAF9F7] p-6 max-h-[500px] overflow-y-auto space-y-4">
-                  <div className="border-b border-[#E5E0D8] pb-2">
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#0D311F] bg-[#0D311F]/10 px-2 py-0.5 rounded-full">
-                      Live Preview
-                    </span>
-                  </div>
-                  <div className="prose prose-sm max-w-none text-neutral-800">
-                    <SimpleMarkdownPreview content={content} />
-                  </div>
+              <div className="max-h-[500px] space-y-4 overflow-y-auto rounded-xl border border-[#E5E0D8] bg-[#FAF9F7] p-6">
+                <div className="border-b border-[#E5E0D8] pb-2">
+                  <span className="rounded-full bg-[#0D311F]/10 px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest text-[#0D311F]">
+                    Live Preview
+                  </span>
                 </div>
-              )}
+                <div className="prose prose-sm max-w-none text-neutral-800">
+                  <SimpleMarkdownPreview content={content} />
+                </div>
+              </div>
             </div>
           </div>
         </div>

@@ -2,7 +2,7 @@ import crypto from 'node:crypto';
 import { authCookieSecret } from './server';
 
 export const SESSION_LIMIT_COOKIE = 'issa_session_limit';
-export const SESSION_LIMIT_SECONDS = 3 * 60 * 60;
+export const SESSION_LIMIT_SECONDS = 12 * 60 * 60;
 
 export function createSessionLimit() {
   const expiresAt = Math.floor(Date.now() / 1000) + SESSION_LIMIT_SECONDS;

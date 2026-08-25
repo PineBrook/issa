@@ -240,7 +240,7 @@ export default function StaffPanel({
   // Authorized View
   if (hasAuthorizedRole && staff) {
     return (
-      <div className="min-h-[calc(100vh-160px)] bg-[#F7F6F3] px-4 pb-10 pt-28 sm:px-6 text-[#071E13]">
+      <div className="min-h-[calc(100vh-160px)] bg-[#F7F6F3] px-4 py-10 sm:px-6 text-[#071E13]">
         <div className="mx-auto max-w-6xl space-y-6">
           {/* Header Bar */}
           <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#E5E0D8] bg-white p-6 shadow-sm">
