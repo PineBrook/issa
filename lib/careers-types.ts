@@ -1,3 +1,12 @@
+export type JobStatus = 'active' | 'closed' | 'draft' | 'archived';
+export type CareerApplicationStatus =
+  | 'new'
+  | 'under_review'
+  | 'interview_scheduled'
+  | 'rejected'
+  | 'hired'
+  | 'archived';
+
 export interface JobOpening {
   id: number;
   slug: string;
@@ -12,11 +21,29 @@ export interface JobOpening {
   desc?: string;
   requirements: string[];
   reqs?: string[];
-  status: 'active' | 'closed' | 'draft' | 'archived';
+  status: JobStatus;
   closingTime?: string | null;
   displayOrder: number;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface PanelJobOpening extends JobOpening {
+  applicationCount?: number;
+}
+
+export interface JobOpeningInput {
+  title: string;
+  slug?: string;
+  department: string;
+  location: string;
+  employmentType: string;
+  salary?: string | null;
+  description: string;
+  requirements: string[] | string;
+  status?: JobStatus;
+  closingTime?: string | null;
+  displayOrder?: number;
 }
 
 export interface CareerApplication {
@@ -31,10 +58,35 @@ export interface CareerApplication {
   consentText: string;
   consentVersion: string;
   consentedAt: string;
-  status: 'new' | 'under_review' | 'interview_scheduled' | 'rejected' | 'hired' | 'archived';
+  status: CareerApplicationStatus;
   assignedTo?: string | null;
   createdAt: string;
   updatedAt: string;
+}
+
+export interface PanelResumeInfo {
+  id: number;
+  storageKey: string;
+  originalFilename: string;
+  mimeType: string;
+  sizeBytes: number;
+  checksumSha256: string;
+  uploadedAt: string;
+  downloadUrl?: string;
+}
+
+export interface PanelCareerApplication extends CareerApplication {
+  jobTitle?: string;
+  jobDepartment?: string;
+  resume?: PanelResumeInfo | null;
+}
+
+export interface CareerMetrics {
+  totalActiveJobs: number;
+  totalJobs: number;
+  totalApplications: number;
+  newApplications: number;
+  underReviewApplications: number;
 }
 
 export interface ResumeFile {
@@ -75,3 +127,4 @@ export interface ApplicationSubmissionState {
   errors?: Record<string, string>;
   applicationId?: number;
 }
+

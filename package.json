@@ -18,6 +18,7 @@
     "test:public-forms": "node --test tests/public-forms.test.mjs",
     "test:staff-auth": "node --test tests/staff-auth.test.mjs",
     "test:cms": "node --test tests/cms-workflow.test.mjs",
+    "test:panel-careers": "node --test tests/panel-careers.test.mjs",
     "test": "node --test tests/*.test.mjs"
   },
   "dependencies": {
