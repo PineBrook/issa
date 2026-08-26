@@ -13,6 +13,7 @@
     "migrate:public-forms": "node --env-file=.env scripts/migrate-public-forms.mjs",
     "migrate:staff-auth": "node --env-file=.env scripts/migrate-staff-auth.mjs",
     "migrate:cms": "node --env-file=.env scripts/migrate-cms-workflow.mjs",
+    "migrate:resume-storage": "node --env-file=.env scripts/migrate-resume-storage.mjs",
     "test:blog-migration": "node --test tests/blog-migration.test.mjs",
     "test:careers": "node --test tests/careers-migration.test.mjs",
     "test:public-forms": "node --test tests/public-forms.test.mjs",

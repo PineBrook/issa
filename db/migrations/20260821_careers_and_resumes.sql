@@ -57,6 +57,7 @@ CREATE TABLE IF NOT EXISTS resume_files (
   mime_type TEXT NOT NULL,
   size_bytes BIGINT NOT NULL CHECK (size_bytes > 0),
   checksum_sha256 TEXT NOT NULL,
+  file_data BYTEA,
   uploaded_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   deleted_at TIMESTAMPTZ,
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()

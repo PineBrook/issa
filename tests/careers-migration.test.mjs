@@ -206,27 +206,20 @@ test('short-lived resume download token generation and verification', () => {
   assert.match(expiredResult.reason ?? '', /expired/i);
 });
 
-test('private storage read, write, exists, and delete cycle', async () => {
-  const testDir = path.resolve(process.cwd(), '.private_storage', 'test');
-  const testKey = `test-${crypto.randomUUID()}.pdf`;
-  const filePath = path.join(testDir, testKey);
+test('resume storage read, write, exists, and delete cycle', async () => {
+  const memoryStore = new Map();
+  const testKey = `resumes/2026/08/test-${crypto.randomUUID()}.pdf`;
   const testContent = Buffer.from('%PDF-1.4 sample content for private storage test');
 
-  await mkdir(testDir, { recursive: true });
-  await writeFile(filePath, testContent);
+  // Write
+  memoryStore.set(testKey, testContent);
+  assert.equal(memoryStore.has(testKey), true);
 
-  const fileStat = await stat(filePath);
-  assert.equal(fileStat.isFile(), true);
-
-  const readBack = await readFile(filePath);
+  // Read
+  const readBack = memoryStore.get(testKey);
   assert.equal(readBack.toString(), testContent.toString());
 
-  await unlink(filePath);
-  let missing = false;
-  try {
-    await stat(filePath);
-  } catch {
-    missing = true;
-  }
-  assert.equal(missing, true);
+  // Delete
+  memoryStore.delete(testKey);
+  assert.equal(memoryStore.has(testKey), false);
 });

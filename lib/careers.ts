@@ -431,7 +431,8 @@ export async function submitCareerApplication(
         original_filename,
         mime_type,
         size_bytes,
-        checksum_sha256
+        checksum_sha256,
+        file_data
       )
       VALUES (
         ${applicationId},
@@ -439,7 +440,8 @@ export async function submitCareerApplication(
         ${resume.originalFilename},
         ${mimeType},
         ${resume.buffer.length},
-        ${checksum}
+        ${checksum},
+        ${resume.buffer}
       )
     `;
 

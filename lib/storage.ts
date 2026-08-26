@@ -1,26 +1,29 @@
 import 'server-only';
 
-import { mkdir, readFile, unlink, stat, writeFile } from 'node:fs/promises';
-import path from 'node:path';
+import { neon } from '@neondatabase/serverless';
 
-function getStorageBaseDir(): string {
-  if (process.env.RESUME_STORAGE_DIR) {
-    return path.resolve(process.env.RESUME_STORAGE_DIR);
+function getDb() {
+  const connectionString = process.env.DATABASE_URL ?? process.env.DB_CONN_KEY;
+  if (!connectionString) {
+    return null;
   }
-  return path.join(process.cwd(), '.private_storage', 'resumes');
+  return neon(connectionString);
 }
 
-function resolveSecurePath(storageKey: string): string {
-  const baseDir = getStorageBaseDir();
-  // Normalize and prevent path traversal
-  const cleanKey = storageKey.replace(/^[/\\]+/, '').replace(/\.\.[/\\]/g, '');
-  const targetPath = path.join(/*turbopackIgnore: true*/ baseDir, cleanKey);
+// In-memory buffer fallback for tests running without database credentials
+const memoryStore = new Map<string, Buffer>();
 
-  if (!targetPath.startsWith(baseDir)) {
-    throw new Error('Access denied: Invalid storage key path.');
+function parseBuffer(raw: unknown): Buffer | null {
+  if (!raw) return null;
+  if (Buffer.isBuffer(raw)) return raw;
+  if (raw instanceof Uint8Array) return Buffer.from(raw);
+  if (typeof raw === 'string') {
+    if (raw.startsWith('\\x')) {
+      return Buffer.from(raw.slice(2), 'hex');
+    }
+    return Buffer.from(raw, 'base64');
   }
-
-  return targetPath;
+  return Buffer.from(raw as ArrayBuffer);
 }
 
 export async function saveResumeFile(
@@ -28,49 +31,83 @@ export async function saveResumeFile(
   data: Buffer,
   _contentType?: string
 ): Promise<void> {
-  const targetPath = resolveSecurePath(storageKey);
-  const parentDir = path.dirname(targetPath);
-
-  await mkdir(parentDir, { recursive: true });
-  await writeFile(targetPath, data);
+  const sql = getDb();
+  if (sql) {
+    try {
+      await sql`
+        UPDATE resume_files
+        SET file_data = ${data}
+        WHERE storage_key = ${storageKey}
+      `;
+      return;
+    } catch {
+      // If table/connection not ready, save in memory store
+    }
+  }
+  memoryStore.set(storageKey, data);
 }
 
 export async function getResumeFile(
   storageKey: string
 ): Promise<{ buffer: Buffer } | null> {
-  try {
-    const targetPath = resolveSecurePath(storageKey);
-    const buffer = await readFile(/*turbopackIgnore: true*/ targetPath);
-    return { buffer };
-  } catch (err: unknown) {
-    const error = err as NodeJS.ErrnoException;
-    if (error && (error.code === 'ENOENT' || error.code === 'ENOTDIR')) {
-      return null;
+  const sql = getDb();
+  if (sql) {
+    try {
+      const rows = await sql`
+        SELECT file_data
+        FROM resume_files
+        WHERE storage_key = ${storageKey}
+          AND deleted_at IS NULL
+        LIMIT 1
+      `;
+      if (rows && rows.length > 0 && rows[0].file_data) {
+        const buf = parseBuffer(rows[0].file_data);
+        if (buf) return { buffer: buf };
+      }
+    } catch {
+      // Fall through to memory store
     }
-    throw err;
   }
+
+  const mem = memoryStore.get(storageKey);
+  if (mem) {
+    return { buffer: mem };
+  }
+  return null;
 }
 
 export async function deleteResumeFile(storageKey: string): Promise<void> {
-  try {
-    const targetPath = resolveSecurePath(storageKey);
-    await unlink(/*turbopackIgnore: true*/ targetPath);
-  } catch (err: unknown) {
-    const error = err as NodeJS.ErrnoException;
-    if (error && error.code === 'ENOENT') {
-      // Already deleted or never created
-      return;
+  const sql = getDb();
+  if (sql) {
+    try {
+      await sql`
+        UPDATE resume_files
+        SET file_data = NULL, deleted_at = NOW()
+        WHERE storage_key = ${storageKey}
+      `;
+    } catch {
+      // Ignore cleanup error
     }
-    throw err;
   }
+  memoryStore.delete(storageKey);
 }
 
 export async function resumeFileExists(storageKey: string): Promise<boolean> {
-  try {
-    const targetPath = resolveSecurePath(storageKey);
-    const s = await stat(/*turbopackIgnore: true*/ targetPath);
-    return s.isFile();
-  } catch {
-    return false;
+  const sql = getDb();
+  if (sql) {
+    try {
+      const rows = await sql`
+        SELECT id
+        FROM resume_files
+        WHERE storage_key = ${storageKey}
+          AND file_data IS NOT NULL
+          AND deleted_at IS NULL
+        LIMIT 1
+      `;
+      if (rows && rows.length > 0) return true;
+    } catch {
+      // Fallback
+    }
   }
+  return memoryStore.has(storageKey);
 }

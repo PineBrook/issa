@@ -28,7 +28,6 @@ import {
   RefreshCw,
   ExternalLink,
   Shield,
-  Sparkles,
   ArrowRight,
   Clock,
   CheckCircle2,
@@ -159,7 +158,7 @@ export default function StaffPanel({
         }
       }
     } catch {
-      // Silent retry on polling error
+      // Silent retry
     }
   }, [router]);
 
@@ -255,7 +254,7 @@ export default function StaffPanel({
         if (data.profile.role === 'ADMIN' || data.profile.role === 'CONTENT') {
           router.refresh();
         } else {
-          setMessage('Request submitted successfully! Waiting for an admin to grant access.');
+          setMessage('Request submitted successfully. Waiting for an admin to assign a role.');
         }
       } else if (data.message) {
         setMessage(data.message);
@@ -431,7 +430,7 @@ export default function StaffPanel({
         setApplications((prev) =>
           prev.map((a) => (a.id === selectedApp.id ? data.application : a))
         );
-        setAppStatusFeedback('Application updated successfully!');
+        setAppStatusFeedback('Application updated successfully.');
         setTimeout(() => setAppStatusFeedback(''), 3000);
       } else {
         setAppStatusFeedback(data.error || 'Failed to update application.');
@@ -536,43 +535,38 @@ export default function StaffPanel({
     rejected: 'bg-red-100 text-red-800 border-red-300',
   };
 
-  // Greeting calculation based on India Standard Time (IST)
-  const currentHour = new Date().getHours();
-  const greetingTime = currentHour < 12 ? 'Good morning' : currentHour < 17 ? 'Good afternoon' : 'Good evening';
-  const displayName = staff?.firstName || staff?.fullName?.split(' ')[0] || initialUser.name || 'Team';
-
   // Authorized View
   if (hasAuthorizedRole && staff) {
     return (
-      <div className="min-h-[calc(100vh-160px)] bg-[#F7F6F3] px-4 py-10 sm:px-6 text-[#071E13]">
+      <div className="min-h-[calc(100vh-160px)] bg-[#F7F6F3] px-4 py-8 sm:px-6 text-[#071E13]">
         <div className="mx-auto max-w-6xl space-y-6">
           {/* Header Bar */}
-          <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-[#E5E0D8] bg-white p-6 shadow-sm">
+          <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-[#E5E0D8] bg-white p-5 shadow-xs">
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-2xl sm:text-3xl font-semibold">{greetingTime}, {displayName}</h1>
+                <h1 className="text-xl font-semibold text-[#071E13]">ISSA Operations Panel</h1>
                 <span className="inline-flex items-center rounded-full bg-[#0D311F]/10 px-2.5 py-0.5 text-xs font-semibold text-[#0D311F]">
                   {staff.role}
                 </span>
               </div>
-              <p className="mt-1 text-sm text-neutral-600">
-                Signed in as <span className="font-medium text-[#071E13]">{staff.email}</span>
+              <p className="mt-0.5 text-xs text-neutral-600">
+                Staff Account: <span className="font-medium text-[#071E13]">{staff.email}</span>
               </p>
             </div>
             <div className="flex items-center gap-3">
               <Link
                 href="/careers"
                 target="_blank"
-                className="inline-flex items-center gap-1.5 rounded-lg border border-[#E5E0D8] bg-white px-3 py-2 text-xs font-medium text-neutral-700 hover:bg-[#F7F6F3] transition"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-[#E5E0D8] bg-white px-3 py-1.5 text-xs font-medium text-neutral-700 hover:bg-[#F7F6F3] transition"
               >
                 Careers Portal <ExternalLink className="h-3.5 w-3.5 opacity-60" />
               </Link>
               <Link
                 href="/stories"
                 target="_blank"
-                className="inline-flex items-center gap-1.5 rounded-lg border border-[#E5E0D8] bg-white px-3 py-2 text-xs font-medium text-neutral-700 hover:bg-[#F7F6F3] transition"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-[#E5E0D8] bg-white px-3 py-1.5 text-xs font-medium text-neutral-700 hover:bg-[#F7F6F3] transition"
               >
-                Stories Site <ExternalLink className="h-3.5 w-3.5 opacity-60" />
+                Public Site <ExternalLink className="h-3.5 w-3.5 opacity-60" />
               </Link>
               <SignOutButton />
             </div>
@@ -603,7 +597,7 @@ export default function StaffPanel({
               }`}
             >
               <FileText className="h-4 w-4" />
-              Blog Posts & Stories
+              Blog Posts
               <span className="rounded-full bg-neutral-200 px-2 py-0.5 text-xs font-bold text-neutral-700">
                 {posts.length}
               </span>
@@ -636,7 +630,7 @@ export default function StaffPanel({
                 }`}
               >
                 <UserCheck className="h-4 w-4" />
-                Career Applications
+                Applications
                 {appCounts.new > 0 ? (
                   <span className="rounded-full bg-amber-400 px-2 py-0.5 text-xs font-bold text-[#071E13]">
                     {appCounts.new} new
@@ -659,57 +653,22 @@ export default function StaffPanel({
               }`}
             >
               <Users className="h-4 w-4" />
-              Staff & Access Directory
+              Staff Directory
               <span className="rounded-full bg-neutral-200 px-2 py-0.5 text-xs font-bold text-neutral-700">
                 {users.length}
               </span>
             </button>
           </div>
 
-          {/* TAB 0: DEFAULT GREETING / OVERVIEW DASHBOARD */}
+          {/* TAB 0: OVERVIEW */}
           {currentTab === 'overview' && (
             <div className="space-y-6">
-              {/* Greeting Hero Card */}
-              <div className="rounded-2xl border border-[#E5E0D8] bg-gradient-to-br from-[#0D311F] to-[#071E13] p-8 text-white shadow-sm">
-                <div className="flex flex-wrap items-center justify-between gap-6">
-                  <div>
-                    <div className="flex items-center gap-2 text-xs font-bold tracking-widest text-[#E8B94C] uppercase">
-                      <Sparkles className="h-4 w-4" /> Operational Workspace
-                    </div>
-                    <h2 className="mt-2 text-2xl font-bold font-serif">
-                      ISSA Foundation Operations Panel
-                    </h2>
-                    <p className="mt-1 text-sm text-neutral-300 max-w-xl">
-                      Central control for publishing community stories, managing Himalayan career vacancies, and processing applicant intake securely.
-                    </p>
-                  </div>
-
-                  <div className="flex flex-wrap gap-3">
-                    {isAdmin && (
-                      <button
-                        type="button"
-                        onClick={() => handleOpenJobModal()}
-                        className="inline-flex items-center gap-2 rounded-xl bg-[#E8B94C] px-4 py-2.5 text-xs font-bold text-[#071E13] hover:bg-[#DCAB3D] transition shadow-xs cursor-pointer"
-                      >
-                        <Plus className="h-4 w-4" /> Post Job Vacancy
-                      </button>
-                    )}
-                    <Link
-                      href="/panel/posts/new"
-                      className="inline-flex items-center gap-2 rounded-xl border border-white/20 bg-white/10 px-4 py-2.5 text-xs font-semibold text-white hover:bg-white/20 transition cursor-pointer"
-                    >
-                      <Plus className="h-4 w-4" /> New Blog Post
-                    </Link>
-                  </div>
-                </div>
-              </div>
-
               {/* Actionable Metrics Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {/* Active Jobs */}
                 <div
                   onClick={() => { setJobStatusFilter('active'); setCurrentTab('jobs'); }}
-                  className="rounded-2xl border border-[#E5E0D8] bg-white p-5 shadow-xs hover:border-[#0D311F] transition cursor-pointer group"
+                  className="rounded-xl border border-[#E5E0D8] bg-white p-5 shadow-xs hover:border-[#0D311F] transition cursor-pointer group"
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold uppercase tracking-wider text-neutral-500">
@@ -720,20 +679,20 @@ export default function StaffPanel({
                     </span>
                   </div>
                   <div className="mt-3">
-                    <div className="text-3xl font-serif font-bold text-[#071E13]">
+                    <div className="text-3xl font-semibold text-[#071E13]">
                       {jobCounts.active}
                     </div>
                     <p className="mt-1 text-xs text-neutral-500 flex items-center gap-1">
-                      {jobCounts.all} total listings <ArrowRight className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      {jobCounts.all} total openings <ArrowRight className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </p>
                   </div>
                 </div>
 
-                {/* New Applications */}
+                {/* Applications Metric */}
                 {isAdmin ? (
                   <div
                     onClick={() => { setAppStatusFilter('new'); setCurrentTab('applications'); }}
-                    className="rounded-2xl border border-[#E5E0D8] bg-white p-5 shadow-xs hover:border-[#0D311F] transition cursor-pointer group"
+                    className="rounded-xl border border-[#E5E0D8] bg-white p-5 shadow-xs hover:border-[#0D311F] transition cursor-pointer group"
                   >
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold uppercase tracking-wider text-neutral-500">
@@ -744,7 +703,7 @@ export default function StaffPanel({
                       </span>
                     </div>
                     <div className="mt-3">
-                      <div className="text-3xl font-serif font-bold text-[#071E13]">
+                      <div className="text-3xl font-semibold text-[#071E13]">
                         {appCounts.new}
                       </div>
                       <p className="mt-1 text-xs text-neutral-500 flex items-center gap-1">
@@ -755,7 +714,7 @@ export default function StaffPanel({
                 ) : (
                   <div
                     onClick={() => { setPostStatusFilter('in_review'); setCurrentTab('posts'); }}
-                    className="rounded-2xl border border-[#E5E0D8] bg-white p-5 shadow-xs hover:border-[#0D311F] transition cursor-pointer group"
+                    className="rounded-xl border border-[#E5E0D8] bg-white p-5 shadow-xs hover:border-[#0D311F] transition cursor-pointer group"
                   >
                     <div className="flex items-center justify-between">
                       <span className="text-xs font-bold uppercase tracking-wider text-neutral-500">
@@ -766,7 +725,7 @@ export default function StaffPanel({
                       </span>
                     </div>
                     <div className="mt-3">
-                      <div className="text-3xl font-serif font-bold text-[#071E13]">
+                      <div className="text-3xl font-semibold text-[#071E13]">
                         {postCounts.in_review}
                       </div>
                       <p className="mt-1 text-xs text-neutral-500 flex items-center gap-1">
@@ -776,21 +735,21 @@ export default function StaffPanel({
                   </div>
                 )}
 
-                {/* Published Stories */}
+                {/* Published Posts */}
                 <div
                   onClick={() => { setPostStatusFilter('published'); setCurrentTab('posts'); }}
-                  className="rounded-2xl border border-[#E5E0D8] bg-white p-5 shadow-xs hover:border-[#0D311F] transition cursor-pointer group"
+                  className="rounded-xl border border-[#E5E0D8] bg-white p-5 shadow-xs hover:border-[#0D311F] transition cursor-pointer group"
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold uppercase tracking-wider text-neutral-500">
-                      Live on Blog
+                      Published Posts
                     </span>
                     <span className="rounded-full bg-emerald-100 p-2 text-emerald-800">
                       <CheckCircle2 className="h-4 w-4" />
                     </span>
                   </div>
                   <div className="mt-3">
-                    <div className="text-3xl font-serif font-bold text-[#071E13]">
+                    <div className="text-3xl font-semibold text-[#071E13]">
                       {postCounts.published}
                     </div>
                     <p className="mt-1 text-xs text-neutral-500 flex items-center gap-1">
@@ -802,7 +761,7 @@ export default function StaffPanel({
                 {/* Drafts */}
                 <div
                   onClick={() => { setPostStatusFilter('draft'); setCurrentTab('posts'); }}
-                  className="rounded-2xl border border-[#E5E0D8] bg-white p-5 shadow-xs hover:border-[#0D311F] transition cursor-pointer group"
+                  className="rounded-xl border border-[#E5E0D8] bg-white p-5 shadow-xs hover:border-[#0D311F] transition cursor-pointer group"
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold uppercase tracking-wider text-neutral-500">
@@ -813,7 +772,7 @@ export default function StaffPanel({
                     </span>
                   </div>
                   <div className="mt-3">
-                    <div className="text-3xl font-serif font-bold text-[#071E13]">
+                    <div className="text-3xl font-semibold text-[#071E13]">
                       {postCounts.draft}
                     </div>
                     <p className="mt-1 text-xs text-neutral-500 flex items-center gap-1">
@@ -825,34 +784,34 @@ export default function StaffPanel({
 
               {/* Quick Jump Modules */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                {/* Careers Quick Overview */}
-                <div className="rounded-2xl border border-[#E5E0D8] bg-white p-6 shadow-sm">
-                  <div className="flex items-center justify-between border-b border-[#E5E0D8] pb-4">
+                {/* Recent Openings */}
+                <div className="rounded-xl border border-[#E5E0D8] bg-white p-5 shadow-xs">
+                  <div className="flex items-center justify-between border-b border-[#E5E0D8] pb-3">
                     <div className="flex items-center gap-2">
-                      <Briefcase className="h-5 w-5 text-[#0D311F]" />
-                      <h3 className="font-semibold text-[#071E13]">Recent Job Openings</h3>
+                      <Briefcase className="h-4 w-4 text-[#0D311F]" />
+                      <h3 className="font-semibold text-sm text-[#071E13]">Job Openings</h3>
                     </div>
                     <button
                       type="button"
                       onClick={() => setCurrentTab('jobs')}
-                      className="text-xs font-bold text-[#0D311F] hover:underline"
+                      className="text-xs font-semibold text-[#0D311F] hover:underline"
                     >
                       View All ({jobs.length})
                     </button>
                   </div>
 
-                  <div className="mt-4 divide-y divide-[#E5E0D8]">
+                  <div className="mt-3 divide-y divide-[#E5E0D8]">
                     {jobs.slice(0, 4).map((j) => (
-                      <div key={j.id} className="py-3 flex items-center justify-between gap-4">
+                      <div key={j.id} className="py-2.5 flex items-center justify-between gap-4 text-xs">
                         <div>
-                          <p className="text-sm font-semibold text-[#071E13]">{j.title}</p>
-                          <p className="text-xs text-neutral-500">{j.department} • {j.location}</p>
+                          <p className="font-semibold text-[#071E13]">{j.title}</p>
+                          <p className="text-neutral-500 text-[11px]">{j.department} • {j.location}</p>
                         </div>
                         <div className="flex items-center gap-2">
                           <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${statusBadgeClasses[j.status] || statusBadgeClasses.active}`}>
                             {j.status}
                           </span>
-                          <span className="text-xs font-medium text-neutral-600 bg-neutral-100 px-2 py-0.5 rounded-md">
+                          <span className="font-medium text-neutral-600 bg-neutral-100 px-2 py-0.5 rounded-md">
                             {j.applicationCount || 0} apps
                           </span>
                         </div>
@@ -865,31 +824,31 @@ export default function StaffPanel({
                 </div>
 
                 {/* Operations Summary */}
-                <div className="rounded-2xl border border-[#E5E0D8] bg-white p-6 shadow-sm">
-                  <div className="flex items-center justify-between border-b border-[#E5E0D8] pb-4">
+                <div className="rounded-xl border border-[#E5E0D8] bg-white p-5 shadow-xs">
+                  <div className="flex items-center justify-between border-b border-[#E5E0D8] pb-3">
                     <div className="flex items-center gap-2">
-                      <Shield className="h-5 w-5 text-[#0D311F]" />
-                      <h3 className="font-semibold text-[#071E13]">System Security & Access</h3>
+                      <Shield className="h-4 w-4 text-[#0D311F]" />
+                      <h3 className="font-semibold text-sm text-[#071E13]">Access & Configuration</h3>
                     </div>
-                    <span className="text-xs font-mono text-neutral-500">Node / Neon</span>
+                    <span className="text-[11px] font-mono text-neutral-500">Node / Neon</span>
                   </div>
 
-                  <div className="mt-4 space-y-3 text-xs">
+                  <div className="mt-3 space-y-2.5 text-xs">
                     <div className="flex justify-between items-center py-1">
-                      <span className="text-neutral-500">Your Current Role:</span>
+                      <span className="text-neutral-500">Active Role:</span>
                       <strong className="text-[#0D311F]">{staff.role}</strong>
                     </div>
                     <div className="flex justify-between items-center py-1">
-                      <span className="text-neutral-500">Application Storage:</span>
-                      <strong className="text-[#0D311F]">Private Object Storage (Verified Tokens)</strong>
+                      <span className="text-neutral-500">Resume Storage:</span>
+                      <strong className="text-[#0D311F]">Private Object Storage</strong>
                     </div>
                     <div className="flex justify-between items-center py-1">
-                      <span className="text-neutral-500">Domain access restriction:</span>
+                      <span className="text-neutral-500">Domain Restriction:</span>
                       <strong className="text-[#0D311F]">@pinebrooktechnologies.com</strong>
                     </div>
                     <div className="flex justify-between items-center py-1">
-                      <span className="text-neutral-500">Audit & Logs:</span>
-                      <strong className="text-[#0D311F]">Append-Only (UTC Timestamps)</strong>
+                      <span className="text-neutral-500">Audit Logging:</span>
+                      <strong className="text-[#0D311F]">Append-Only (UTC)</strong>
                     </div>
                   </div>
                 </div>
@@ -897,14 +856,14 @@ export default function StaffPanel({
             </div>
           )}
 
-          {/* TAB 1: BLOG POSTS (CMS) */}
+          {/* TAB 1: BLOG POSTS */}
           {currentTab === 'posts' && (
-            <div className="rounded-2xl border border-[#E5E0D8] bg-white shadow-sm overflow-hidden space-y-0">
-              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#E5E0D8] p-6 bg-white">
+            <div className="rounded-xl border border-[#E5E0D8] bg-white shadow-xs overflow-hidden space-y-0">
+              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#E5E0D8] p-5 bg-white">
                 <div>
-                  <h2 className="text-xl font-semibold text-[#071E13]">Blog Posts & Stories CMS</h2>
-                  <p className="mt-1 text-xs text-neutral-500">
-                    Author, edit, submit for review, schedule, and publish stories across ISSA initiatives.
+                  <h2 className="text-lg font-semibold text-[#071E13]">Blog Posts</h2>
+                  <p className="mt-0.5 text-xs text-neutral-500">
+                    Draft, edit, review, and manage article publishing.
                   </p>
                 </div>
 
@@ -913,7 +872,7 @@ export default function StaffPanel({
                     type="button"
                     onClick={refreshPostsList}
                     disabled={isRefreshingPosts}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-[#E5E0D8] bg-white px-3 py-2 text-xs font-medium text-neutral-700 hover:bg-[#F7F6F3] transition cursor-pointer"
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-[#E5E0D8] bg-white px-3 py-1.5 text-xs font-medium text-neutral-700 hover:bg-[#F7F6F3] transition cursor-pointer"
                   >
                     <RefreshCw className={`h-3.5 w-3.5 ${isRefreshingPosts ? 'animate-spin' : ''}`} />
                     Refresh
@@ -921,22 +880,22 @@ export default function StaffPanel({
 
                   <Link
                     href="/panel/posts/new"
-                    className="inline-flex items-center gap-1.5 rounded-lg bg-[#0D311F] px-4 py-2 text-xs font-semibold text-white hover:bg-[#17452F] transition shadow-xs cursor-pointer"
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-[#0D311F] px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-[#17452F] transition shadow-xs cursor-pointer"
                   >
-                    <Plus className="h-4 w-4" /> New Blog Post
+                    <Plus className="h-4 w-4" /> New Post
                   </Link>
                 </div>
               </div>
 
-              {/* Status Filters & Search Bar */}
-              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#E5E0D8] bg-[#FAF9F7] px-6 py-3">
+              {/* Status Filters & Search */}
+              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#E5E0D8] bg-[#FAF9F7] px-5 py-2.5">
                 <div className="flex flex-wrap gap-1.5 text-xs font-medium">
                   {(['all', 'draft', 'in_review', 'scheduled', 'published', 'archived'] as const).map((st) => (
                     <button
                       key={st}
                       type="button"
                       onClick={() => setPostStatusFilter(st)}
-                      className={`rounded-lg px-3 py-1.5 transition cursor-pointer capitalize ${
+                      className={`rounded-lg px-2.5 py-1 transition cursor-pointer capitalize ${
                         postStatusFilter === st
                           ? 'bg-[#0D311F] text-white font-semibold'
                           : 'bg-white border border-[#E5E0D8] text-neutral-700 hover:bg-[#F7F6F3]'
@@ -950,7 +909,7 @@ export default function StaffPanel({
                   ))}
                 </div>
 
-                <div className="relative w-full sm:w-64">
+                <div className="relative w-full sm:w-60">
                   <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-neutral-400" />
                   <input
                     type="text"
@@ -967,54 +926,54 @@ export default function StaffPanel({
                 <table className="w-full text-left text-sm">
                   <thead className="bg-[#F7F6F3] text-xs uppercase tracking-wider text-neutral-600 border-b border-[#E5E0D8]">
                     <tr>
-                      <th scope="col" className="px-6 py-3.5 font-semibold">Post Title & Slug</th>
-                      <th scope="col" className="px-6 py-3.5 font-semibold">Category</th>
-                      <th scope="col" className="px-6 py-3.5 font-semibold">Author</th>
-                      <th scope="col" className="px-6 py-3.5 font-semibold">Status</th>
-                      <th scope="col" className="px-6 py-3.5 font-semibold">Version</th>
-                      <th scope="col" className="px-6 py-3.5 font-semibold">Last Updated</th>
-                      <th scope="col" className="px-6 py-3.5 font-semibold text-right">Actions</th>
+                      <th scope="col" className="px-5 py-3 font-semibold">Title & Slug</th>
+                      <th scope="col" className="px-5 py-3 font-semibold">Category</th>
+                      <th scope="col" className="px-5 py-3 font-semibold">Author</th>
+                      <th scope="col" className="px-5 py-3 font-semibold">Status</th>
+                      <th scope="col" className="px-5 py-3 font-semibold">Version</th>
+                      <th scope="col" className="px-5 py-3 font-semibold">Updated</th>
+                      <th scope="col" className="px-5 py-3 font-semibold text-right">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#E5E0D8]">
                     {filteredPosts.length === 0 ? (
                       <tr>
-                        <td colSpan={7} className="px-6 py-12 text-center text-neutral-500 text-xs">
-                          No blog posts found matching your criteria.
+                        <td colSpan={7} className="px-5 py-8 text-center text-neutral-500 text-xs">
+                          No blog posts found.
                         </td>
                       </tr>
                     ) : (
                       filteredPosts.map((post) => (
                         <tr key={post.id || post.slug} className="hover:bg-[#FDFCFB] transition">
-                          <td className="px-6 py-4 max-w-sm">
-                            <div className="font-semibold text-[#071E13] line-clamp-1">
+                          <td className="px-5 py-3.5 max-w-sm">
+                            <div className="font-semibold text-xs text-[#071E13] line-clamp-1">
                               {post.title}
                             </div>
                             <div className="text-[11px] font-mono text-neutral-500 line-clamp-1">
                               /blog/{post.slug}
                             </div>
                           </td>
-                          <td className="px-6 py-4">
+                          <td className="px-5 py-3.5">
                             <span className="inline-block rounded-md bg-[#0D311F]/10 px-2 py-0.5 text-xs font-semibold text-[#0D311F]">
                               {post.category}
                             </span>
                           </td>
-                          <td className="px-6 py-4 text-xs text-neutral-700">
+                          <td className="px-5 py-3.5 text-xs text-neutral-700">
                             {post.authorName}
                           </td>
-                          <td className="px-6 py-4">
+                          <td className="px-5 py-3.5">
                             <span
-                              className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider ${
+                              className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
                                 statusBadgeClasses[post.status || 'draft'] || statusBadgeClasses.draft
                               }`}
                             >
                               {post.status?.replace('_', ' ')}
                             </span>
                           </td>
-                          <td className="px-6 py-4 text-xs font-mono font-medium text-neutral-600">
+                          <td className="px-5 py-3.5 text-xs font-mono text-neutral-600">
                             v{post.version || 1}
                           </td>
-                          <td className="px-6 py-4 text-xs text-neutral-500">
+                          <td className="px-5 py-3.5 text-xs text-neutral-500">
                             {post.updatedAt
                               ? new Date(post.updatedAt).toLocaleDateString('en-IN', {
                                   day: 'numeric',
@@ -1024,20 +983,20 @@ export default function StaffPanel({
                                 })
                               : post.displayDate}
                           </td>
-                          <td className="px-6 py-4 text-right">
+                          <td className="px-5 py-3.5 text-right">
                             <div className="inline-flex items-center gap-1.5 justify-end">
                               {post.id && (
                                 <>
                                   <Link
                                     href={`/panel/posts/${post.id}`}
-                                    className="inline-flex items-center gap-1 rounded-md border border-[#E5E0D8] bg-white px-2.5 py-1 text-xs font-medium text-neutral-700 hover:bg-[#F7F6F3] transition cursor-pointer"
+                                    className="inline-flex items-center gap-1 rounded-md border border-[#E5E0D8] bg-white px-2 py-1 text-xs font-medium text-neutral-700 hover:bg-[#F7F6F3] transition cursor-pointer"
                                   >
                                     <Edit className="h-3 w-3" /> Edit
                                   </Link>
                                   <Link
                                     href={`/panel/posts/${post.id}/preview`}
                                     target="_blank"
-                                    className="inline-flex items-center gap-1 rounded-md border border-[#E5E0D8] bg-white px-2.5 py-1 text-xs font-medium text-neutral-700 hover:bg-[#F7F6F3] transition cursor-pointer"
+                                    className="inline-flex items-center gap-1 rounded-md border border-[#E5E0D8] bg-white px-2 py-1 text-xs font-medium text-neutral-700 hover:bg-[#F7F6F3] transition cursor-pointer"
                                   >
                                     <Eye className="h-3 w-3" /> Preview
                                   </Link>
@@ -1052,21 +1011,21 @@ export default function StaffPanel({
                 </table>
               </div>
 
-              <div className="border-t border-[#E5E0D8] bg-[#FAF9F7] px-6 py-3 text-xs text-neutral-500 flex justify-between items-center">
+              <div className="border-t border-[#E5E0D8] bg-[#FAF9F7] px-5 py-2.5 text-xs text-neutral-500 flex justify-between items-center">
                 <span>Showing {filteredPosts.length} of {posts.length} posts</span>
-                <span>Role: <strong>{staff.role}</strong> ({isAdmin ? 'Full editorial & publishing rights' : 'Draft authoring & review submission'})</span>
+                <span>Role: <strong>{staff.role}</strong></span>
               </div>
             </div>
           )}
 
-          {/* TAB 2: JOB LISTINGS & CAREER VACANCIES */}
+          {/* TAB 2: JOB OPENINGS */}
           {currentTab === 'jobs' && (
-            <div className="rounded-2xl border border-[#E5E0D8] bg-white shadow-sm overflow-hidden space-y-0">
-              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#E5E0D8] p-6 bg-white">
+            <div className="rounded-xl border border-[#E5E0D8] bg-white shadow-xs overflow-hidden space-y-0">
+              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#E5E0D8] p-5 bg-white">
                 <div>
-                  <h2 className="text-xl font-semibold text-[#071E13]">Job Openings & Vacancy Management</h2>
-                  <p className="mt-1 text-xs text-neutral-500">
-                    Create, edit, reorder, and configure public career openings displayed on the ISSA careers portal.
+                  <h2 className="text-lg font-semibold text-[#071E13]">Job Openings</h2>
+                  <p className="mt-0.5 text-xs text-neutral-500">
+                    Manage active vacancies and requirements displayed on /careers.
                   </p>
                 </div>
 
@@ -1075,7 +1034,7 @@ export default function StaffPanel({
                     type="button"
                     onClick={refreshJobsList}
                     disabled={isRefreshingJobs}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-[#E5E0D8] bg-white px-3 py-2 text-xs font-medium text-neutral-700 hover:bg-[#F7F6F3] transition cursor-pointer"
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-[#E5E0D8] bg-white px-3 py-1.5 text-xs font-medium text-neutral-700 hover:bg-[#F7F6F3] transition cursor-pointer"
                   >
                     <RefreshCw className={`h-3.5 w-3.5 ${isRefreshingJobs ? 'animate-spin' : ''}`} />
                     Refresh
@@ -1085,7 +1044,7 @@ export default function StaffPanel({
                     <button
                       type="button"
                       onClick={() => handleOpenJobModal()}
-                      className="inline-flex items-center gap-1.5 rounded-lg bg-[#0D311F] px-4 py-2 text-xs font-semibold text-white hover:bg-[#17452F] transition shadow-xs cursor-pointer"
+                      className="inline-flex items-center gap-1.5 rounded-lg bg-[#0D311F] px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-[#17452F] transition shadow-xs cursor-pointer"
                     >
                       <Plus className="h-4 w-4" /> Create Opening
                     </button>
@@ -1093,15 +1052,15 @@ export default function StaffPanel({
                 </div>
               </div>
 
-              {/* Status Filters & Search Bar */}
-              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#E5E0D8] bg-[#FAF9F7] px-6 py-3">
+              {/* Status Filters & Search */}
+              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#E5E0D8] bg-[#FAF9F7] px-5 py-2.5">
                 <div className="flex flex-wrap gap-1.5 text-xs font-medium">
                   {(['all', 'active', 'draft', 'closed', 'archived'] as const).map((st) => (
                     <button
                       key={st}
                       type="button"
                       onClick={() => setJobStatusFilter(st)}
-                      className={`rounded-lg px-3 py-1.5 transition cursor-pointer capitalize ${
+                      className={`rounded-lg px-2.5 py-1 transition cursor-pointer capitalize ${
                         jobStatusFilter === st
                           ? 'bg-[#0D311F] text-white font-semibold'
                           : 'bg-white border border-[#E5E0D8] text-neutral-700 hover:bg-[#F7F6F3]'
@@ -1115,7 +1074,7 @@ export default function StaffPanel({
                   ))}
                 </div>
 
-                <div className="relative w-full sm:w-64">
+                <div className="relative w-full sm:w-60">
                   <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-neutral-400" />
                   <input
                     type="text"
@@ -1132,52 +1091,52 @@ export default function StaffPanel({
                 <table className="w-full text-left text-sm">
                   <thead className="bg-[#F7F6F3] text-xs uppercase tracking-wider text-neutral-600 border-b border-[#E5E0D8]">
                     <tr>
-                      <th scope="col" className="px-6 py-3.5 font-semibold">Job Title & Slug</th>
-                      <th scope="col" className="px-6 py-3.5 font-semibold">Department</th>
-                      <th scope="col" className="px-6 py-3.5 font-semibold">Location & Type</th>
-                      <th scope="col" className="px-6 py-3.5 font-semibold">Status</th>
-                      <th scope="col" className="px-6 py-3.5 font-semibold">Applications</th>
-                      <th scope="col" className="px-6 py-3.5 font-semibold">Order</th>
-                      <th scope="col" className="px-6 py-3.5 font-semibold text-right">Actions</th>
+                      <th scope="col" className="px-5 py-3 font-semibold">Title & Slug</th>
+                      <th scope="col" className="px-5 py-3 font-semibold">Department</th>
+                      <th scope="col" className="px-5 py-3 font-semibold">Location & Type</th>
+                      <th scope="col" className="px-5 py-3 font-semibold">Status</th>
+                      <th scope="col" className="px-5 py-3 font-semibold">Applications</th>
+                      <th scope="col" className="px-5 py-3 font-semibold">Order</th>
+                      <th scope="col" className="px-5 py-3 font-semibold text-right">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#E5E0D8]">
                     {filteredJobs.length === 0 ? (
                       <tr>
-                        <td colSpan={7} className="px-6 py-12 text-center text-neutral-500 text-xs">
-                          No job openings found matching your criteria.
+                        <td colSpan={7} className="px-5 py-8 text-center text-neutral-500 text-xs">
+                          No job openings found.
                         </td>
                       </tr>
                     ) : (
                       filteredJobs.map((job) => (
                         <tr key={job.id} className="hover:bg-[#FDFCFB] transition">
-                          <td className="px-6 py-4 max-w-xs">
-                            <div className="font-semibold text-[#071E13]">
+                          <td className="px-5 py-3.5 max-w-xs">
+                            <div className="font-semibold text-xs text-[#071E13]">
                               {job.title}
                             </div>
                             <div className="text-[11px] font-mono text-neutral-500">
                               /careers#{job.slug}
                             </div>
                           </td>
-                          <td className="px-6 py-4">
+                          <td className="px-5 py-3.5">
                             <span className="inline-block rounded-md bg-[#0D311F]/10 px-2 py-0.5 text-xs font-semibold text-[#0D311F]">
                               {job.department}
                             </span>
                           </td>
-                          <td className="px-6 py-4 text-xs text-neutral-700">
+                          <td className="px-5 py-3.5 text-xs text-neutral-700">
                             <div>{job.location}</div>
                             <div className="text-neutral-500 text-[11px]">{job.employmentType}</div>
                           </td>
-                          <td className="px-6 py-4">
+                          <td className="px-5 py-3.5">
                             <span
-                              className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider ${
+                              className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
                                 statusBadgeClasses[job.status] || statusBadgeClasses.active
                               }`}
                             >
                               {job.status}
                             </span>
                           </td>
-                          <td className="px-6 py-4">
+                          <td className="px-5 py-3.5">
                             <button
                               type="button"
                               onClick={() => {
@@ -1194,17 +1153,17 @@ export default function StaffPanel({
                               {job.applicationCount || 0}
                             </button>
                           </td>
-                          <td className="px-6 py-4 text-xs font-mono text-neutral-600">
+                          <td className="px-5 py-3.5 text-xs font-mono text-neutral-600">
                             #{job.displayOrder}
                           </td>
-                          <td className="px-6 py-4 text-right">
+                          <td className="px-5 py-3.5 text-right">
                             <div className="inline-flex items-center gap-1.5 justify-end">
                               {isAdmin && (
                                 <>
                                   <button
                                     type="button"
                                     onClick={() => handleOpenJobModal(job)}
-                                    className="inline-flex items-center gap-1 rounded-md border border-[#E5E0D8] bg-white px-2.5 py-1 text-xs font-medium text-neutral-700 hover:bg-[#F7F6F3] transition cursor-pointer"
+                                    className="inline-flex items-center gap-1 rounded-md border border-[#E5E0D8] bg-white px-2 py-1 text-xs font-medium text-neutral-700 hover:bg-[#F7F6F3] transition cursor-pointer"
                                   >
                                     <Edit className="h-3 w-3" /> Edit
                                   </button>
@@ -1235,21 +1194,21 @@ export default function StaffPanel({
                 </table>
               </div>
 
-              <div className="border-t border-[#E5E0D8] bg-[#FAF9F7] px-6 py-3 text-xs text-neutral-500 flex justify-between items-center">
+              <div className="border-t border-[#E5E0D8] bg-[#FAF9F7] px-5 py-2.5 text-xs text-neutral-500 flex justify-between items-center">
                 <span>Showing {filteredJobs.length} of {jobs.length} openings</span>
-                <span>Active openings appear immediately on <strong>/careers</strong></span>
+                <span>Active openings appear immediately on /careers</span>
               </div>
             </div>
           )}
 
-          {/* TAB 3: CAREER APPLICATIONS & CANDIDATE REVIEW (ADMIN ONLY) */}
+          {/* TAB 3: APPLICATIONS */}
           {currentTab === 'applications' && (
-            <div className="rounded-2xl border border-[#E5E0D8] bg-white shadow-sm overflow-hidden space-y-0">
-              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#E5E0D8] p-6 bg-white">
+            <div className="rounded-xl border border-[#E5E0D8] bg-white shadow-xs overflow-hidden space-y-0">
+              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#E5E0D8] p-5 bg-white">
                 <div>
-                  <h2 className="text-xl font-semibold text-[#071E13]">Career Applications & Candidate Review</h2>
-                  <p className="mt-1 text-xs text-neutral-500">
-                    Review candidate profiles, motivation statements, consent records, and secure resume downloads.
+                  <h2 className="text-lg font-semibold text-[#071E13]">Career Applications</h2>
+                  <p className="mt-0.5 text-xs text-neutral-500">
+                    Review applicant profiles, statements, and verified resume files.
                   </p>
                 </div>
 
@@ -1258,7 +1217,7 @@ export default function StaffPanel({
                     type="button"
                     onClick={refreshApplicationsList}
                     disabled={isRefreshingApps}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-[#E5E0D8] bg-white px-3 py-2 text-xs font-medium text-neutral-700 hover:bg-[#F7F6F3] transition cursor-pointer"
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-[#E5E0D8] bg-white px-3 py-1.5 text-xs font-medium text-neutral-700 hover:bg-[#F7F6F3] transition cursor-pointer"
                   >
                     <RefreshCw className={`h-3.5 w-3.5 ${isRefreshingApps ? 'animate-spin' : ''}`} />
                     Refresh
@@ -1266,15 +1225,15 @@ export default function StaffPanel({
                 </div>
               </div>
 
-              {/* Status Filters & Search Bar */}
-              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#E5E0D8] bg-[#FAF9F7] px-6 py-3">
+              {/* Status Filters & Search */}
+              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#E5E0D8] bg-[#FAF9F7] px-5 py-2.5">
                 <div className="flex flex-wrap gap-1.5 text-xs font-medium">
                   {(['all', 'new', 'under_review', 'interview_scheduled', 'hired', 'rejected', 'archived'] as const).map((st) => (
                     <button
                       key={st}
                       type="button"
                       onClick={() => setAppStatusFilter(st)}
-                      className={`rounded-lg px-3 py-1.5 transition cursor-pointer capitalize ${
+                      className={`rounded-lg px-2.5 py-1 transition cursor-pointer capitalize ${
                         appStatusFilter === st
                           ? 'bg-[#0D311F] text-white font-semibold'
                           : 'bg-white border border-[#E5E0D8] text-neutral-700 hover:bg-[#F7F6F3]'
@@ -1294,7 +1253,7 @@ export default function StaffPanel({
                     onChange={(e) => setAppRoleFilter(e.target.value)}
                     className="rounded-lg border border-[#E5E0D8] bg-white px-2.5 py-1.5 text-xs text-[#071E13] outline-none transition focus:border-[#0D311F] cursor-pointer"
                   >
-                    <option value="all">All Roles & Positions</option>
+                    <option value="all">All Roles</option>
                     {jobs.map((j) => (
                       <option key={j.slug} value={j.slug}>
                         {j.title}
@@ -1321,34 +1280,34 @@ export default function StaffPanel({
                 <table className="w-full text-left text-sm">
                   <thead className="bg-[#F7F6F3] text-xs uppercase tracking-wider text-neutral-600 border-b border-[#E5E0D8]">
                     <tr>
-                      <th scope="col" className="px-6 py-3.5 font-semibold">Applicant</th>
-                      <th scope="col" className="px-6 py-3.5 font-semibold">Position</th>
-                      <th scope="col" className="px-6 py-3.5 font-semibold">Experience</th>
-                      <th scope="col" className="px-6 py-3.5 font-semibold">Status</th>
-                      <th scope="col" className="px-6 py-3.5 font-semibold">Assignee</th>
-                      <th scope="col" className="px-6 py-3.5 font-semibold">Applied Date (IST)</th>
-                      <th scope="col" className="px-6 py-3.5 font-semibold text-right">Actions</th>
+                      <th scope="col" className="px-5 py-3 font-semibold">Applicant</th>
+                      <th scope="col" className="px-5 py-3 font-semibold">Position</th>
+                      <th scope="col" className="px-5 py-3 font-semibold">Experience</th>
+                      <th scope="col" className="px-5 py-3 font-semibold">Status</th>
+                      <th scope="col" className="px-5 py-3 font-semibold">Assignee</th>
+                      <th scope="col" className="px-5 py-3 font-semibold">Applied (IST)</th>
+                      <th scope="col" className="px-5 py-3 font-semibold text-right">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#E5E0D8]">
                     {filteredApplications.length === 0 ? (
                       <tr>
-                        <td colSpan={7} className="px-6 py-12 text-center text-neutral-500 text-xs">
-                          No career applications found matching your criteria.
+                        <td colSpan={7} className="px-5 py-8 text-center text-neutral-500 text-xs">
+                          No career applications found.
                         </td>
                       </tr>
                     ) : (
                       filteredApplications.map((app) => (
                         <tr key={app.id} className="hover:bg-[#FDFCFB] transition">
-                          <td className="px-6 py-4">
-                            <div className="font-semibold text-[#071E13]">
+                          <td className="px-5 py-3.5">
+                            <div className="font-semibold text-xs text-[#071E13]">
                               {app.fullName}
                             </div>
-                            <div className="text-xs text-neutral-500">
+                            <div className="text-[11px] text-neutral-500">
                               {app.email}
                             </div>
                           </td>
-                          <td className="px-6 py-4">
+                          <td className="px-5 py-3.5">
                             <div className="text-xs font-semibold text-[#071E13]">
                               {app.jobTitle || app.roleSlug}
                             </div>
@@ -1356,30 +1315,30 @@ export default function StaffPanel({
                               {app.jobDepartment || 'Outreach'}
                             </div>
                           </td>
-                          <td className="px-6 py-4">
+                          <td className="px-5 py-3.5">
                             <span className="inline-block rounded-md bg-neutral-100 px-2 py-0.5 text-xs font-medium text-neutral-700">
                               {app.experienceYears} yrs
                             </span>
                           </td>
-                          <td className="px-6 py-4">
+                          <td className="px-5 py-3.5">
                             <span
-                              className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider ${
+                              className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
                                 statusBadgeClasses[app.status] || statusBadgeClasses.new
                               }`}
                             >
                               {app.status.replace('_', ' ')}
                             </span>
                           </td>
-                          <td className="px-6 py-4 text-xs text-neutral-600">
+                          <td className="px-5 py-3.5 text-xs text-neutral-600">
                             {app.assignedTo ? (
                               <span className="inline-flex items-center gap-1 font-medium text-[#0D311F]">
                                 <User className="h-3 w-3" /> {app.assignedTo}
                               </span>
                             ) : (
-                              <span className="text-neutral-400 italic">Unassigned</span>
+                              <span className="text-neutral-400 italic text-[11px]">Unassigned</span>
                             )}
                           </td>
-                          <td className="px-6 py-4 text-xs text-neutral-500 font-mono">
+                          <td className="px-5 py-3.5 text-xs text-neutral-500 font-mono">
                             {new Date(app.createdAt).toLocaleDateString('en-IN', {
                               day: 'numeric',
                               month: 'short',
@@ -1387,15 +1346,15 @@ export default function StaffPanel({
                               timeZone: 'Asia/Kolkata',
                             })}
                           </td>
-                          <td className="px-6 py-4 text-right">
-                            <div className="inline-flex items-center gap-2 justify-end">
+                          <td className="px-5 py-3.5 text-right">
+                            <div className="inline-flex items-center gap-1.5 justify-end">
                               {app.resume?.downloadUrl && (
                                 <a
                                   href={app.resume.downloadUrl}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  title="Download verified resume"
-                                  className="inline-flex items-center gap-1 rounded-md border border-[#E5E0D8] bg-white px-2.5 py-1 text-xs font-medium text-neutral-700 hover:bg-[#F7F6F3] transition"
+                                  title="Download resume"
+                                  className="inline-flex items-center gap-1 rounded-md border border-[#E5E0D8] bg-white px-2 py-1 text-xs font-medium text-neutral-700 hover:bg-[#F7F6F3] transition"
                                 >
                                   <Download className="h-3 w-3 text-[#0D311F]" /> Resume
                                 </a>
@@ -1416,21 +1375,21 @@ export default function StaffPanel({
                 </table>
               </div>
 
-              <div className="border-t border-[#E5E0D8] bg-[#FAF9F7] px-6 py-3 text-xs text-neutral-500 flex justify-between items-center">
+              <div className="border-t border-[#E5E0D8] bg-[#FAF9F7] px-5 py-2.5 text-xs text-neutral-500 flex justify-between items-center">
                 <span>Showing {filteredApplications.length} of {applications.length} applications</span>
-                <span>Protected Access: Resumes secured with HMAC SHA256 download tokens</span>
+                <span>Protected resume storage with HMAC SHA-256 tokens</span>
               </div>
             </div>
           )}
 
-          {/* TAB 4: STAFF & ACCESS DIRECTORY */}
+          {/* TAB 4: STAFF DIRECTORY */}
           {currentTab === 'users' && (
-            <div className="rounded-2xl border border-[#E5E0D8] bg-white shadow-sm overflow-hidden">
-              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#E5E0D8] p-6">
+            <div className="rounded-xl border border-[#E5E0D8] bg-white shadow-xs overflow-hidden">
+              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#E5E0D8] p-5">
                 <div>
-                  <h2 className="text-xl font-semibold text-[#071E13]">Staff & Access Directory</h2>
-                  <p className="mt-1 text-xs text-neutral-500">
-                    Registered Pinebrook Technologies accounts with assigned operational roles.
+                  <h2 className="text-lg font-semibold text-[#071E13]">Staff Directory</h2>
+                  <p className="mt-0.5 text-xs text-neutral-500">
+                    Accounts with assigned roles in the ISSA operations panel.
                   </p>
                 </div>
 
@@ -1440,13 +1399,13 @@ export default function StaffPanel({
                     value={userSearchFilter}
                     onChange={(e) => setUserSearchFilter(e.target.value)}
                     placeholder="Filter staff..."
-                    className="rounded-lg border border-[#E5E0D8] bg-[#FDFCFB] px-3 py-1.5 text-sm text-[#071E13] outline-none transition focus:border-[#0D311F]"
+                    className="rounded-lg border border-[#E5E0D8] bg-[#FDFCFB] px-3 py-1.5 text-xs text-[#071E13] outline-none transition focus:border-[#0D311F]"
                   />
                   <button
                     type="button"
                     onClick={refreshUsersList}
                     title="Refresh user list"
-                    className="rounded-lg border border-[#E5E0D8] bg-white px-3 py-1.5 text-sm font-medium text-neutral-700 hover:bg-[#F7F6F3] transition cursor-pointer"
+                    className="rounded-lg border border-[#E5E0D8] bg-white px-3 py-1.5 text-xs font-medium text-neutral-700 hover:bg-[#F7F6F3] transition cursor-pointer"
                   >
                     ↻ Refresh
                   </button>
@@ -1458,31 +1417,31 @@ export default function StaffPanel({
                 <table className="w-full text-left text-sm">
                   <thead className="bg-[#F7F6F3] text-xs uppercase tracking-wider text-neutral-600 border-b border-[#E5E0D8]">
                     <tr>
-                      <th scope="col" className="px-6 py-3.5 font-semibold">First Name</th>
-                      <th scope="col" className="px-6 py-3.5 font-semibold">Email</th>
-                      <th scope="col" className="px-6 py-3.5 font-semibold">Role</th>
-                      {isAdmin && <th scope="col" className="px-6 py-3.5 font-semibold text-right">Role Action</th>}
+                      <th scope="col" className="px-5 py-3 font-semibold">First Name</th>
+                      <th scope="col" className="px-5 py-3 font-semibold">Email</th>
+                      <th scope="col" className="px-5 py-3 font-semibold">Role</th>
+                      {isAdmin && <th scope="col" className="px-5 py-3 font-semibold text-right">Role Action</th>}
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#E5E0D8]">
                     {filteredUsers.length === 0 ? (
                       <tr>
-                        <td colSpan={isAdmin ? 4 : 3} className="px-6 py-8 text-center text-neutral-500">
+                        <td colSpan={isAdmin ? 4 : 3} className="px-5 py-8 text-center text-neutral-500 text-xs">
                           No users found.
                         </td>
                       </tr>
                     ) : (
                       filteredUsers.map((u) => (
                         <tr key={u.id} className="hover:bg-[#FDFCFB] transition">
-                          <td className="px-6 py-4 font-medium text-[#071E13]">
+                          <td className="px-5 py-3.5 text-xs font-medium text-[#071E13]">
                             {u.firstName || u.fullName.split(' ')[0] || '—'}
                           </td>
-                          <td className="px-6 py-4 text-neutral-700">
+                          <td className="px-5 py-3.5 text-xs text-neutral-700">
                             {u.email}
                           </td>
-                          <td className="px-6 py-4">
+                          <td className="px-5 py-3.5">
                             <span
-                              className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                              className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold ${
                                 u.role === 'ADMIN'
                                   ? 'bg-purple-100 text-purple-800'
                                   : u.role === 'CONTENT'
@@ -1494,7 +1453,7 @@ export default function StaffPanel({
                             </span>
                           </td>
                           {isAdmin && (
-                            <td className="px-6 py-4 text-right">
+                            <td className="px-5 py-3.5 text-right">
                               <select
                                 value={u.role}
                                 disabled={updatingUserId === u.id}
@@ -1514,8 +1473,8 @@ export default function StaffPanel({
                 </table>
               </div>
 
-              <div className="border-t border-[#E5E0D8] bg-[#FAF9F7] px-6 py-3 text-xs text-neutral-500">
-                Total registered users: <span className="font-medium text-[#071E13]">{users.length}</span>
+              <div className="border-t border-[#E5E0D8] bg-[#FAF9F7] px-5 py-2.5 text-xs text-neutral-500">
+                Registered staff: <span className="font-medium text-[#071E13]">{users.length}</span>
               </div>
             </div>
           )}
@@ -1524,12 +1483,12 @@ export default function StaffPanel({
         {/* MODAL: CREATE / EDIT JOB OPENING */}
         {isJobModalOpen && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
-            <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-[#E5E0D8] bg-white p-6 shadow-2xl">
-              <div className="flex items-center justify-between border-b border-[#E5E0D8] pb-4">
+            <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-xl border border-[#E5E0D8] bg-white p-6 shadow-2xl">
+              <div className="flex items-center justify-between border-b border-[#E5E0D8] pb-3">
                 <div className="flex items-center gap-2">
-                  <Briefcase className="h-5 w-5 text-[#0D311F]" />
-                  <h3 className="text-lg font-semibold text-[#071E13]">
-                    {editingJob ? 'Edit Job Opening' : 'Post New Job Opening'}
+                  <Briefcase className="h-4 w-4 text-[#0D311F]" />
+                  <h3 className="text-base font-semibold text-[#071E13]">
+                    {editingJob ? 'Edit Job Opening' : 'New Job Opening'}
                   </h3>
                 </div>
                 <button
@@ -1537,7 +1496,7 @@ export default function StaffPanel({
                   onClick={() => setIsJobModalOpen(false)}
                   className="rounded-lg p-1 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700 cursor-pointer"
                 >
-                  <X className="h-5 w-5" />
+                  <X className="h-4 w-4" />
                 </button>
               </div>
 
@@ -1559,20 +1518,20 @@ export default function StaffPanel({
                       required
                       value={jobFormData.title}
                       onChange={(e) => setJobFormData({ ...jobFormData, title: e.target.value })}
-                      placeholder="e.g. Senior Education Expert"
+                      placeholder="Senior Education Expert"
                       className="w-full rounded-lg border border-[#E5E0D8] p-2.5 text-[#071E13] outline-none focus:border-[#0D311F]"
                     />
                   </div>
 
                   <div>
                     <label className="block font-semibold text-neutral-700 mb-1">
-                      Slug (URL identifier)
+                      Slug
                     </label>
                     <input
                       type="text"
                       value={jobFormData.slug || ''}
                       onChange={(e) => setJobFormData({ ...jobFormData, slug: e.target.value })}
-                      placeholder="e.g. edu-expert (auto-generated if blank)"
+                      placeholder="edu-expert"
                       className="w-full rounded-lg border border-[#E5E0D8] p-2.5 text-[#071E13] outline-none focus:border-[#0D311F]"
                     />
                   </div>
@@ -1588,7 +1547,7 @@ export default function StaffPanel({
                       required
                       value={jobFormData.department}
                       onChange={(e) => setJobFormData({ ...jobFormData, department: e.target.value })}
-                      placeholder="e.g. Academic Programs"
+                      placeholder="Academic Programs"
                       className="w-full rounded-lg border border-[#E5E0D8] p-2.5 text-[#071E13] outline-none focus:border-[#0D311F]"
                     />
                   </div>
@@ -1602,7 +1561,7 @@ export default function StaffPanel({
                       required
                       value={jobFormData.location}
                       onChange={(e) => setJobFormData({ ...jobFormData, location: e.target.value })}
-                      placeholder="e.g. Srinagar Garhwal, Uttarakhand"
+                      placeholder="Srinagar Garhwal, Uttarakhand"
                       className="w-full rounded-lg border border-[#E5E0D8] p-2.5 text-[#071E13] outline-none focus:border-[#0D311F]"
                     />
                   </div>
@@ -1616,7 +1575,7 @@ export default function StaffPanel({
                       required
                       value={jobFormData.employmentType}
                       onChange={(e) => setJobFormData({ ...jobFormData, employmentType: e.target.value })}
-                      placeholder="e.g. Full-time (On-site)"
+                      placeholder="Full-time (On-site)"
                       className="w-full rounded-lg border border-[#E5E0D8] p-2.5 text-[#071E13] outline-none focus:border-[#0D311F]"
                     />
                   </div>
@@ -1625,13 +1584,13 @@ export default function StaffPanel({
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                   <div>
                     <label className="block font-semibold text-neutral-700 mb-1">
-                      Salary / Compensation Note
+                      Salary Note
                     </label>
                     <input
                       type="text"
                       value={jobFormData.salary || ''}
                       onChange={(e) => setJobFormData({ ...jobFormData, salary: e.target.value })}
-                      placeholder="e.g. Competitive & Housing Provided"
+                      placeholder="Competitive & Housing"
                       className="w-full rounded-lg border border-[#E5E0D8] p-2.5 text-[#071E13] outline-none focus:border-[#0D311F]"
                     />
                   </div>
@@ -1645,16 +1604,16 @@ export default function StaffPanel({
                       onChange={(e) => setJobFormData({ ...jobFormData, status: e.target.value as JobStatus })}
                       className="w-full rounded-lg border border-[#E5E0D8] p-2.5 text-[#071E13] outline-none focus:border-[#0D311F] bg-white cursor-pointer"
                     >
-                      <option value="active">Active (Visible publicly)</option>
-                      <option value="draft">Draft (Hidden)</option>
-                      <option value="closed">Closed (No new apps)</option>
+                      <option value="active">Active</option>
+                      <option value="draft">Draft</option>
+                      <option value="closed">Closed</option>
                       <option value="archived">Archived</option>
                     </select>
                   </div>
 
                   <div>
                     <label className="block font-semibold text-neutral-700 mb-1">
-                      Display Priority Order
+                      Display Priority
                     </label>
                     <input
                       type="number"
@@ -1676,20 +1635,20 @@ export default function StaffPanel({
                     rows={4}
                     value={jobFormData.description}
                     onChange={(e) => setJobFormData({ ...jobFormData, description: e.target.value })}
-                    placeholder="Describe the role mission, responsibilities, and team scope..."
+                    placeholder="Role responsibilities and expectations..."
                     className="w-full rounded-lg border border-[#E5E0D8] p-2.5 text-[#071E13] outline-none focus:border-[#0D311F]"
                   />
                 </div>
 
                 <div>
                   <label className="block font-semibold text-neutral-700 mb-1">
-                    Key Requirements (One bullet point per line)
+                    Requirements (One per line)
                   </label>
                   <textarea
                     rows={4}
                     value={typeof jobFormData.requirements === 'string' ? jobFormData.requirements : (jobFormData.requirements || []).join('\n')}
                     onChange={(e) => setJobFormData({ ...jobFormData, requirements: e.target.value })}
-                    placeholder="Master's degree in relevant discipline&#10;3+ years field experience&#10;Fluency in Hindi and local Garhwali/Kumaoni dialects"
+                    placeholder="Relevant degree&#10;Field experience in rural districts"
                     className="w-full rounded-lg border border-[#E5E0D8] p-2.5 text-[#071E13] outline-none focus:border-[#0D311F] font-mono text-[11px]"
                   />
                 </div>
@@ -1718,14 +1677,14 @@ export default function StaffPanel({
         {/* DRAWER / MODAL: REVIEW CANDIDATE APPLICATION */}
         {selectedApp && (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-xs">
-            <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl border border-[#E5E0D8] bg-white p-6 shadow-2xl">
-              <div className="flex items-center justify-between border-b border-[#E5E0D8] pb-4">
+            <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-xl border border-[#E5E0D8] bg-white p-6 shadow-2xl">
+              <div className="flex items-center justify-between border-b border-[#E5E0D8] pb-3">
                 <div>
-                  <h3 className="text-lg font-semibold text-[#071E13]">
+                  <h3 className="text-base font-semibold text-[#071E13]">
                     {selectedApp.fullName}
                   </h3>
                   <p className="text-xs text-neutral-500">
-                    Applied for <strong className="text-[#0D311F]">{selectedApp.jobTitle || selectedApp.roleSlug}</strong>
+                    Position: <strong className="text-[#0D311F]">{selectedApp.jobTitle || selectedApp.roleSlug}</strong>
                   </p>
                 </div>
                 <button
@@ -1733,7 +1692,7 @@ export default function StaffPanel({
                   onClick={() => setSelectedApp(null)}
                   className="rounded-lg p-1 text-neutral-400 hover:bg-neutral-100 hover:text-neutral-700 cursor-pointer"
                 >
-                  <X className="h-5 w-5" />
+                  <X className="h-4 w-4" />
                 </button>
               </div>
 
@@ -1748,19 +1707,19 @@ export default function StaffPanel({
                 </div>
               )}
 
-              <div className="mt-4 space-y-5 text-xs">
-                {/* Contact & Basics Grid */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-[#FAF9F7] p-4 rounded-xl border border-[#E5E0D8]">
+              <div className="mt-4 space-y-4 text-xs">
+                {/* Details Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 bg-[#FAF9F7] p-3.5 rounded-lg border border-[#E5E0D8]">
                   <div>
-                    <span className="text-neutral-500 block">Email Address:</span>
+                    <span className="text-neutral-500 block">Email:</span>
                     <strong className="text-[#071E13] select-all">{selectedApp.email}</strong>
                   </div>
                   <div>
-                    <span className="text-neutral-500 block">Experience Level:</span>
+                    <span className="text-neutral-500 block">Experience:</span>
                     <strong className="text-[#071E13]">{selectedApp.experienceYears} Years</strong>
                   </div>
                   <div>
-                    <span className="text-neutral-500 block">Submission Date (IST):</span>
+                    <span className="text-neutral-500 block">Applied (IST):</span>
                     <strong className="text-[#071E13]">
                       {new Date(selectedApp.createdAt).toLocaleString('en-IN', {
                         timeZone: 'Asia/Kolkata',
@@ -1770,7 +1729,7 @@ export default function StaffPanel({
                     </strong>
                   </div>
                   <div>
-                    <span className="text-neutral-500 block">Current Status:</span>
+                    <span className="text-neutral-500 block">Status:</span>
                     <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${statusBadgeClasses[selectedApp.status] || statusBadgeClasses.new}`}>
                       {selectedApp.status.replace('_', ' ')}
                     </span>
@@ -1779,8 +1738,8 @@ export default function StaffPanel({
 
                 {/* Cover Statement */}
                 <div>
-                  <h4 className="font-semibold text-neutral-800 mb-1.5">Applicant Statement & Motivation:</h4>
-                  <div className="p-3 bg-[#FDFCFB] rounded-xl border border-[#E5E0D8] text-neutral-800 leading-relaxed whitespace-pre-wrap">
+                  <h4 className="font-semibold text-neutral-800 mb-1">Applicant Statement:</h4>
+                  <div className="p-3 bg-[#FDFCFB] rounded-lg border border-[#E5E0D8] text-neutral-800 leading-relaxed whitespace-pre-wrap">
                     {selectedApp.statement || 'No statement provided.'}
                   </div>
                 </div>
@@ -1788,10 +1747,10 @@ export default function StaffPanel({
                 {/* Attached Resume */}
                 {selectedApp.resume && (
                   <div>
-                    <h4 className="font-semibold text-neutral-800 mb-1.5">Attached Resume File:</h4>
-                    <div className="flex items-center justify-between p-3.5 bg-emerald-50/60 rounded-xl border border-emerald-200/80">
-                      <div className="flex items-center gap-3">
-                        <FileCode className="h-5 w-5 text-emerald-700 shrink-0" />
+                    <h4 className="font-semibold text-neutral-800 mb-1">Resume File:</h4>
+                    <div className="flex items-center justify-between p-3 bg-[#FAF9F7] rounded-lg border border-[#E5E0D8]">
+                      <div className="flex items-center gap-2.5">
+                        <FileCode className="h-4 w-4 text-[#0D311F] shrink-0" />
                         <div>
                           <p className="font-semibold text-[#071E13]">{selectedApp.resume.originalFilename}</p>
                           <p className="text-[11px] text-neutral-500 font-mono">
@@ -1805,7 +1764,7 @@ export default function StaffPanel({
                           href={selectedApp.resume.downloadUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1.5 rounded-lg bg-[#0D311F] px-3.5 py-1.5 text-xs font-semibold text-white hover:bg-[#17452F] transition shadow-xs"
+                          className="inline-flex items-center gap-1 rounded-lg bg-[#0D311F] px-3 py-1.5 text-xs font-semibold text-white hover:bg-[#17452F] transition shadow-xs"
                         >
                           <Download className="h-3.5 w-3.5" /> Download Resume
                         </a>
@@ -1815,18 +1774,17 @@ export default function StaffPanel({
                 )}
 
                 {/* Consent Audit */}
-                <div className="text-[11px] text-neutral-500 bg-[#FAF9F7] p-3 rounded-lg border border-[#E5E0D8]">
-                  <p><strong>Consent Version:</strong> {selectedApp.consentVersion} (Consented on {new Date(selectedApp.consentedAt).toISOString()})</p>
-                  <p className="mt-0.5 italic">&ldquo;{selectedApp.consentText}&rdquo;</p>
+                <div className="text-[11px] text-neutral-500 bg-[#FAF9F7] p-2.5 rounded-lg border border-[#E5E0D8]">
+                  <p><strong>Consent:</strong> {selectedApp.consentVersion} (Timestamp: {new Date(selectedApp.consentedAt).toISOString()})</p>
                 </div>
 
                 {/* Workflow Status & Assignee Controls */}
-                <div className="border-t border-[#E5E0D8] pt-4 space-y-3">
-                  <h4 className="font-semibold text-[#071E13]">Update Workflow Status & Assignee:</h4>
+                <div className="border-t border-[#E5E0D8] pt-3.5 space-y-3">
+                  <h4 className="font-semibold text-[#071E13]">Update Status & Assignee:</h4>
 
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
-                      <label className="block text-neutral-600 mb-1">Workflow Status</label>
+                      <label className="block text-neutral-600 mb-1">Status</label>
                       <select
                         value={appStatusUpdateTarget}
                         onChange={(e) => setAppStatusUpdateTarget(e.target.value as CareerApplicationStatus)}
@@ -1842,22 +1800,22 @@ export default function StaffPanel({
                     </div>
 
                     <div>
-                      <label className="block text-neutral-600 mb-1">Assigned Reviewer</label>
+                      <label className="block text-neutral-600 mb-1">Assignee</label>
                       <input
                         type="text"
                         value={appAssigneeTarget}
                         onChange={(e) => setAppAssigneeTarget(e.target.value)}
-                        placeholder="e.g. Admin or Staff name"
+                        placeholder="Staff or reviewer email/name"
                         className="w-full rounded-lg border border-[#E5E0D8] p-2 text-[#071E13] outline-none focus:border-[#0D311F]"
                       />
                     </div>
                   </div>
 
-                  <div className="flex justify-end gap-2 pt-2">
+                  <div className="flex justify-end gap-2 pt-1">
                     <button
                       type="button"
                       onClick={() => setSelectedApp(null)}
-                      className="rounded-lg border border-[#E5E0D8] px-4 py-2 text-xs font-semibold text-neutral-700 hover:bg-[#F7F6F3] cursor-pointer"
+                      className="rounded-lg border border-[#E5E0D8] px-3.5 py-1.5 text-xs font-semibold text-neutral-700 hover:bg-[#F7F6F3] cursor-pointer"
                     >
                       Close
                     </button>
@@ -1865,9 +1823,9 @@ export default function StaffPanel({
                       type="button"
                       disabled={isUpdatingAppStatus}
                       onClick={handleUpdateApplicationStatus}
-                      className="rounded-lg bg-[#0D311F] px-4 py-2 text-xs font-semibold text-white hover:bg-[#17452F] disabled:opacity-50 cursor-pointer"
+                      className="rounded-lg bg-[#0D311F] px-4 py-1.5 text-xs font-semibold text-white hover:bg-[#17452F] disabled:opacity-50 cursor-pointer"
                     >
-                      {isUpdatingAppStatus ? 'Updating...' : 'Save Status & Assignee'}
+                      {isUpdatingAppStatus ? 'Updating...' : 'Save Changes'}
                     </button>
                   </div>
                 </div>
@@ -1884,48 +1842,48 @@ export default function StaffPanel({
 
   return (
     <div className="flex min-h-[calc(100vh-160px)] items-center justify-center bg-[#F7F6F3] px-6 py-16 text-[#071E13]">
-      <section className="w-full max-w-md rounded-2xl border border-[#E5E0D8] bg-white p-8 text-center shadow-sm">
-        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#0D311F]/10 text-2xl">
+      <section className="w-full max-w-md rounded-xl border border-[#E5E0D8] bg-white p-8 text-center shadow-xs">
+        <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[#0D311F]/10 text-xl">
           🔒
         </div>
 
-        <h1 className="text-2xl font-semibold">
+        <h1 className="text-xl font-semibold text-[#071E13]">
           {isAlreadyRequested ? 'Access Request Pending' : 'Staff Access Required'}
         </h1>
 
-        <p className="mt-2 text-sm text-neutral-600">
+        <p className="mt-1 text-xs text-neutral-600">
           Signed in as <span className="font-medium text-[#071E13]">{initialUser.email}</span>
         </p>
 
         {isAlreadyRequested ? (
-          <div className="mt-6 rounded-xl border border-amber-200 bg-amber-50 p-4 text-left">
+          <div className="mt-5 rounded-lg border border-amber-200 bg-amber-50 p-4 text-left text-xs">
             <div className="flex items-center gap-2">
-              <span className="relative flex h-2.5 w-2.5">
+              <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-400 opacity-75"></span>
-                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-amber-500"></span>
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-amber-500"></span>
               </span>
-              <span className="text-xs font-semibold uppercase tracking-wider text-amber-800">
+              <span className="font-semibold uppercase tracking-wider text-amber-800 text-[11px]">
                 Pending Approval
               </span>
             </div>
-            <p className="mt-2 text-sm text-amber-900">
-              Your access request has been recorded. An administrator will review and assign your role (Admin or Content).
+            <p className="mt-2 text-amber-900">
+              Your access request has been recorded. An administrator will assign your role.
             </p>
-            <p className="mt-2 text-xs text-amber-700">
-              This screen will automatically refresh as soon as your role is approved.
+            <p className="mt-1.5 text-neutral-500 text-[11px]">
+              This view refreshes automatically once approved.
             </p>
           </div>
         ) : (
-          <div className="mt-6">
-            <p className="text-sm text-neutral-600">
-              You are authenticated, but you have not yet been granted staff access to the panel.
+          <div className="mt-5 text-xs">
+            <p className="text-neutral-600">
+              Your account is authenticated, but requires role authorization to access panel operations.
             </p>
 
             <button
               type="button"
               disabled={requesting}
               onClick={handleRequestAccess}
-              className="mt-6 w-full cursor-pointer rounded-lg bg-[#0D311F] px-4 py-3 font-medium text-white transition-colors hover:bg-[#17452F] disabled:cursor-not-allowed disabled:opacity-60"
+              className="mt-5 w-full cursor-pointer rounded-lg bg-[#0D311F] px-4 py-2.5 font-medium text-white transition-colors hover:bg-[#17452F] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {requesting ? 'Submitting Request...' : 'Request Access'}
             </button>
@@ -1933,10 +1891,10 @@ export default function StaffPanel({
         )}
 
         {message && (
-          <p className="mt-4 text-sm font-medium text-emerald-700">{message}</p>
+          <p className="mt-3 text-xs font-medium text-emerald-700">{message}</p>
         )}
 
-        <div className="mt-6 border-t border-[#E5E0D8] pt-6">
+        <div className="mt-5 border-t border-[#E5E0D8] pt-5">
           <SignOutButton />
         </div>
       </section>
