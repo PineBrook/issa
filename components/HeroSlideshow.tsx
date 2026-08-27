@@ -91,7 +91,8 @@ export const HERO_SLIDES: HeroSlide[] = [
   },
 ];
 
-interface HeroSlideshowProps {
+export interface HeroSlideshowProps {
+  slides?: HeroSlide[];
   activeIndex: number;
   onSelect: (index: number) => void;
   isPaused: boolean;
@@ -99,26 +100,28 @@ interface HeroSlideshowProps {
 }
 
 export default function HeroSlideshow({
+  slides = HERO_SLIDES,
   activeIndex,
   onSelect,
   isPaused,
   onTogglePause,
 }: HeroSlideshowProps) {
-  const slide = HERO_SLIDES[activeIndex] ?? HERO_SLIDES[0];
+  const currentSlides = slides && slides.length > 0 ? slides : HERO_SLIDES;
+  const slide = currentSlides[activeIndex] ?? currentSlides[0];
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'ArrowRight') {
       e.preventDefault();
-      onSelect((activeIndex + 1) % HERO_SLIDES.length);
+      onSelect((activeIndex + 1) % currentSlides.length);
     } else if (e.key === 'ArrowLeft') {
       e.preventDefault();
-      onSelect((activeIndex - 1 + HERO_SLIDES.length) % HERO_SLIDES.length);
+      onSelect((activeIndex - 1 + currentSlides.length) % currentSlides.length);
     } else if (e.key === 'Home') {
       e.preventDefault();
       onSelect(0);
     } else if (e.key === 'End') {
       e.preventDefault();
-      onSelect(HERO_SLIDES.length - 1);
+      onSelect(currentSlides.length - 1);
     }
   };
 
@@ -132,7 +135,7 @@ export default function HeroSlideshow({
       aria-label="ISSA Foundation Hero Slideshow"
     >
       {/* 1. Full-bleed photo layers — base of the stack */}
-      {HERO_SLIDES.map((s, i) => {
+      {currentSlides.map((s, i) => {
         const isActive = i === activeIndex;
         return (
           <motion.div
@@ -254,7 +257,7 @@ export default function HeroSlideshow({
         </button>
 
         <div className="flex items-center gap-1.5" role="tablist" aria-label="Hero slide selection">
-          {HERO_SLIDES.map((s, i) => {
+          {currentSlides.map((s, i) => {
             const isActive = i === activeIndex;
             return (
               <button
@@ -263,7 +266,7 @@ export default function HeroSlideshow({
                 type="button"
                 role="tab"
                 onClick={() => onSelect(i)}
-                aria-label={`Slide ${i + 1} of ${HERO_SLIDES.length}: ${s.eyebrow}`}
+                aria-label={`Slide ${i + 1} of ${currentSlides.length}: ${s.eyebrow}`}
                 aria-selected={isActive}
                 aria-controls={`hero-slide-panel-${s.id}`}
                 className="group relative h-3 flex items-center cursor-pointer p-1 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"

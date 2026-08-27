@@ -219,7 +219,11 @@ function ActionLink({ href, children, dark = false }: { href: string; children: 
   );
 }
 
-export default function EntrepreneurshipInitiativeView() {
+export default function EntrepreneurshipInitiativeView({ program }: { program?: any }) {
+  const heroTitle = program?.title || 'Entrepreneurship Development Program (EDP)';
+  const heroSub = program?.subtitle || 'Creating Entrepreneurs. Generating Employment. Building a Self-Reliant Uttarakhand.';
+  const heroDesc = program?.overviewP1 || 'The ISSA Foundation EDP is a flagship initiative designed to identify, mentor, and support aspiring and existing entrepreneurs across Uttarakhand. Our mission is to transform innovative ideas and local skills into sustainable enterprises that generate employment, strengthen local economies, and improve livelihoods.';
+
   return (
     <section id="entrepreneurship-initiative" className="bg-neutral-50 font-sans text-neutral-800">
       {/* HERO SECTION */}
@@ -228,13 +232,13 @@ export default function EntrepreneurshipInitiativeView() {
         <div className="relative mx-auto grid max-w-7xl gap-12 px-4 py-20 sm:px-6 lg:grid-cols-12 lg:px-8 lg:py-28 items-center">
           <div className="lg:col-span-7 space-y-6">
             <h1 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-bold leading-tight tracking-tight">
-              Entrepreneurship Development Program (EDP)
+              {heroTitle}
             </h1>
             <p className="text-xl font-serif text-accent font-medium leading-snug">
-              Creating Entrepreneurs. Generating Employment. Building a Self-Reliant Uttarakhand.
+              {heroSub}
             </p>
             <p className="text-sm sm:text-base leading-relaxed text-neutral-300 font-sans max-w-2xl">
-              The ISSA Foundation EDP is a flagship initiative designed to identify, mentor, and support aspiring and existing entrepreneurs across Uttarakhand. Our mission is to transform innovative ideas and local skills into sustainable enterprises that generate employment, strengthen local economies, and improve livelihoods.
+              {heroDesc}
             </p>
 
             <div className="pt-2 flex flex-wrap gap-3">

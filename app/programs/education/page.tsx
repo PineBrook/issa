@@ -1,5 +1,8 @@
 import { Metadata } from 'next';
-import ProgramsView from '@/components/ProgramsView';
+import EducationInitiativeView from '@/components/programs/EducationInitiativeView';
+import { getProgramsContent } from '@/lib/site-cms';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Education Programs',
@@ -9,6 +12,7 @@ export const metadata: Metadata = {
   twitter: { card: 'summary', title: 'Education Programs | ISSA Foundation', description: 'Strengthening education and future-ready learning across Uttarakhand.' },
 };
 
-export default function EducationProgramsPage() {
-  return <ProgramsView initialPillar="education" />;
+export default async function EducationProgramsPage() {
+  const content = await getProgramsContent('education');
+  return <EducationInitiativeView program={content.education} />;
 }

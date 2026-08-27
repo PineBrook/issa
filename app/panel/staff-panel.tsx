@@ -15,6 +15,32 @@ import type {
   CareerMetrics,
   JobOpeningInput,
 } from '@/lib/careers-types';
+import type {
+  SiteSettings,
+  HeroSlideItem,
+  HomeSectionsData,
+  ImpactContentData,
+  ProgramContentData,
+  FaqItem,
+  OfficeLocationItem,
+  MediaAssetItem,
+  LegalPageItem,
+  ContactSubmissionItem,
+  NewsletterSubscriberItem,
+} from '@/lib/site-cms-types';
+import SiteSettingsTab from '@/components/cms/SiteSettingsTab';
+import HeroSlidesTab from '@/components/cms/HeroSlidesTab';
+import HomeSectionsTab from '@/components/cms/HomeSectionsTab';
+import ProgramsTab from '@/components/cms/ProgramsTab';
+import ImpactTab from '@/components/cms/ImpactTab';
+import FaqsOfficesTab from '@/components/cms/FaqsOfficesTab';
+import LegalPagesTab from '@/components/cms/LegalPagesTab';
+import MediaLibraryTab from '@/components/cms/MediaLibraryTab';
+import InquiriesTab from '@/components/cms/InquiriesTab';
+import AuditLogTab from '@/components/cms/AuditLogTab';
+import ServerLogsTab from '@/components/cms/ServerLogsTab';
+import type { AuditEventRecord } from '@/lib/audit';
+import type { ServerLogItem, ServerHealthOverview } from '@/lib/server-logger';
 import {
   LayoutDashboard,
   FileText,
@@ -40,6 +66,17 @@ import {
   User,
   FileCode,
   Check,
+  Sliders,
+  Image as ImageIcon,
+  Home as HomeIcon,
+  BookOpen,
+  BarChart3,
+  HelpCircle,
+  Mail,
+  FolderOpen,
+  ShieldCheck,
+  Activity,
+  Server,
 } from 'lucide-react';
 
 interface SessionUserInfo {
@@ -56,6 +93,21 @@ interface StaffPanelProps {
   initialJobs?: PanelJobOpening[];
   initialApplications?: PanelCareerApplication[];
   initialCareerMetrics?: CareerMetrics;
+  initialSiteSettings?: SiteSettings;
+  initialHeroSlides?: HeroSlideItem[];
+  initialHomeSections?: HomeSectionsData;
+  initialImpactContent?: ImpactContentData;
+  initialProgramsContent?: Record<string, ProgramContentData>;
+  initialFaqs?: FaqItem[];
+  initialOffices?: OfficeLocationItem[];
+  initialMediaAssets?: MediaAssetItem[];
+  initialLegalPrivacy?: LegalPageItem | null;
+  initialLegalTerms?: LegalPageItem | null;
+  initialInquiries?: ContactSubmissionItem[];
+  initialSubscribers?: NewsletterSubscriberItem[];
+  initialAuditEvents?: AuditEventRecord[];
+  initialServerLogs?: ServerLogItem[];
+  initialServerOverview?: ServerHealthOverview;
 }
 
 export default function StaffPanel({
@@ -72,6 +124,21 @@ export default function StaffPanel({
     newApplications: 0,
     underReviewApplications: 0,
   },
+  initialSiteSettings,
+  initialHeroSlides = [],
+  initialHomeSections,
+  initialImpactContent,
+  initialProgramsContent = {},
+  initialFaqs = [],
+  initialOffices = [],
+  initialMediaAssets = [],
+  initialLegalPrivacy = null,
+  initialLegalTerms = null,
+  initialInquiries = [],
+  initialSubscribers = [],
+  initialAuditEvents = [],
+  initialServerLogs = [],
+  initialServerOverview,
 }: StaffPanelProps) {
   const router = useRouter();
   const [staff, setStaff] = useState<StaffProfile | null>(initialStaff);
@@ -80,9 +147,27 @@ export default function StaffPanel({
   const [jobs, setJobs] = useState<PanelJobOpening[]>(initialJobs);
   const [applications, setApplications] = useState<PanelCareerApplication[]>(initialApplications);
   const [_careerMetrics] = useState<CareerMetrics>(initialCareerMetrics);
+  const [mediaAssets, setMediaAssets] = useState<MediaAssetItem[]>(initialMediaAssets);
 
   // Active navigation tab
-  const [currentTab, setCurrentTab] = useState<'overview' | 'posts' | 'jobs' | 'applications' | 'users'>('overview');
+  const [currentTab, setCurrentTab] = useState<
+    | 'overview'
+    | 'settings'
+    | 'hero'
+    | 'home'
+    | 'programs'
+    | 'impact'
+    | 'faqs_offices'
+    | 'legal'
+    | 'media'
+    | 'inquiries'
+    | 'posts'
+    | 'jobs'
+    | 'applications'
+    | 'users'
+    | 'audit'
+    | 'server_logs'
+  >('overview');
 
   // Posts Filter & Search State
   const [postStatusFilter, setPostStatusFilter] = useState<string>('all');
@@ -127,6 +212,9 @@ export default function StaffPanel({
   const [message, setMessage] = useState('');
   const [updatingUserId, setUpdatingUserId] = useState<number | null>(null);
   const [userSearchFilter, setUserSearchFilter] = useState('');
+  const [userRoleFilter, setUserRoleFilter] = useState<'all' | 'pending' | 'content' | 'admin'>('all');
+  const [userActionFeedback, setUserActionFeedback] = useState('');
+  const [isRefreshingUsers, setIsRefreshingUsers] = useState(false);
 
   const hasAuthorizedRole = staff && (staff.role === 'ADMIN' || staff.role === 'CONTENT');
   const isPendingAccess = !hasAuthorizedRole;
@@ -163,7 +251,8 @@ export default function StaffPanel({
   }, [router]);
 
   const refreshUsersList = useCallback(async () => {
-    if (!hasAuthorizedRole) return;
+    if (!isAdmin) return;
+    setIsRefreshingUsers(true);
     try {
       const res = await fetch('/api/staff/users', { cache: 'no-store' });
       if (!res.ok) return;
@@ -173,8 +262,20 @@ export default function StaffPanel({
       }
     } catch {
       // Silent error
+    } finally {
+      setIsRefreshingUsers(false);
     }
-  }, [hasAuthorizedRole]);
+  }, [isAdmin]);
+
+  // Restrict CONTENT role users from accessing admin-only tabs
+  useEffect(() => {
+    if (staff && staff.role === 'CONTENT' && (currentTab === 'settings' || currentTab === 'users' || currentTab === 'applications' || currentTab === 'audit')) {
+      setCurrentTab('overview');
+    }
+    if (staff && staff.role === 'CONTENT' && currentTab === 'server_logs') {
+      setCurrentTab('overview');
+    }
+  }, [staff, currentTab]);
 
   const refreshPostsList = useCallback(async () => {
     if (!hasAuthorizedRole) return;
@@ -240,6 +341,20 @@ export default function StaffPanel({
     };
   }, [isPendingAccess, checkStatus]);
 
+  // Periodic background polling for Admins to auto-detect new signups and applications
+  useEffect(() => {
+    if (!isAdmin) return;
+
+    const interval = setInterval(() => {
+      refreshUsersList();
+      refreshApplicationsList();
+    }, 8000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [isAdmin, refreshUsersList, refreshApplicationsList]);
+
   async function handleRequestAccess() {
     setRequesting(true);
     setMessage('');
@@ -268,6 +383,7 @@ export default function StaffPanel({
 
   async function handleRoleChange(userId: number, newRole: StaffRole) {
     setUpdatingUserId(userId);
+    setUserActionFeedback('');
     try {
       const res = await fetch('/api/staff/users', {
         method: 'PATCH',
@@ -275,14 +391,50 @@ export default function StaffPanel({
         body: JSON.stringify({ userId, role: newRole }),
       });
 
+      const data = await res.json();
       if (res.ok) {
-        setUsers((prev) =>
-          prev.map((u) => (u.id === userId ? { ...u, role: newRole } : u)),
-        );
-        refreshUsersList();
+        if (data.users) {
+          setUsers(data.users);
+        } else {
+          setUsers((prev) =>
+            prev.map((u) => (u.id === userId ? { ...u, role: newRole } : u)),
+          );
+        }
+        setUserActionFeedback(`User assigned role: ${newRole === 'NO_ACCESS' ? 'No Access' : newRole}.`);
+        setTimeout(() => setUserActionFeedback(''), 4000);
+      } else {
+        setUserActionFeedback(data.error || 'Failed to update user role.');
       }
     } catch {
-      // Error handling
+      setUserActionFeedback('Network error updating user role.');
+    } finally {
+      setUpdatingUserId(null);
+    }
+  }
+
+  async function handleDeleteUser(userId: number, userName?: string) {
+    if (!confirm(`Are you sure you want to remove the access request/account for ${userName || 'this user'}?`)) return;
+    setUpdatingUserId(userId);
+    setUserActionFeedback('');
+    try {
+      const res = await fetch(`/api/staff/users?userId=${userId}`, {
+        method: 'DELETE',
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        if (data.users) {
+          setUsers(data.users);
+        } else {
+          setUsers((prev) => prev.filter((u) => u.id !== userId));
+        }
+        setUserActionFeedback('User request/account removed.');
+        setTimeout(() => setUserActionFeedback(''), 4000);
+      } else {
+        setUserActionFeedback(data.error || 'Failed to remove user.');
+      }
+    } catch {
+      setUserActionFeedback('Network error removing user.');
     } finally {
       setUpdatingUserId(null);
     }
@@ -482,15 +634,37 @@ export default function StaffPanel({
     return matchesStatus && matchesRole && matchesSearch;
   });
 
+  const userCounts = {
+    all: users.length,
+    pending: users.filter((u) => u.role === 'NO_ACCESS').length,
+    content: users.filter((u) => u.role === 'CONTENT').length,
+    admin: users.filter((u) => u.role === 'ADMIN').length,
+  };
+
+  const pendingUsers = users.filter((u) => u.role === 'NO_ACCESS');
+
   // Filter users
   const filteredUsers = users.filter((u) => {
+    const matchesRole =
+      userRoleFilter === 'all'
+        ? true
+        : userRoleFilter === 'pending'
+        ? u.role === 'NO_ACCESS'
+        : userRoleFilter === 'content'
+        ? u.role === 'CONTENT'
+        : userRoleFilter === 'admin'
+        ? u.role === 'ADMIN'
+        : true;
+
     const q = userSearchFilter.toLowerCase();
-    return (
+    const matchesSearch =
+      !q ||
       u.firstName.toLowerCase().includes(q) ||
       u.fullName.toLowerCase().includes(q) ||
       u.email.toLowerCase().includes(q) ||
-      u.role.toLowerCase().includes(q)
-    );
+      u.role.toLowerCase().includes(q);
+
+    return matchesRole && matchesSearch;
   });
 
   const postCounts = {
@@ -573,32 +747,143 @@ export default function StaffPanel({
           </div>
 
           {/* Navigation Tabs */}
-          <div className="flex flex-wrap items-center gap-2 border-b border-[#E5E0D8] pb-1">
+          <div className="flex flex-wrap items-center gap-1.5 border-b border-[#E5E0D8] pb-1 overflow-x-auto">
             <button
               type="button"
               onClick={() => setCurrentTab('overview')}
-              className={`inline-flex items-center gap-2 rounded-t-xl px-4 py-2.5 text-sm font-semibold transition cursor-pointer border-b-2 ${
+              className={`inline-flex items-center gap-1.5 rounded-t-xl px-3.5 py-2.5 text-xs font-bold transition cursor-pointer border-b-2 whitespace-nowrap ${
                 currentTab === 'overview'
                   ? 'border-[#0D311F] bg-white text-[#0D311F] shadow-xs'
                   : 'border-transparent text-neutral-600 hover:text-[#071E13]'
               }`}
             >
-              <LayoutDashboard className="h-4 w-4" />
+              <LayoutDashboard className="h-3.5 w-3.5" />
               Overview
+            </button>
+
+            {isAdmin && (
+              <button
+                type="button"
+                onClick={() => setCurrentTab('settings')}
+                className={`inline-flex items-center gap-1.5 rounded-t-xl px-3.5 py-2.5 text-xs font-bold transition cursor-pointer border-b-2 whitespace-nowrap ${
+                  currentTab === 'settings'
+                    ? 'border-[#0D311F] bg-white text-[#0D311F] shadow-xs'
+                    : 'border-transparent text-neutral-600 hover:text-[#071E13]'
+                }`}
+              >
+                <Sliders className="h-3.5 w-3.5" />
+                Site Settings
+              </button>
+            )}
+
+            <button
+              type="button"
+              onClick={() => setCurrentTab('hero')}
+              className={`inline-flex items-center gap-1.5 rounded-t-xl px-3.5 py-2.5 text-xs font-bold transition cursor-pointer border-b-2 whitespace-nowrap ${
+                currentTab === 'hero'
+                  ? 'border-[#0D311F] bg-white text-[#0D311F] shadow-xs'
+                  : 'border-transparent text-neutral-600 hover:text-[#071E13]'
+              }`}
+            >
+              <ImageIcon className="h-3.5 w-3.5" />
+              Hero Slides
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setCurrentTab('home')}
+              className={`inline-flex items-center gap-1.5 rounded-t-xl px-3.5 py-2.5 text-xs font-bold transition cursor-pointer border-b-2 whitespace-nowrap ${
+                currentTab === 'home'
+                  ? 'border-[#0D311F] bg-white text-[#0D311F] shadow-xs'
+                  : 'border-transparent text-neutral-600 hover:text-[#071E13]'
+              }`}
+            >
+              <HomeIcon className="h-3.5 w-3.5" />
+              Homepage
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setCurrentTab('programs')}
+              className={`inline-flex items-center gap-1.5 rounded-t-xl px-3.5 py-2.5 text-xs font-bold transition cursor-pointer border-b-2 whitespace-nowrap ${
+                currentTab === 'programs'
+                  ? 'border-[#0D311F] bg-white text-[#0D311F] shadow-xs'
+                  : 'border-transparent text-neutral-600 hover:text-[#071E13]'
+              }`}
+            >
+              <BookOpen className="h-3.5 w-3.5" />
+              Programs
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setCurrentTab('impact')}
+              className={`inline-flex items-center gap-1.5 rounded-t-xl px-3.5 py-2.5 text-xs font-bold transition cursor-pointer border-b-2 whitespace-nowrap ${
+                currentTab === 'impact'
+                  ? 'border-[#0D311F] bg-white text-[#0D311F] shadow-xs'
+                  : 'border-transparent text-neutral-600 hover:text-[#071E13]'
+              }`}
+            >
+              <BarChart3 className="h-3.5 w-3.5" />
+              Impact
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setCurrentTab('faqs_offices')}
+              className={`inline-flex items-center gap-1.5 rounded-t-xl px-3.5 py-2.5 text-xs font-bold transition cursor-pointer border-b-2 whitespace-nowrap ${
+                currentTab === 'faqs_offices'
+                  ? 'border-[#0D311F] bg-white text-[#0D311F] shadow-xs'
+                  : 'border-transparent text-neutral-600 hover:text-[#071E13]'
+              }`}
+            >
+              <HelpCircle className="h-3.5 w-3.5" />
+              FAQs & Offices
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setCurrentTab('media')}
+              className={`inline-flex items-center gap-1.5 rounded-t-xl px-3.5 py-2.5 text-xs font-bold transition cursor-pointer border-b-2 whitespace-nowrap ${
+                currentTab === 'media'
+                  ? 'border-[#0D311F] bg-white text-[#0D311F] shadow-xs'
+                  : 'border-transparent text-neutral-600 hover:text-[#071E13]'
+              }`}
+            >
+              <FolderOpen className="h-3.5 w-3.5" />
+              Media
+            </button>
+
+            <button
+              type="button"
+              onClick={() => setCurrentTab('inquiries')}
+              className={`inline-flex items-center gap-1.5 rounded-t-xl px-3.5 py-2.5 text-xs font-bold transition cursor-pointer border-b-2 whitespace-nowrap ${
+                currentTab === 'inquiries'
+                  ? 'border-[#0D311F] bg-white text-[#0D311F] shadow-xs'
+                  : 'border-transparent text-neutral-600 hover:text-[#071E13]'
+              }`}
+            >
+              <Mail className="h-3.5 w-3.5" />
+              Inquiries
+              {initialInquiries.filter((i) => i.status === 'new').length > 0 && (
+                <span className="rounded-full bg-amber-400 px-1.5 py-0.2 text-[10px] font-bold text-[#071E13]">
+                  {initialInquiries.filter((i) => i.status === 'new').length}
+                </span>
+              )}
             </button>
 
             <button
               type="button"
               onClick={() => setCurrentTab('posts')}
-              className={`inline-flex items-center gap-2 rounded-t-xl px-4 py-2.5 text-sm font-semibold transition cursor-pointer border-b-2 ${
+              className={`inline-flex items-center gap-1.5 rounded-t-xl px-3.5 py-2.5 text-xs font-bold transition cursor-pointer border-b-2 whitespace-nowrap ${
                 currentTab === 'posts'
                   ? 'border-[#0D311F] bg-white text-[#0D311F] shadow-xs'
                   : 'border-transparent text-neutral-600 hover:text-[#071E13]'
               }`}
             >
-              <FileText className="h-4 w-4" />
-              Blog Posts
-              <span className="rounded-full bg-neutral-200 px-2 py-0.5 text-xs font-bold text-neutral-700">
+              <FileText className="h-3.5 w-3.5" />
+              Stories
+              <span className="rounded-full bg-neutral-200 px-1.5 py-0.2 text-[10px] font-bold text-neutral-700">
                 {posts.length}
               </span>
             </button>
@@ -606,15 +891,15 @@ export default function StaffPanel({
             <button
               type="button"
               onClick={() => setCurrentTab('jobs')}
-              className={`inline-flex items-center gap-2 rounded-t-xl px-4 py-2.5 text-sm font-semibold transition cursor-pointer border-b-2 ${
+              className={`inline-flex items-center gap-1.5 rounded-t-xl px-3.5 py-2.5 text-xs font-bold transition cursor-pointer border-b-2 whitespace-nowrap ${
                 currentTab === 'jobs'
                   ? 'border-[#0D311F] bg-white text-[#0D311F] shadow-xs'
                   : 'border-transparent text-neutral-600 hover:text-[#071E13]'
               }`}
             >
-              <Briefcase className="h-4 w-4" />
-              Job Openings
-              <span className="rounded-full bg-neutral-200 px-2 py-0.5 text-xs font-bold text-neutral-700">
+              <Briefcase className="h-3.5 w-3.5" />
+              Jobs
+              <span className="rounded-full bg-neutral-200 px-1.5 py-0.2 text-[10px] font-bold text-neutral-700">
                 {jobs.length}
               </span>
             </button>
@@ -623,21 +908,17 @@ export default function StaffPanel({
               <button
                 type="button"
                 onClick={() => setCurrentTab('applications')}
-                className={`inline-flex items-center gap-2 rounded-t-xl px-4 py-2.5 text-sm font-semibold transition cursor-pointer border-b-2 ${
+                className={`inline-flex items-center gap-1.5 rounded-t-xl px-3.5 py-2.5 text-xs font-bold transition cursor-pointer border-b-2 whitespace-nowrap ${
                   currentTab === 'applications'
                     ? 'border-[#0D311F] bg-white text-[#0D311F] shadow-xs'
                     : 'border-transparent text-neutral-600 hover:text-[#071E13]'
                 }`}
               >
-                <UserCheck className="h-4 w-4" />
+                <UserCheck className="h-3.5 w-3.5" />
                 Applications
-                {appCounts.new > 0 ? (
-                  <span className="rounded-full bg-amber-400 px-2 py-0.5 text-xs font-bold text-[#071E13]">
-                    {appCounts.new} new
-                  </span>
-                ) : (
-                  <span className="rounded-full bg-neutral-200 px-2 py-0.5 text-xs font-bold text-neutral-700">
-                    {applications.length}
+                {appCounts.new > 0 && (
+                  <span className="rounded-full bg-amber-400 px-1.5 py-0.2 text-[10px] font-bold text-[#071E13]">
+                    {appCounts.new}
                   </span>
                 )}
               </button>
@@ -645,24 +926,109 @@ export default function StaffPanel({
 
             <button
               type="button"
-              onClick={() => setCurrentTab('users')}
-              className={`inline-flex items-center gap-2 rounded-t-xl px-4 py-2.5 text-sm font-semibold transition cursor-pointer border-b-2 ${
-                currentTab === 'users'
+              onClick={() => setCurrentTab('legal')}
+              className={`inline-flex items-center gap-1.5 rounded-t-xl px-3.5 py-2.5 text-xs font-bold transition cursor-pointer border-b-2 whitespace-nowrap ${
+                currentTab === 'legal'
                   ? 'border-[#0D311F] bg-white text-[#0D311F] shadow-xs'
                   : 'border-transparent text-neutral-600 hover:text-[#071E13]'
               }`}
             >
-              <Users className="h-4 w-4" />
-              Staff Directory
-              <span className="rounded-full bg-neutral-200 px-2 py-0.5 text-xs font-bold text-neutral-700">
-                {users.length}
-              </span>
+              <Shield className="h-3.5 w-3.5" />
+              Legal
             </button>
+
+            {isAdmin && (
+              <button
+                type="button"
+                onClick={() => setCurrentTab('users')}
+                className={`inline-flex items-center gap-1.5 rounded-t-xl px-3.5 py-2.5 text-xs font-bold transition cursor-pointer border-b-2 whitespace-nowrap ${
+                  currentTab === 'users'
+                    ? 'border-[#0D311F] bg-white text-[#0D311F] shadow-xs'
+                    : 'border-transparent text-neutral-600 hover:text-[#071E13]'
+                }`}
+              >
+                <Users className="h-3.5 w-3.5" />
+                Users
+                {userCounts.pending > 0 ? (
+                  <span className="rounded-full bg-amber-400 px-1.5 py-0.2 text-[10px] font-bold text-[#071E13] animate-pulse" title={`${userCounts.pending} pending access requests`}>
+                    {userCounts.pending} req
+                  </span>
+                ) : (
+                  <span className="rounded-full bg-neutral-200 px-1.5 py-0.2 text-[10px] font-bold text-neutral-700">
+                    {users.length}
+                  </span>
+                )}
+              </button>
+            )}
+
+            {isAdmin && (
+              <button
+                type="button"
+                onClick={() => setCurrentTab('audit')}
+                className={`inline-flex items-center gap-1.5 rounded-t-xl px-3.5 py-2.5 text-xs font-bold transition cursor-pointer border-b-2 whitespace-nowrap ${
+                  currentTab === 'audit'
+                    ? 'border-[#0D311F] bg-white text-[#0D311F] shadow-xs'
+                    : 'border-transparent text-neutral-600 hover:text-[#071E13]'
+                }`}
+              >
+                <ShieldCheck className="h-3.5 w-3.5" />
+                Audit Log
+              </button>
+            )}
+
+            {isAdmin && (
+              <button
+                type="button"
+                onClick={() => setCurrentTab('server_logs')}
+                className={`inline-flex items-center gap-1.5 rounded-t-xl px-3.5 py-2.5 text-xs font-bold transition cursor-pointer border-b-2 whitespace-nowrap ${
+                  currentTab === 'server_logs'
+                    ? 'border-[#0D311F] bg-white text-[#0D311F] shadow-xs'
+                    : 'border-transparent text-neutral-600 hover:text-[#071E13]'
+                }`}
+              >
+                <Activity className="h-3.5 w-3.5" />
+                Server Logs
+              </button>
+            )}
           </div>
 
           {/* TAB 0: OVERVIEW */}
           {currentTab === 'overview' && (
             <div className="space-y-6">
+              {/* Action Banner for Admins if new users signed up */}
+              {isAdmin && userCounts.pending > 0 && (
+                <div className="rounded-xl border border-amber-300 bg-amber-50 p-4.5 shadow-xs flex flex-wrap items-center justify-between gap-4 animate-in fade-in duration-300">
+                  <div className="flex items-center gap-3.5">
+                    <div className="rounded-xl bg-amber-400/20 p-2.5 text-amber-900 shrink-0">
+                      <AlertCircle className="h-5 w-5 text-amber-700" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h3 className="font-semibold text-sm text-[#071E13]">
+                          {userCounts.pending} Staff Access Request{userCounts.pending > 1 ? 's' : ''} Pending Approval
+                        </h3>
+                        <span className="rounded-full bg-amber-400 px-2 py-0.5 text-[10px] font-bold text-[#071E13]">
+                          Action Required
+                        </span>
+                      </div>
+                      <p className="text-xs text-neutral-600 mt-0.5">
+                        New staff have signed up with their Pinebrook ID and are waiting for role approval in the Users section.
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setUserRoleFilter('pending');
+                      setCurrentTab('users');
+                    }}
+                    className="inline-flex items-center gap-1.5 rounded-lg bg-[#0D311F] px-4 py-2 text-xs font-semibold text-white hover:bg-[#17452F] transition shadow-xs cursor-pointer shrink-0"
+                  >
+                    Review & Approve Requests <ArrowRight className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              )}
+
               {/* Actionable Metrics Grid */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 {/* Active Jobs */}
@@ -758,28 +1124,63 @@ export default function StaffPanel({
                   </div>
                 </div>
 
-                {/* Drafts */}
-                <div
-                  onClick={() => { setPostStatusFilter('draft'); setCurrentTab('posts'); }}
-                  className="rounded-xl border border-[#E5E0D8] bg-white p-5 shadow-xs hover:border-[#0D311F] transition cursor-pointer group"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold uppercase tracking-wider text-neutral-500">
-                      Draft Posts
-                    </span>
-                    <span className="rounded-full bg-amber-100 p-2 text-amber-800">
-                      <FileEdit className="h-4 w-4" />
-                    </span>
-                  </div>
-                  <div className="mt-3">
-                    <div className="text-3xl font-semibold text-[#071E13]">
-                      {postCounts.draft}
+                {/* Staff & Requests / Drafts */}
+                {isAdmin ? (
+                  <div
+                    onClick={() => {
+                      if (userCounts.pending > 0) setUserRoleFilter('pending');
+                      else setUserRoleFilter('all');
+                      setCurrentTab('users');
+                    }}
+                    className="rounded-xl border border-[#E5E0D8] bg-white p-5 shadow-xs hover:border-[#0D311F] transition cursor-pointer group"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold uppercase tracking-wider text-neutral-500">
+                        Staff & Requests
+                      </span>
+                      <span className={`rounded-full p-2 ${userCounts.pending > 0 ? 'bg-amber-100 text-amber-800' : 'bg-purple-100 text-purple-800'}`}>
+                        <Users className="h-4 w-4" />
+                      </span>
                     </div>
-                    <p className="mt-1 text-xs text-neutral-500 flex items-center gap-1">
-                      Unpublished drafts <ArrowRight className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </p>
+                    <div className="mt-3">
+                      <div className="flex items-baseline gap-2">
+                        <div className="text-3xl font-semibold text-[#071E13]">
+                          {userCounts.all}
+                        </div>
+                        {userCounts.pending > 0 && (
+                          <span className="rounded-full bg-amber-400 px-2 py-0.5 text-xs font-bold text-[#071E13] animate-pulse">
+                            {userCounts.pending} pending
+                          </span>
+                        )}
+                      </div>
+                      <p className="mt-1 text-xs text-neutral-500 flex items-center gap-1">
+                        {userCounts.pending > 0 ? `${userCounts.pending} awaiting approval` : `${userCounts.all} registered staff`} <ArrowRight className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </p>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <div
+                    onClick={() => { setPostStatusFilter('draft'); setCurrentTab('posts'); }}
+                    className="rounded-xl border border-[#E5E0D8] bg-white p-5 shadow-xs hover:border-[#0D311F] transition cursor-pointer group"
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold uppercase tracking-wider text-neutral-500">
+                        Draft Posts
+                      </span>
+                      <span className="rounded-full bg-amber-100 p-2 text-amber-800">
+                        <FileEdit className="h-4 w-4" />
+                      </span>
+                    </div>
+                    <div className="mt-3">
+                      <div className="text-3xl font-semibold text-[#071E13]">
+                        {postCounts.draft}
+                      </div>
+                      <p className="mt-1 text-xs text-neutral-500 flex items-center gap-1">
+                        Unpublished drafts <ArrowRight className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </p>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Quick Jump Modules */}
@@ -854,6 +1255,51 @@ export default function StaffPanel({
                 </div>
               </div>
             </div>
+          )}
+
+          {/* CMS TABS */}
+          {currentTab === 'settings' && isAdmin && initialSiteSettings && (
+            <SiteSettingsTab initialSettings={initialSiteSettings} />
+          )}
+
+          {currentTab === 'hero' && (
+            <HeroSlidesTab initialSlides={initialHeroSlides} mediaAssets={mediaAssets} />
+          )}
+
+          {currentTab === 'home' && (
+            <HomeSectionsTab initialSections={initialHomeSections} mediaAssets={mediaAssets} />
+          )}
+
+          {currentTab === 'programs' && (
+            <ProgramsTab initialPrograms={initialProgramsContent} mediaAssets={mediaAssets} />
+          )}
+
+          {currentTab === 'impact' && (
+            <ImpactTab initialImpact={initialImpactContent} />
+          )}
+
+          {currentTab === 'faqs_offices' && (
+            <FaqsOfficesTab initialFaqs={initialFaqs} initialOffices={initialOffices} />
+          )}
+
+          {currentTab === 'legal' && (
+            <LegalPagesTab initialPrivacy={initialLegalPrivacy} initialTerms={initialLegalTerms} />
+          )}
+
+          {currentTab === 'media' && (
+            <MediaLibraryTab initialAssets={mediaAssets} onAssetsUpdated={setMediaAssets} />
+          )}
+
+          {currentTab === 'inquiries' && (
+            <InquiriesTab initialInquiries={initialInquiries} initialSubscribers={initialSubscribers} />
+          )}
+
+          {currentTab === 'audit' && isAdmin && (
+            <AuditLogTab initialEvents={initialAuditEvents} />
+          )}
+
+          {currentTab === 'server_logs' && isAdmin && (
+            <ServerLogsTab initialLogs={initialServerLogs} initialOverview={initialServerOverview} />
           )}
 
           {/* TAB 1: BLOG POSTS */}
@@ -1202,7 +1648,7 @@ export default function StaffPanel({
           )}
 
           {/* TAB 3: APPLICATIONS */}
-          {currentTab === 'applications' && (
+          {currentTab === 'applications' && isAdmin && (
             <div className="rounded-xl border border-[#E5E0D8] bg-white shadow-xs overflow-hidden space-y-0">
               <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#E5E0D8] p-5 bg-white">
                 <div>
@@ -1382,99 +1828,315 @@ export default function StaffPanel({
             </div>
           )}
 
-          {/* TAB 4: STAFF DIRECTORY */}
-          {currentTab === 'users' && (
-            <div className="rounded-xl border border-[#E5E0D8] bg-white shadow-xs overflow-hidden">
-              <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#E5E0D8] p-5">
-                <div>
-                  <h2 className="text-lg font-semibold text-[#071E13]">Staff Directory</h2>
-                  <p className="mt-0.5 text-xs text-neutral-500">
-                    Accounts with assigned roles in the ISSA operations panel.
-                  </p>
-                </div>
-
-                <div className="flex items-center gap-3">
-                  <input
-                    type="text"
-                    value={userSearchFilter}
-                    onChange={(e) => setUserSearchFilter(e.target.value)}
-                    placeholder="Filter staff..."
-                    className="rounded-lg border border-[#E5E0D8] bg-[#FDFCFB] px-3 py-1.5 text-xs text-[#071E13] outline-none transition focus:border-[#0D311F]"
-                  />
+          {/* TAB 4: STAFF DIRECTORY & ACCESS REQUESTS */}
+          {currentTab === 'users' && isAdmin && (
+            <div className="space-y-6">
+              {/* Feedback Alert */}
+              {userActionFeedback && (
+                <div className="rounded-xl border border-emerald-300 bg-emerald-50 px-4 py-3 text-xs font-medium text-emerald-900 flex items-center justify-between shadow-xs animate-in fade-in">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle2 className="h-4 w-4 text-emerald-700 shrink-0" />
+                    <span>{userActionFeedback}</span>
+                  </div>
                   <button
                     type="button"
-                    onClick={refreshUsersList}
-                    title="Refresh user list"
-                    className="rounded-lg border border-[#E5E0D8] bg-white px-3 py-1.5 text-xs font-medium text-neutral-700 hover:bg-[#F7F6F3] transition cursor-pointer"
+                    onClick={() => setUserActionFeedback('')}
+                    className="text-emerald-700 hover:text-emerald-900"
                   >
-                    ↻ Refresh
+                    <X className="h-3.5 w-3.5" />
                   </button>
                 </div>
-              </div>
+              )}
 
-              {/* Table */}
-              <div className="overflow-x-auto">
-                <table className="w-full text-left text-sm">
-                  <thead className="bg-[#F7F6F3] text-xs uppercase tracking-wider text-neutral-600 border-b border-[#E5E0D8]">
-                    <tr>
-                      <th scope="col" className="px-5 py-3 font-semibold">First Name</th>
-                      <th scope="col" className="px-5 py-3 font-semibold">Email</th>
-                      <th scope="col" className="px-5 py-3 font-semibold">Role</th>
-                      {isAdmin && <th scope="col" className="px-5 py-3 font-semibold text-right">Role Action</th>}
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-[#E5E0D8]">
-                    {filteredUsers.length === 0 ? (
+              {/* 1. DEDICATED PENDING ACCESS REQUESTS SECTION (FOR ADMINS) */}
+              {isAdmin && pendingUsers.length > 0 && (
+                <div className="rounded-xl border border-amber-300 bg-amber-50/70 p-5 shadow-xs space-y-4">
+                  <div className="flex flex-wrap items-center justify-between gap-3 border-b border-amber-200/80 pb-3">
+                    <div className="flex items-center gap-2.5">
+                      <div className="rounded-lg bg-amber-400/20 p-2 text-amber-900">
+                        <AlertCircle className="h-4 w-4 text-amber-800" />
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h3 className="text-sm font-bold text-[#071E13]">
+                            Pending Staff Access Requests ({pendingUsers.length})
+                          </h3>
+                          <span className="rounded-full bg-amber-400 px-2 py-0.5 text-[10px] font-bold text-[#071E13]">
+                            Action Required
+                          </span>
+                        </div>
+                        <p className="text-xs text-neutral-600">
+                          These new users have verified their Pinebrook email OTP and are awaiting admin permission to access the operations panel.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
+                    {pendingUsers.map((u) => (
+                      <div
+                        key={u.id}
+                        className="rounded-xl border border-amber-200 bg-white p-4 shadow-xs flex flex-col justify-between space-y-3.5 hover:border-amber-400 transition"
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex items-center gap-3">
+                            <div className="w-9 h-9 rounded-full bg-[#0D311F]/10 text-[#0D311F] flex items-center justify-center font-bold text-xs shrink-0">
+                              {(u.firstName || u.fullName || 'U').charAt(0).toUpperCase()}
+                            </div>
+                            <div>
+                              <div className="text-xs font-bold text-[#071E13]">
+                                {u.fullName || u.firstName || 'New User'}
+                              </div>
+                              <div className="text-[11px] text-neutral-600 font-mono">
+                                {u.email}
+                              </div>
+                            </div>
+                          </div>
+                          <span className="rounded-full bg-amber-100 border border-amber-200 px-2 py-0.5 text-[10px] font-bold text-amber-800 shrink-0">
+                            Awaiting Role
+                          </span>
+                        </div>
+
+                        <div className="text-[11px] text-neutral-500 flex items-center justify-between border-t border-neutral-100 pt-2">
+                          <span>
+                            Requested: {u.createdAt ? new Date(u.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Kolkata' }) : 'Recently'}
+                          </span>
+                        </div>
+
+                        <div className="flex flex-wrap items-center justify-end gap-2 pt-1 border-t border-neutral-100">
+                          <button
+                            type="button"
+                            disabled={updatingUserId === u.id}
+                            onClick={() => handleRoleChange(u.id, 'CONTENT')}
+                            className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-300 bg-emerald-50 px-2.5 py-1.5 text-xs font-semibold text-emerald-800 hover:bg-emerald-100 transition disabled:opacity-50 cursor-pointer"
+                          >
+                            <Check className="h-3 w-3" /> Approve Content
+                          </button>
+                          <button
+                            type="button"
+                            disabled={updatingUserId === u.id}
+                            onClick={() => handleRoleChange(u.id, 'ADMIN')}
+                            className="inline-flex items-center gap-1.5 rounded-lg border border-purple-300 bg-purple-50 px-2.5 py-1.5 text-xs font-semibold text-purple-800 hover:bg-purple-100 transition disabled:opacity-50 cursor-pointer"
+                          >
+                            <Shield className="h-3 w-3" /> Approve Admin
+                          </button>
+                          <button
+                            type="button"
+                            disabled={updatingUserId === u.id}
+                            onClick={() => handleDeleteUser(u.id, u.email)}
+                            title="Reject and delete access request"
+                            className="inline-flex items-center gap-1 rounded-lg border border-red-200 bg-red-50 p-1.5 text-xs font-semibold text-red-700 hover:bg-red-100 transition disabled:opacity-50 cursor-pointer"
+                          >
+                            <Trash2 className="h-3 w-3" />
+                          </button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* 2. FULL STAFF DIRECTORY TABLE & CONTROLS */}
+              <div className="rounded-xl border border-[#E5E0D8] bg-white shadow-xs overflow-hidden">
+                <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#E5E0D8] p-5">
+                  <div>
+                    <h2 className="text-lg font-semibold text-[#071E13]">Staff Directory</h2>
+                    <p className="mt-0.5 text-xs text-neutral-500">
+                      Manage registered staff accounts, assign authorization roles, and control active status.
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={refreshUsersList}
+                      disabled={isRefreshingUsers}
+                      title="Refresh user list"
+                      className="inline-flex items-center gap-1.5 rounded-lg border border-[#E5E0D8] bg-white px-3 py-1.5 text-xs font-medium text-neutral-700 hover:bg-[#F7F6F3] transition cursor-pointer"
+                    >
+                      <RefreshCw className={`h-3.5 w-3.5 ${isRefreshingUsers ? 'animate-spin' : ''}`} />
+                      Refresh
+                    </button>
+                  </div>
+                </div>
+
+                {/* Filter Tabs & Search Bar */}
+                <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[#E5E0D8] bg-[#FAF9F7] px-5 py-2.5">
+                  <div className="flex flex-wrap gap-1.5 text-xs font-medium">
+                    {(
+                      [
+                        { id: 'all', label: 'All Staff', count: userCounts.all },
+                        { id: 'pending', label: 'Pending Requests', count: userCounts.pending },
+                        { id: 'content', label: 'Content Editors', count: userCounts.content },
+                        { id: 'admin', label: 'Admins', count: userCounts.admin },
+                      ] as const
+                    ).map((tab) => (
+                      <button
+                        key={tab.id}
+                        type="button"
+                        onClick={() => setUserRoleFilter(tab.id)}
+                        className={`rounded-lg px-2.5 py-1 transition cursor-pointer ${
+                          userRoleFilter === tab.id
+                            ? 'bg-[#0D311F] text-white font-semibold'
+                            : tab.id === 'pending' && tab.count > 0
+                            ? 'bg-amber-100 border border-amber-300 text-amber-900 hover:bg-amber-200'
+                            : 'bg-white border border-[#E5E0D8] text-neutral-700 hover:bg-[#F7F6F3]'
+                        }`}
+                      >
+                        {tab.label}
+                        <span
+                          className={`ml-1.5 text-[10px] rounded-full px-1.5 py-0.2 ${
+                            userRoleFilter === tab.id
+                              ? 'bg-white/20 text-white'
+                              : tab.id === 'pending' && tab.count > 0
+                              ? 'bg-amber-400 text-[#071E13] font-bold'
+                              : 'bg-neutral-100 text-neutral-600'
+                          }`}
+                        >
+                          {tab.count}
+                        </span>
+                      </button>
+                    ))}
+                  </div>
+
+                  <div className="relative w-48 sm:w-60">
+                    <Search className="absolute left-3 top-2.5 h-3.5 w-3.5 text-neutral-400" />
+                    <input
+                      type="text"
+                      value={userSearchFilter}
+                      onChange={(e) => setUserSearchFilter(e.target.value)}
+                      placeholder="Search name, email, role..."
+                      className="w-full rounded-lg border border-[#E5E0D8] bg-white pl-8 pr-3 py-1.5 text-xs text-[#071E13] outline-none transition focus:border-[#0D311F]"
+                    />
+                  </div>
+                </div>
+
+                {/* Table */}
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-sm">
+                    <thead className="bg-[#F7F6F3] text-xs uppercase tracking-wider text-neutral-600 border-b border-[#E5E0D8]">
                       <tr>
-                        <td colSpan={isAdmin ? 4 : 3} className="px-5 py-8 text-center text-neutral-500 text-xs">
-                          No users found.
-                        </td>
+                        <th scope="col" className="px-5 py-3 font-semibold">User</th>
+                        <th scope="col" className="px-5 py-3 font-semibold">Email</th>
+                        <th scope="col" className="px-5 py-3 font-semibold">Role</th>
+                        <th scope="col" className="px-5 py-3 font-semibold">Registered (IST)</th>
+                        <th scope="col" className="px-5 py-3 font-semibold">Last Login (IST)</th>
+                        {isAdmin && <th scope="col" className="px-5 py-3 font-semibold text-right">Actions</th>}
                       </tr>
-                    ) : (
-                      filteredUsers.map((u) => (
-                        <tr key={u.id} className="hover:bg-[#FDFCFB] transition">
-                          <td className="px-5 py-3.5 text-xs font-medium text-[#071E13]">
-                            {u.firstName || u.fullName.split(' ')[0] || '—'}
+                    </thead>
+                    <tbody className="divide-y divide-[#E5E0D8]">
+                      {filteredUsers.length === 0 ? (
+                        <tr>
+                          <td colSpan={isAdmin ? 6 : 5} className="px-5 py-8 text-center text-neutral-500 text-xs">
+                            No matching staff users found.
                           </td>
-                          <td className="px-5 py-3.5 text-xs text-neutral-700">
-                            {u.email}
-                          </td>
-                          <td className="px-5 py-3.5">
-                            <span
-                              className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold ${
-                                u.role === 'ADMIN'
-                                  ? 'bg-purple-100 text-purple-800'
-                                  : u.role === 'CONTENT'
-                                  ? 'bg-emerald-100 text-emerald-800'
-                                  : 'bg-amber-100 text-amber-800'
-                              }`}
-                            >
-                              {u.role === 'NO_ACCESS' ? 'No Access' : u.role}
-                            </span>
-                          </td>
-                          {isAdmin && (
-                            <td className="px-5 py-3.5 text-right">
-                              <select
-                                value={u.role}
-                                disabled={updatingUserId === u.id}
-                                onChange={(e) => handleRoleChange(u.id, e.target.value as StaffRole)}
-                                className="rounded-lg border border-[#E5E0D8] bg-white px-2.5 py-1 text-xs font-medium text-[#071E13] outline-none transition hover:border-[#0D311F] focus:border-[#0D311F] disabled:opacity-50 cursor-pointer"
-                              >
-                                <option value="NO_ACCESS">No Access</option>
-                                <option value="CONTENT">Content</option>
-                                <option value="ADMIN">Admin</option>
-                              </select>
-                            </td>
-                          )}
                         </tr>
-                      ))
-                    )}
-                  </tbody>
-                </table>
-              </div>
+                      ) : (
+                        filteredUsers.map((u) => (
+                          <tr key={u.id} className="hover:bg-[#FDFCFB] transition">
+                            <td className="px-5 py-3.5">
+                              <div className="flex items-center gap-2">
+                                <div className="w-7 h-7 rounded-full bg-[#0D311F]/10 text-[#0D311F] flex items-center justify-center font-bold text-xs shrink-0">
+                                  {(u.firstName || u.fullName || 'U').charAt(0).toUpperCase()}
+                                </div>
+                                <div>
+                                  <div className="font-semibold text-xs text-[#071E13]">
+                                    {u.fullName || u.firstName || '—'}
+                                  </div>
+                                  {u.role === 'NO_ACCESS' && (
+                                    <span className="text-[10px] text-amber-700 font-medium">
+                                      New Access Request
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            </td>
+                            <td className="px-5 py-3.5 text-xs text-neutral-700 font-mono">
+                              {u.email}
+                            </td>
+                            <td className="px-5 py-3.5">
+                              <span
+                                className={`inline-flex items-center rounded-full px-2 py-0.5 text-xs font-semibold ${
+                                  u.role === 'ADMIN'
+                                    ? 'bg-purple-100 text-purple-800'
+                                    : u.role === 'CONTENT'
+                                    ? 'bg-emerald-100 text-emerald-800'
+                                    : 'bg-amber-100 text-amber-800'
+                                }`}
+                              >
+                                {u.role === 'NO_ACCESS' ? 'No Access (Pending)' : u.role}
+                              </span>
+                            </td>
+                            <td className="px-5 py-3.5 text-xs text-neutral-500 font-mono">
+                              {u.createdAt
+                                ? new Date(u.createdAt).toLocaleDateString('en-IN', {
+                                    day: 'numeric',
+                                    month: 'short',
+                                    year: 'numeric',
+                                    timeZone: 'Asia/Kolkata',
+                                  })
+                                : '—'}
+                            </td>
+                            <td className="px-5 py-3.5 text-xs text-neutral-500 font-mono">
+                              {u.lastLoginAt
+                                ? new Date(u.lastLoginAt).toLocaleDateString('en-IN', {
+                                    day: 'numeric',
+                                    month: 'short',
+                                    year: 'numeric',
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                    timeZone: 'Asia/Kolkata',
+                                  })
+                                : 'Never'}
+                            </td>
+                            {isAdmin && (
+                              <td className="px-5 py-3.5 text-right">
+                                <div className="inline-flex items-center gap-1.5 justify-end">
+                                  <select
+                                    value={u.role}
+                                    disabled={updatingUserId === u.id}
+                                    onChange={(e) => handleRoleChange(u.id, e.target.value as StaffRole)}
+                                    className="rounded-lg border border-[#E5E0D8] bg-white px-2.5 py-1 text-xs font-medium text-[#071E13] outline-none transition hover:border-[#0D311F] focus:border-[#0D311F] disabled:opacity-50 cursor-pointer"
+                                  >
+                                    <option value="NO_ACCESS">No Access</option>
+                                    <option value="CONTENT">Content</option>
+                                    <option value="ADMIN">Admin</option>
+                                  </select>
 
-              <div className="border-t border-[#E5E0D8] bg-[#FAF9F7] px-5 py-2.5 text-xs text-neutral-500">
-                Registered staff: <span className="font-medium text-[#071E13]">{users.length}</span>
+                                  {u.id !== staff?.id && (
+                                    <button
+                                      type="button"
+                                      disabled={updatingUserId === u.id}
+                                      onClick={() => handleDeleteUser(u.id, u.email)}
+                                      title="Remove account / request"
+                                      className="inline-flex items-center rounded-lg border border-red-200 bg-red-50 p-1 text-red-600 hover:bg-red-100 transition disabled:opacity-50 cursor-pointer"
+                                    >
+                                      <Trash2 className="h-3.5 w-3.5" />
+                                    </button>
+                                  )}
+                                </div>
+                              </td>
+                            )}
+                          </tr>
+                        ))
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+
+                <div className="border-t border-[#E5E0D8] bg-[#FAF9F7] px-5 py-2.5 text-xs text-neutral-500 flex flex-wrap justify-between items-center gap-2">
+                  <span>
+                    Total Staff: <strong className="text-[#071E13]">{userCounts.all}</strong> ({userCounts.admin} Admins, {userCounts.content} Content Editors)
+                  </span>
+                  {userCounts.pending > 0 ? (
+                    <span className="text-amber-800 font-semibold flex items-center gap-1">
+                      <AlertCircle className="h-3.5 w-3.5 text-amber-600" />
+                      {userCounts.pending} pending request{userCounts.pending > 1 ? 's' : ''} awaiting approval
+                    </span>
+                  ) : (
+                    <span className="text-emerald-700">All access requests reviewed</span>
+                  )}
+                </div>
               </div>
             </div>
           )}

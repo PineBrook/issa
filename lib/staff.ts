@@ -164,3 +164,49 @@ export async function updateStaffUserRole(targetUserId: number, newRole: StaffRo
 
   return { success: true, message: 'User role updated successfully.' };
 }
+
+export async function updateStaffUserStatus(targetUserId: number, newStatus: 'active' | 'suspended'): Promise<{ success: boolean; message: string }> {
+  const currentStaff = await getCurrentStaff();
+  if (!currentStaff || currentStaff.role !== 'ADMIN') {
+    return { success: false, message: 'Unauthorized: Only admins can update user status.' };
+  }
+
+  if (currentStaff.id === targetUserId && newStatus === 'suspended') {
+    return { success: false, message: 'You cannot suspend your own admin account.' };
+  }
+
+  const connectionString = process.env.DATABASE_URL ?? process.env.DB_CONN_KEY;
+  if (!connectionString) return { success: false, message: 'Database configuration missing.' };
+
+  const sql = neon(connectionString);
+  await sql`
+    UPDATE staff_profiles
+    SET status = ${newStatus}, updated_at = NOW()
+    WHERE id = ${targetUserId} AND email LIKE '%@pinebrooktechnologies.com'
+  `;
+
+  return { success: true, message: `User status set to ${newStatus}.` };
+}
+
+export async function deleteStaffUser(targetUserId: number): Promise<{ success: boolean; message: string }> {
+  const currentStaff = await getCurrentStaff();
+  if (!currentStaff || currentStaff.role !== 'ADMIN') {
+    return { success: false, message: 'Unauthorized: Only admins can remove staff accounts.' };
+  }
+
+  if (currentStaff.id === targetUserId) {
+    return { success: false, message: 'You cannot delete your own admin account.' };
+  }
+
+  const connectionString = process.env.DATABASE_URL ?? process.env.DB_CONN_KEY;
+  if (!connectionString) return { success: false, message: 'Database configuration missing.' };
+
+  const sql = neon(connectionString);
+  await sql`
+    DELETE FROM staff_profiles
+    WHERE id = ${targetUserId} AND email LIKE '%@pinebrooktechnologies.com'
+  `;
+
+  return { success: true, message: 'User request/account removed successfully.' };
+}
+

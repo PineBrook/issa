@@ -1,7 +1,8 @@
 import { Metadata } from 'next';
 import HomeView from '@/components/HomeView';
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from '@vercel/analytics/next';
 import { getPublishedBlogPosts } from '@/lib/blog';
+import { getHeroSlides, getHomeSections, getSiteSettings } from '@/lib/site-cms';
 
 export const dynamic = 'force-dynamic';
 
@@ -25,11 +26,21 @@ export const metadata: Metadata = {
 };
 
 export default async function HomePage() {
-  const stories = await getPublishedBlogPosts(3);
+  const [stories, heroSlides, homeSections, settings] = await Promise.all([
+    getPublishedBlogPosts(3).catch(() => []),
+    getHeroSlides().catch(() => []),
+    getHomeSections().catch(() => undefined),
+    getSiteSettings().catch(() => undefined),
+  ]);
 
   return (
     <>
-      <HomeView stories={stories} />
+      <HomeView
+        stories={stories}
+        heroSlides={heroSlides}
+        homeSections={homeSections}
+        settings={settings}
+      />
       <Analytics />
     </>
   );

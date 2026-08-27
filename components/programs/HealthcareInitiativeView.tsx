@@ -1,3 +1,6 @@
+'use client';
+
+import React from 'react';
 import {
   Activity,
   ArrowRight,
@@ -13,197 +16,154 @@ import {
   Users,
 } from 'lucide-react';
 import Image from 'next/image';
+import type { ProgramContentData } from '@/lib/site-cms-types';
 
-const healthcareModel = [
-  {
-    title: 'Communities & Villages',
-    icon: Users,
-    items: ['Health awareness', 'Preventive healthcare', 'Village outreach', 'Early screening'],
-  },
-  {
-    title: 'Mobile Healthcare Unit',
-    icon: Smartphone,
-    items: ['Weekly village visits', 'Emergency response', 'Medicine delivery', 'Health camps', 'Sample collection', 'Follow-up care'],
-  },
-  {
-    title: 'Rural Health Hub',
-    icon: Stethoscope,
-    items: ['Doctor consultation', 'Diagnostics and laboratory', 'Pharmacy', 'Day-care procedures', 'Emergency stabilization'],
-  },
-  {
-    title: 'UttaraCare Hospital',
-    icon: Hospital,
-    items: ['Specialist consultation', 'Advanced diagnostics', 'Hospital admission', 'Surgical care', 'Referral management'],
-  },
-  {
-    title: 'Digital Health Platform',
-    icon: Network,
-    items: ['Tele-consultation', 'Electronic health records', 'Diagnostic reporting', 'Analytics', 'Continuous monitoring'],
-  },
-];
+export default function HealthcareInitiativeView({ program }: { program?: ProgramContentData }) {
+  const title = program?.title || 'Care that reaches';
+  const subtitle = program?.subtitle || 'to the last mile.';
+  const badge = program?.badge || 'Healthcare initiative';
+  const heroImage = program?.heroImage || '/isssa-healthcare-program-v2.png';
+  const overviewP1 =
+    program?.overviewP1 ||
+    'Access to quality healthcare should not depend on geography. In remote Himalayan villages, geographical distance and lack of specialist medical staff pose severe barriers to timely treatment. ISSA Foundation collaborates with local health authorities to bridge this divide.';
+  const overviewP2 =
+    program?.overviewP2 ||
+    'By equipping community hospitals, deploying mobile diagnostic clinics, and facilitating specialist teleconsultations, we ensure comprehensive primary and specialized medical care reaches the most isolated hill communities.';
+  const vision =
+    program?.vision ||
+    'Accessible, dependable, and high-standard healthcare for every mountain community in Uttarakhand.';
+  const mission =
+    program?.mission ||
+    'Deliver life-saving medical equipment, organize specialty health camps, and support rural hospitals to drastically reduce healthcare travel burdens.';
 
-const accessPoints = [
-  {
-    title: 'UttaraCare Hospital',
-    icon: Hospital,
-    description: 'Established in Pauri Garhwal, UttaraCare is the main hospital supporting the network, providing specialist consultations, inpatient care, diagnostics, and referrals for rural health centres.',
-  },
-  {
-    title: 'Bironkhal Rural Health Hub',
-    icon: MapPin,
-    description: 'The first Rural Health Hub in ISSA\'s network, bringing outpatient consultations, diagnostics, pharmacy, laboratory services, day-care procedures, telemedicine, follow-up, and referrals closer to remote communities.',
-  },
-  {
-    title: 'Mobile Healthcare',
-    icon: Smartphone,
-    description: 'Mobile medical units extend care beyond the clinic through weekly village visits, preventive camps, basic diagnostics, sample collection, medicine delivery, emergency support, and health education.',
-  },
-  {
-    title: 'Digital Healthcare',
-    icon: Activity,
-    description: 'Tele-consultation, electronic health records, digital diagnostic reports, patient monitoring, clinical analytics, and referral coordination connect rural patients with the care they need.',
-  },
-];
+  const programmes = program?.programmes?.length
+    ? program.programmes
+    : [
+        {
+          title: 'UttaraCare Hospital',
+          description:
+            'Established in Pauri Garhwal, UttaraCare is the main hospital supporting the network, providing specialist consultations, inpatient care, diagnostics, and referrals for rural health centres.',
+        },
+        {
+          title: 'Bironkhal Rural Health Hub',
+          description:
+            'The first Rural Health Hub in ISSA network, bringing outpatient consultations, diagnostics, pharmacy, laboratory services, day-care procedures, telemedicine, follow-up, and referrals closer to remote communities.',
+        },
+        {
+          title: 'Mobile Healthcare',
+          description:
+            'Mobile medical units extend care beyond the clinic through weekly village visits, preventive camps, basic diagnostics, sample collection, medicine delivery, emergency support, and health education.',
+        },
+        {
+          title: 'Digital Healthcare',
+          description:
+            'Tele-consultation, electronic health records, digital diagnostic reports, patient monitoring, clinical analytics, and referral coordination connect rural patients with the care they need.',
+        },
+      ];
 
-const preventionPrograms = [
-  'Community health awareness',
-  'Maternal & child health',
-  'School health',
-  'Preventive screenings',
-  'Nutrition awareness',
-  'Lifestyle disease management',
-  'Elderly care',
-  'Vaccination awareness',
-];
+  const stats = program?.stats?.length
+    ? program.stats
+    : [
+        { value: '20+', label: 'Hospital beds equipped with advanced monitors' },
+        { value: '1,200+', label: 'Patients treated in high-altitude communities' },
+        { value: '72%', label: 'Reduction in travel distance for routine diagnostics' },
+      ];
 
-const roadmap = [
-  'Additional Rural Health Hubs',
-  'Village Health Centres',
-  'More Mobile Medical Units',
-  'Specialist Outreach Clinics',
-  'Digital Health Platform',
-  'AI-assisted Community Health Monitoring',
-  "School and Women's Health Programmes",
-  'Senior Citizen and Home Healthcare Services',
-];
+  const roadmap = program?.roadmap?.length
+    ? program.roadmap
+    : [
+        'Additional Rural Health Hubs',
+        'Village Health Centres',
+        'More Mobile Medical Units',
+        'Specialist Outreach Clinics',
+        'Digital Health Platform',
+        'AI-assisted Community Health Monitoring',
+      ];
 
-export default function HealthcareInitiativeView() {
   return (
     <main id="healthcare-initiative" className="bg-neutral-50 font-sans text-neutral-800">
       <section className="relative overflow-hidden bg-primary py-20 text-white sm:py-28">
         <div className="absolute inset-0 opacity-10 bg-[linear-gradient(to_right,#808080_1px,transparent_1px),linear-gradient(to_bottom,#808080_1px,transparent_1px)] bg-[size:24px_24px]" />
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl space-y-6">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">Healthcare | Healthy Communities, Better Futures</p>
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-accent">{badge}</p>
             <h1 className="font-serif text-4xl font-bold tracking-tight sm:text-6xl">
-              ISSA Rural Healthcare Initiative
+              {title} <span className="italic font-normal text-accent">{subtitle}</span>
             </h1>
-            <p className="font-serif text-xl text-accent sm:text-2xl">Transforming rural healthcare through connected communities.</p>
-            <p className="max-w-2xl text-sm leading-relaxed text-neutral-300 sm:text-base">
-              Healthcare should never be limited by geography. ISSA is building an integrated ecosystem of hospitals, rural health hubs, mobile healthcare, telemedicine, and community outreach that brings quality care closer to every village in Uttarakhand.
+            <p className="max-w-2xl text-base leading-8 text-neutral-300">
+              Connecting remote mountain communities with clinical diagnostics, specialist doctors, and essential healthcare infrastructure.
             </p>
           </div>
         </div>
       </section>
 
-      <section className="mx-auto grid max-w-7xl gap-6 px-4 py-12 sm:px-6 lg:grid-cols-[1fr_0.8fr_1fr] lg:px-8 lg:py-20">
-        <article className="space-y-4 rounded-2xl border border-emerald-200/70 border-t-4 border-t-primary bg-white p-8 shadow-sm">
-          <h2 className="font-serif text-2xl font-bold text-primary">Why We Started</h2>
-          <p className="text-sm leading-relaxed text-neutral-600">For many families in rural Uttarakhand, a simple consultation can require several hours of travel. Diagnostic facilities are often unavailable, specialist doctors are concentrated in cities, emergency response is delayed, and preventive healthcare receives little attention.</p>
-          <p className="text-sm leading-relaxed text-neutral-600">ISSA believes every family deserves quality healthcare regardless of where they live. This initiative is designed to reach remote communities through a connected and scalable healthcare network.</p>
-        </article>
-        <div className="relative min-h-64 overflow-hidden rounded-2xl bg-neutral-200">
-          <Image src="/isssa-healthcare-program-v2.png" alt="ISSA community healthcare outreach in a Himalayan village" fill className="object-cover" sizes="(max-width: 1024px) 100vw, 30vw" />
+      <section className="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[1.15fr_0.85fr] lg:px-8 lg:py-24">
+        <div className="space-y-6">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">Overview</p>
+          <h2 className="font-serif text-3xl font-bold text-primary sm:text-4xl">Bridging the Healthcare Divide</h2>
+          <p className="leading-8 text-neutral-600">{overviewP1}</p>
+          <p className="leading-8 text-neutral-600">{overviewP2}</p>
         </div>
-        <article className="space-y-4 rounded-2xl border border-emerald-200/70 border-t-4 border-t-primary bg-white p-8 shadow-sm">
-          <h2 className="font-serif text-2xl font-bold text-primary">Vision & Mission</h2>
-          <p className="text-sm leading-relaxed text-neutral-600"><strong className="text-primary">Vision:</strong> To build Uttarakhand&apos;s most trusted rural healthcare ecosystem by connecting hospitals, primary healthcare centres, telemedicine, mobile medical units, and community health programmes.</p>
-          <p className="text-sm leading-relaxed text-neutral-600"><strong className="text-primary">Mission:</strong> To improve healthcare accessibility, reduce unnecessary travel, strengthen preventive healthcare, and enable technology-driven medical services for underserved communities.</p>
-        </article>
+
+        <div className="space-y-5">
+          <div className="relative aspect-[4/3] overflow-hidden bg-neutral-200 rounded-2xl shadow-md">
+            <Image src={heroImage} alt={title} fill className="object-cover" sizes="(max-width: 1024px) 100vw, 35vw" unoptimized />
+          </div>
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-1">
+            <div className="border-t-4 border-accent bg-white p-7 shadow-sm rounded-xl">
+              <p className="mb-2 text-xs font-bold uppercase tracking-widest text-neutral-400">Vision</p>
+              <p className="font-serif text-xl leading-8 text-primary">{vision}</p>
+            </div>
+            <div className="border-t-4 border-primary bg-white p-7 shadow-sm rounded-xl">
+              <p className="mb-2 text-xs font-bold uppercase tracking-widest text-neutral-400">Mission</p>
+              <p className="font-serif text-xl leading-8 text-primary">{mission}</p>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <section className="bg-white py-16 sm:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="mx-auto max-w-2xl space-y-4 text-center">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">One connected network</p>
-            <h2 className="font-serif text-3xl font-bold text-primary sm:text-4xl">Our Rural Healthcare Model</h2>
-            <p className="text-sm leading-relaxed text-neutral-600">Hospital care alone is not enough. Healthcare begins with awareness, continues through early diagnosis, and succeeds through accessible primary care, specialist guidance, and follow-up.</p>
-          </div>
-          <div className="mt-12 grid gap-4 md:grid-cols-5">
-            {healthcareModel.map(({ title, icon: Icon, items }, index) => (
-              <div key={title} className="relative rounded-2xl border border-neutral-200 bg-neutral-50 p-5">
-                <div className="mb-5 flex items-center gap-3 text-primary">
-                  <Icon className="h-5 w-5" aria-hidden="true" />
-                  <h3 className="font-serif text-base font-bold">{title}</h3>
-                </div>
-                <ul className="space-y-2">
-                  {items.map((item) => <li key={item} className="flex items-start gap-2 text-xs leading-relaxed text-neutral-600"><CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-accent" aria-hidden="true" />{item}</li>)}
-                </ul>
-                {index < healthcareModel.length - 1 && <ArrowRight className="absolute -right-4 top-1/2 z-10 hidden h-7 w-7 -translate-y-1/2 rounded-full border border-neutral-200 bg-white p-1 text-primary md:block" aria-hidden="true" />}
+      <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8 lg:pb-24">
+        <div className="mb-10 max-w-2xl space-y-3">
+          <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">Connected Network</p>
+          <h2 className="font-serif text-3xl font-bold text-primary sm:text-4xl">Multi-Tier Healthcare Infrastructure</h2>
+          <p className="leading-7 text-neutral-600">Bringing hospital care, mobile medical clinics, and digital consultations together.</p>
+        </div>
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-2">
+          {programmes.map((p) => (
+            <article key={p.title} className="group border border-neutral-200 bg-white p-6 transition hover:-translate-y-1 hover:border-accent hover:shadow-md rounded-2xl">
+              <div className="mb-5 flex h-11 w-11 items-center justify-center bg-accent/20 text-primary rounded-xl">
+                <Hospital className="h-5 w-5" aria-hidden="true" />
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl space-y-10 px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-        <div className="max-w-2xl space-y-3">
-          <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">Care where it is needed</p>
-          <h2 className="font-serif text-3xl font-bold text-primary sm:text-4xl">From village outreach to specialist care.</h2>
-        </div>
-        <div className="grid gap-6 sm:grid-cols-2">
-          {accessPoints.map(({ title, icon: Icon, description }) => (
-            <article key={title} className="rounded-2xl border border-neutral-200 bg-white p-7 shadow-sm transition-shadow hover:shadow-md">
-              <Icon className="mb-6 h-7 w-7 text-primary" aria-hidden="true" />
-              <h3 className="font-serif text-xl font-bold text-primary">{title}</h3>
-              <p className="mt-3 text-sm leading-relaxed text-neutral-600">{description}</p>
-              {title === 'UttaraCare Hospital' && <span className="mt-5 inline-flex cursor-not-allowed items-center gap-2 rounded-full border border-neutral-300 px-4 py-2 text-xs font-bold uppercase tracking-wider text-neutral-400" aria-disabled="true" title="Hospital website link will be added when the external site is live">Visit Hospital Website <ArrowRight className="h-4 w-4" aria-hidden="true" /></span>}
+              <h3 className="mb-3 font-serif text-xl font-bold text-primary">{p.title}</h3>
+              <p className="text-sm leading-7 text-neutral-600">{p.description}</p>
             </article>
           ))}
         </div>
       </section>
 
-      <section className="bg-primary-dark py-16 text-white sm:py-20">
-        <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
-          <div className="space-y-5">
-            <HeartPulse className="h-8 w-8 text-accent" aria-hidden="true" />
-            <h2 className="font-serif text-3xl font-bold text-accent">Beyond Treatment</h2>
-            <p className="max-w-xl text-sm leading-relaxed text-neutral-300">We believe healthcare should focus equally on prevention. Community programmes help people recognise risks earlier and build healthier lives.</p>
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-              {preventionPrograms.map((program) => <div key={program} className="flex items-center gap-2 text-sm text-neutral-200"><CheckCircle2 className="h-4 w-4 text-accent" aria-hidden="true" />{program}</div>)}
-            </div>
-          </div>
-          <div className="rounded-2xl border border-white/10 bg-white/5 p-8">
-            <h2 className="font-serif text-2xl font-bold text-white">Current Impact</h2>
-            <p className="mt-3 text-sm leading-relaxed text-neutral-300">Our healthcare network is steadily expanding across Uttarakhand.</p>
-            <ul className="mt-6 space-y-3">
-              {['UttaraCare Hospital, Pauri', 'Affordable community healthcare', 'Bironkhal Hub-and-Spoke model', 'Mobile healthcare services', 'Digital health and telemedicine', 'Community outreach'].map((item) => <li key={item} className="flex items-center gap-3 text-sm text-neutral-200"><ShieldCheck className="h-4 w-4 text-accent" aria-hidden="true" />{item}</li>)}
-            </ul>
+      <section className="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-2 lg:px-8 lg:py-24">
+        <div className="border-l-4 border-accent bg-white p-8 shadow-sm sm:p-10 rounded-2xl">
+          <p className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-primary">Impact so far</p>
+          <h2 className="mb-6 font-serif text-3xl font-bold text-primary">Measurable Healthcare Reach</h2>
+          <div className="grid gap-6 sm:grid-cols-2">
+            {stats.map((s, idx) => (
+              <div key={idx}>
+                <p className="font-serif text-4xl font-bold text-primary">{s.value}</p>
+                <p className="mt-1 text-sm text-neutral-600">{s.label}</p>
+              </div>
+            ))}
           </div>
         </div>
-      </section>
-
-      <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
-        <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
+        <div className="space-y-6">
+          <div className="flex items-center gap-3"><Activity className="h-5 w-5 text-accent" aria-hidden="true" /><p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">Roadmap</p></div>
+          <h2 className="font-serif text-3xl font-bold text-primary">Expansion Roadmap</h2>
           <div className="space-y-4">
-            <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">Looking ahead</p>
-            <h2 className="font-serif text-3xl font-bold text-primary sm:text-4xl">A healthier Uttarakhand, village by village.</h2>
-            <p className="text-sm leading-relaxed text-neutral-600">Every new centre will strengthen the same connected healthcare network and extend timely, affordable, and compassionate care closer to home.</p>
-          </div>
-          <div className="grid gap-3 sm:grid-cols-2">
-            {roadmap.map((item) => <div key={item} className="flex items-center gap-3 rounded-xl border border-neutral-200 bg-white p-4 text-sm text-neutral-700"><CheckCircle2 className="h-5 w-5 shrink-0 text-primary" aria-hidden="true" />{item}</div>)}
-          </div>
-        </div>
-      </section>
-
-      <section className="bg-accent py-16 sm:py-20">
-        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-          <HeartHandshake className="mx-auto h-9 w-9 text-primary" aria-hidden="true" />
-          <h2 className="mt-5 font-serif text-3xl font-bold text-primary sm:text-4xl">Help build a connected rural healthcare ecosystem.</h2>
-          <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-primary/80">We invite hospitals, doctors, healthcare professionals, technology providers, educational institutions, corporate partners, volunteers, and donors to work with us.</p>
-          <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-            <a href="#contact" className="inline-flex items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-xs font-bold uppercase tracking-wider text-white transition-colors hover:bg-primary-light">Partner With Us <ArrowRight className="h-4 w-4" aria-hidden="true" /></a>
-            <a href="#contact" className="inline-flex items-center justify-center gap-2 rounded-full border border-primary px-6 py-3 text-xs font-bold uppercase tracking-wider text-primary transition-colors hover:bg-white/50">Support Our Mission <ArrowRight className="h-4 w-4" aria-hidden="true" /></a>
+            {roadmap.map((item, index) => (
+              <div key={item} className="flex gap-4 border-b border-neutral-200 pb-4">
+                <span className="font-serif text-xl font-bold text-accent">0{index + 1}</span>
+                <p className="pt-1 text-sm leading-7 text-neutral-600">{item}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>

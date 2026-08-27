@@ -5,8 +5,17 @@ import { MapPin, Phone, Mail, Clock, HelpCircle, ArrowRight, CheckCircle2, Send,
 import { useToast } from '@/components/Toast';
 import Newsletter from '@/components/Newsletter';
 import { submitContactAction } from '@/app/forms/actions';
+import type { FaqItem, OfficeLocationItem, SiteSettings } from '@/lib/site-cms-types';
 
-export default function ContactView() {
+export default function ContactView({
+  offices: initialOffices,
+  faqs: initialFaqs,
+  settings,
+}: {
+  offices?: OfficeLocationItem[];
+  faqs?: FaqItem[];
+  settings?: SiteSettings;
+}) {
   const [activeFaq, setActiveFaq] = React.useState<number | null>(null);
   const { toast } = useToast();
 
@@ -20,37 +29,68 @@ export default function ContactView() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formError, setFormError] = useState('');
 
-  const offices = [
+  const defaultOffices = [
     {
+      id: 1,
       city: 'Head Office (Dehradun)',
       role: 'Headquarters',
       address: '3F, Municipal No. 23/1 E.C. Road, New Municipal No. 107, Rajeev Gandhi Marg-II, Dehradun, Uttarakhand - 248001',
-      phone: '+91 135 430 8180',
-      email: 'career.issafoundation@gmail.com',
+      phone: settings?.phone || '+91 135 430 8180',
+      email: settings?.email || 'career.issafoundation@gmail.com',
+      displayOrder: 1,
+      isActive: true,
+      createdAt: '',
+      updatedAt: '',
     },
     {
+      id: 2,
       city: 'Regional Office (Pauri)',
       role: 'Regional Administrative Hub',
       address: 'Ward No 6, House No 33, C/o USHA RAWAT Agency Chowk, Kandoliya Mandir Road, Pauri Garhwal District Hospital, Pauri, Pauri Garhwal, Uttarakhand - 246001',
-      phone: '+91 135 430 8180',
-      email: 'career.issafoundation@gmail.com',
+      phone: settings?.phone || '+91 135 430 8180',
+      email: settings?.email || 'career.issafoundation@gmail.com',
+      displayOrder: 2,
+      isActive: true,
+      createdAt: '',
+      updatedAt: '',
     },
   ];
 
-  const faqs = [
+  const defaultFaqs = [
     {
-      q: "Where is the ISSA Foundation located?",
-      a: "Our Head Office is located on E.C. Road in Dehradun, and our Regional Office is located near District Hospital in Pauri, Uttarakhand."
+      id: 1,
+      category: 'contact',
+      question: "Where is the ISSA Foundation located?",
+      answer: "Our Head Office is located on E.C. Road in Dehradun, and our Regional Office is located near District Hospital in Pauri, Uttarakhand.",
+      displayOrder: 1,
+      isActive: true,
+      createdAt: '',
+      updatedAt: '',
     },
     {
-      q: "Can I volunteer directly in Uttarakhand schools?",
-      a: "Absolutely. We run seasonal student tutoring and digital mentoring camps. Volunteers with backgrounds in computing, basic healthcare instruction, or physical therapy are welcome to submit applications through our Careers/Join Us page."
+      id: 2,
+      category: 'contact',
+      question: "Can I volunteer directly in Uttarakhand schools?",
+      answer: "Absolutely. We run seasonal student tutoring and digital mentoring camps. Volunteers with backgrounds in computing, basic healthcare instruction, or physical therapy are welcome to submit applications through our Careers/Join Us page.",
+      displayOrder: 2,
+      isActive: true,
+      createdAt: '',
+      updatedAt: '',
     },
     {
-      q: "Is ISSA audited by state authorities?",
-      a: "Yes. All school adoptions, classroom renovations, and medical device distributions are carried out under formal agreements with the relevant state departments and are subject to public auditing guidelines."
+      id: 3,
+      category: 'contact',
+      question: "Is ISSA audited by state authorities?",
+      answer: "Yes. All school adoptions, classroom renovations, and medical device distributions are carried out under formal agreements with the relevant state departments and are subject to public auditing guidelines.",
+      displayOrder: 3,
+      isActive: true,
+      createdAt: '',
+      updatedAt: '',
     }
   ];
+
+  const offices = initialOffices && initialOffices.length > 0 ? initialOffices : defaultOffices;
+  const faqs = initialFaqs && initialFaqs.length > 0 ? initialFaqs : defaultFaqs;
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -141,240 +181,171 @@ export default function ContactView() {
         </div>
       </section>
 
-      {/* SPLIT CONTACT FORM & FAQ */}
+      {/* FORM & FAQ SPLIT SECTION */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
-          {/* Left: Interactive Contact Form */}
-          <div className="lg:col-span-7 bg-white p-8 sm:p-10 rounded-3xl border border-neutral-200/80 shadow-md space-y-8">
-            <div className="space-y-2">
-              <p className="text-sm uppercase tracking-wider text-primary font-sans font-bold">Send a Message</p>
-              <h2 className="text-3xl sm:text-4xl font-serif font-bold text-primary">Contact Our Team</h2>
-              <p className="text-sm text-neutral-700 font-sans max-w-lg leading-relaxed">
-                Fill out the secure form below to send an inquiry. Our team will review your message and respond within two working days.
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          
+          {/* CONTACT FORM */}
+          <div className="lg:col-span-6 bg-white rounded-3xl p-8 sm:p-10 border border-neutral-200/80 shadow-sm" id="contact-form">
+            <div className="space-y-2 mb-8">
+              <span className="text-xs uppercase tracking-wider text-neutral-600 font-sans font-bold block">Direct Channel</span>
+              <h2 className="text-3xl font-serif font-bold text-primary">Send an Inquiry</h2>
+              <p className="text-sm text-neutral-700 leading-relaxed font-sans">
+                Our central operations desk responds to verified community and partner requests within 48 business hours.
               </p>
             </div>
 
-            <form onSubmit={handleContactSubmit} className="space-y-6" id="contact-inquiry-form">
+            <form onSubmit={handleContactSubmit} className="space-y-6">
               <input name="website" tabIndex={-1} autoComplete="off" className="sr-only" aria-hidden="true" />
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label htmlFor="contact-name" className="block text-xs font-sans uppercase tracking-wider text-neutral-700 font-bold">Your Name</label>
-                  <input
-                    type="text"
-                    id="contact-name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    disabled={isSubmitting}
-                    placeholder="Aarav Sharma"
-                    className="w-full bg-neutral-50 border border-neutral-300 rounded-xl px-4 py-3 text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-300 font-sans disabled:opacity-55"
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label htmlFor="contact-email" className="block text-xs font-sans uppercase tracking-wider text-neutral-700 font-bold">Email Address</label>
-                  <input
-                    type="email"
-                    id="contact-email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    disabled={isSubmitting}
-                    placeholder="aarav.sharma@example.com"
-                    className="w-full bg-neutral-50 border border-neutral-300 rounded-xl px-4 py-3 text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-300 font-sans disabled:opacity-55"
-                  />
-                </div>
+              <div>
+                <label className="text-xs uppercase tracking-wider text-neutral-700 font-sans font-semibold block mb-2">
+                  Full Name <span className="text-rust">*</span>
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  required
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  placeholder="Aarav Sharma"
+                  className="w-full px-4 py-3 rounded-xl border border-neutral-200 text-sm font-sans focus:outline-none focus:border-primary transition-colors"
+                />
               </div>
 
-              <div className="space-y-2">
-                <label htmlFor="contact-subject" className="block text-xs font-sans uppercase tracking-wider text-neutral-700 font-bold">Subject / Area of Interest</label>
+              <div>
+                <label className="text-xs uppercase tracking-wider text-neutral-700 font-sans font-semibold block mb-2">
+                  Official Email Address <span className="text-rust">*</span>
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  required
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  placeholder="aarav.sharma@example.com"
+                  className="w-full px-4 py-3 rounded-xl border border-neutral-200 text-sm font-sans focus:outline-none focus:border-primary transition-colors"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs uppercase tracking-wider text-neutral-700 font-sans font-semibold block mb-2">
+                  Inquiry Topic
+                </label>
                 <select
-                  id="contact-subject"
                   name="subject"
                   value={formData.subject}
                   onChange={handleInputChange}
-                  disabled={isSubmitting}
-                  className="w-full bg-neutral-50 border border-neutral-300 rounded-xl px-4 py-3 text-sm text-neutral-800 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-300 font-sans disabled:opacity-55"
+                  className="w-full px-4 py-3 rounded-xl border border-neutral-200 text-sm font-sans focus:outline-none focus:border-primary transition-colors bg-white"
                 >
-                  <option value="General Inquiry">General Inquiry & Info</option>
-                  <option value="School Volunteer">School Volunteering & Digital Mentorship</option>
-                  <option value="Clinical Support">Clinical & Medical Camp Coordination</option>
-                    <option value="CSR Partnership">Corporate Partnerships & Government Agreements</option>
+                  <option value="General Inquiry">General Inquiry</option>
+                  <option value="School Adoption (CIAS)">School Adoption & EduTech (CIAS)</option>
+                  <option value="Hospital & Mobile Health">Healthcare Programs & Mobile Unit</option>
+                  <option value="EDP & Local Business">Entrepreneurship Development (EDP)</option>
+                  <option value="Careers & Volunteering">Volunteering & Careers</option>
+                  <option value="CSR Collaboration">Corporate Social Responsibility (CSR)</option>
                 </select>
               </div>
 
-              <div className="space-y-2">
-                <label htmlFor="contact-message" className="block text-xs font-sans uppercase tracking-wider text-neutral-700 font-bold">Detailed Message</label>
+              <div>
+                <label className="text-xs uppercase tracking-wider text-neutral-700 font-sans font-semibold block mb-2">
+                  Message Details <span className="text-rust">*</span>
+                </label>
                 <textarea
-                  id="contact-message"
+                  rows={5}
                   name="message"
+                  required
                   value={formData.message}
                   onChange={handleInputChange}
-                  disabled={isSubmitting}
-                  rows={4}
-                  placeholder="How can our Uttarakhand teams assist you? Please share relevant context..."
-                  className="w-full bg-neutral-50 border border-neutral-300 rounded-xl px-4 py-3 text-sm text-neutral-800 placeholder-neutral-400 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all duration-300 font-sans resize-none disabled:opacity-55"
+                  placeholder="Outline your proposal, school location, or specific questions..."
+                  className="w-full px-4 py-3 rounded-xl border border-neutral-200 text-sm font-sans focus:outline-none focus:border-primary transition-colors resize-none"
                 />
               </div>
+
+              {formError && (
+                <div role="status" className="p-3.5 bg-red-50 border border-red-200 text-red-700 text-xs rounded-xl font-medium">
+                  {formError}
+                </div>
+              )}
 
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-primary hover:bg-primary-light text-white font-sans font-bold py-4 px-6 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 cursor-pointer disabled:opacity-55 hover:shadow-lg hover:shadow-primary/10"
-                id="contact-form-submit"
+                className="w-full bg-primary hover:bg-primary-dark text-white py-4 rounded-xl text-xs uppercase tracking-widest font-sans font-bold transition-colors shadow-sm flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
               >
                 {isSubmitting ? (
                   <>
-                    <Loader2 className="w-4 h-4 animate-spin text-accent" />
-                    <span className="text-sm font-bold">Dispatching message...</span>
+                    <Loader2 className="w-4 h-4 animate-spin" /> Submitting...
                   </>
                 ) : (
                   <>
-                    <span className="text-sm tracking-wider uppercase font-bold">Send Message</span>
-                    <Send className="w-4 h-4 text-accent" />
+                    <Send className="w-4 h-4" /> Send Official Request
                   </>
                 )}
               </button>
-              {formError && <p role="status" className="text-sm text-red-700 font-medium">{formError}</p>}
             </form>
           </div>
 
-          {/* Right: Working Hours & FAQs Stacked */}
-          <div className="lg:col-span-5 space-y-8">
-            {/* Hours */}
-            <div className="bg-white p-8 rounded-3xl border border-neutral-200/80 shadow-sm space-y-6" id="contact-hours">
-              <div>
-                <h3 className="text-xl font-serif font-bold text-primary">Office Hours</h3>
-                <p className="text-sm text-neutral-700 font-sans mt-1">Our coordinators are available in the field during these IST hours.</p>
-              </div>
+          {/* FREQUENTLY ASKED QUESTIONS */}
+          <div className="lg:col-span-6 space-y-8" id="contact-faq">
+            <div className="space-y-2">
+              <span className="text-xs uppercase tracking-wider text-neutral-600 font-sans font-bold block">Clarifications</span>
+              <h2 className="text-3xl font-serif font-bold text-primary">Frequently Asked Questions</h2>
+              <p className="text-sm text-neutral-700 leading-relaxed font-sans">
+                Quick answers concerning our legal registrations, non-profit status, and operational footprints.
+              </p>
+            </div>
 
-              <div className="space-y-3 text-sm font-sans text-neutral-700">
-                <div className="flex items-center gap-3 bg-neutral-50 p-4 rounded-xl border border-neutral-200">
-                  <Clock className="w-5 h-5 text-primary shrink-0" />
-                  <div>
-                    <span className="block font-bold text-neutral-800">Monday - Friday</span>
-                    <span className="text-neutral-600 font-medium">09:00 AM - 06:00 PM IST</span>
-                  </div>
+            <div className="space-y-4">
+              {faqs.map((faq, idx) => (
+                <div
+                  key={idx}
+                  className="bg-white rounded-2xl border border-neutral-200/80 overflow-hidden shadow-sm transition-all"
+                >
+                  <button
+                    onClick={() => setActiveFaq(activeFaq === idx ? null : idx)}
+                    className="w-full p-6 text-left flex items-center justify-between gap-4 cursor-pointer focus:outline-none"
+                  >
+                    <span className="font-serif font-bold text-base text-primary leading-snug">{faq.question}</span>
+                    <span className="text-primary font-sans font-bold text-xl leading-none">{activeFaq === idx ? '−' : '+'}</span>
+                  </button>
+                  {activeFaq === idx && (
+                    <div className="px-6 pb-6 text-sm text-neutral-700 leading-relaxed font-sans border-t border-neutral-100 pt-4 animate-in fade-in duration-300">
+                      {faq.answer}
+                    </div>
+                  )}
                 </div>
+              ))}
+            </div>
 
-                <div className="flex items-center gap-3 bg-neutral-50 p-4 rounded-xl border border-neutral-200">
-                  <Clock className="w-5 h-5 text-primary shrink-0" />
-                  <div>
-                    <span className="block font-bold text-neutral-800">Saturday</span>
-                    <span className="text-neutral-600 font-medium">10:00 AM - 02:00 PM IST</span>
-                  </div>
+            {/* DIRECT TELEPHONE & EMAIL CARD */}
+            <div className="bg-primary text-white rounded-3xl p-8 space-y-6 mt-8">
+              <div className="space-y-2">
+                <span className="text-xs uppercase tracking-wider text-accent font-sans font-bold">Priority Contact</span>
+                <h3 className="text-xl font-serif font-bold">Have an urgent community proposal?</h3>
+                <p className="text-xs sm:text-sm text-neutral-300 font-sans leading-relaxed">
+                  Call our Dehradun administrative line during office hours (Monday – Friday, 9:30 AM – 5:30 PM IST).
+                </p>
+              </div>
+              <div className="flex flex-col sm:flex-row sm:items-center gap-4 text-sm font-sans pt-2">
+                <div className="flex items-center gap-2">
+                  <Phone className="w-4 h-4 text-accent shrink-0" />
+                  <span className="font-bold">{settings?.phone || '+91 135 430 8180'}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Mail className="w-4 h-4 text-accent shrink-0" />
+                  <span className="font-bold">{settings?.email || 'career.issafoundation@gmail.com'}</span>
                 </div>
               </div>
             </div>
 
-            {/* Field Dispatch Newsletter Subscription */}
-            <div className="bg-white p-8 rounded-3xl border border-neutral-200/80 shadow-sm" id="contact-newsletter-card">
-              <Newsletter 
-                variant="light" 
-                title="Subscribe for Newsletter"
-                subtitle="Get monthly progress updates, smart classroom milestones, and clinical camp reports directly in your inbox."
-                id="contact-newsletter-form"
-              />
-            </div>
-
-            {/* Official Social Media Channels */}
-            <div className="bg-white p-8 rounded-3xl border border-neutral-200/80 shadow-sm space-y-4" id="contact-social">
-              <div>
-                <h3 className="text-xl font-serif font-bold text-primary">Official Channels</h3>
-                <p className="text-sm text-neutral-700 font-sans mt-1">Follow our program stories and educational video series on our official platforms.</p>
-              </div>
-
-              <div className="grid grid-cols-1 gap-3 pt-2">
-                <a
-                  href="https://www.youtube.com/@ISSAClasses"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-between p-3.5 rounded-2xl bg-neutral-50 hover:bg-red-50/60 border border-neutral-200 hover:border-red-200 text-neutral-800 hover:text-red-600 transition-all duration-300 text-sm font-semibold group"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-red-100 text-red-600 flex items-center justify-center shrink-0">
-                      <Youtube className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <span className="block font-bold text-neutral-900">YouTube</span>
-                      <span className="text-xs text-neutral-600 font-sans font-medium">@ISSAClasses</span>
-                    </div>
-                  </div>
-                  <ArrowRight className="w-4 h-4 text-neutral-400 group-hover:text-red-600 group-hover:translate-x-0.5 transition-all" />
-                </a>
-
-                <a
-                  href="https://www.facebook.com/profile.php?id=61592854956791&sk=about"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-between p-3.5 rounded-2xl bg-neutral-50 hover:bg-blue-50/60 border border-neutral-200 hover:border-blue-200 text-neutral-800 hover:text-blue-600 transition-all duration-300 text-sm font-semibold group"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shrink-0">
-                      <Facebook className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <span className="block font-bold text-neutral-900">Facebook</span>
-                      <span className="text-xs text-neutral-600 font-sans font-medium">ISSA Foundation Page</span>
-                    </div>
-                  </div>
-                  <ArrowRight className="w-4 h-4 text-neutral-400 group-hover:text-blue-600 group-hover:translate-x-0.5 transition-all" />
-                </a>
-
-                <a
-                  href="https://www.instagram.com/issa__foundation/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-between p-3.5 rounded-2xl bg-neutral-50 hover:bg-pink-50/60 border border-neutral-200 hover:border-pink-200 text-neutral-800 hover:text-pink-600 transition-all duration-300 text-sm font-semibold group"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-pink-100 text-pink-600 flex items-center justify-center shrink-0">
-                      <Instagram className="w-5 h-5" />
-                    </div>
-                    <div>
-                      <span className="block font-bold text-neutral-900">Instagram</span>
-                      <span className="text-xs text-neutral-600 font-sans font-medium">@issa__foundation</span>
-                    </div>
-                  </div>
-                  <ArrowRight className="w-4 h-4 text-neutral-400 group-hover:text-pink-600 group-hover:translate-x-0.5 transition-all" />
-                </a>
-
-                <a href="https://x.com/ISSAfoundation1" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-3.5 rounded-2xl bg-neutral-50 hover:bg-sky-50/60 border border-neutral-200 hover:border-sky-200 text-neutral-800 hover:text-sky-600 transition-all duration-300 text-sm font-semibold group">
-                  <div className="flex items-center gap-3"><div className="w-9 h-9 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center shrink-0"><Twitter className="w-5 h-5" /></div><div><span className="block font-bold text-neutral-900">Twitter / X</span><span className="text-xs text-neutral-600 font-sans font-medium">@ISSAfoundation1</span></div></div>
-                  <ArrowRight className="w-4 h-4 text-neutral-400 group-hover:text-sky-600 group-hover:translate-x-0.5 transition-all" />
-                </a>
-
-                <a href="https://www.linkedin.com/company/issa-foundation-uttarakhand/about/?viewAsMember=true" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between p-3.5 rounded-2xl bg-neutral-50 hover:bg-blue-50/60 border border-neutral-200 hover:border-blue-200 text-neutral-800 hover:text-blue-600 transition-all duration-300 text-sm font-semibold group">
-                  <div className="flex items-center gap-3"><div className="w-9 h-9 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center shrink-0"><Linkedin className="w-5 h-5" /></div><div><span className="block font-bold text-neutral-900">LinkedIn</span><span className="text-xs text-neutral-600 font-sans font-medium">ISSA Foundation Uttarakhand</span></div></div>
-                  <ArrowRight className="w-4 h-4 text-neutral-400 group-hover:text-blue-600 group-hover:translate-x-0.5 transition-all" />
-                </a>
-              </div>
-            </div>
-
-            {/* Compact FAQ Accordion */}
-            <div className="space-y-4" id="contact-faq">
-              <h3 className="text-base font-sans uppercase tracking-wider text-primary font-bold pl-1">Operational Q&A</h3>
-              <div className="space-y-3">
-                {faqs.map((faq, idx) => (
-                  <div key={idx} className="bg-white rounded-2xl border border-neutral-200 overflow-hidden shadow-sm">
-                    <button
-                      onClick={() => setActiveFaq(activeFaq === idx ? null : idx)}
-                      className="w-full text-left p-5 flex justify-between items-center font-serif text-sm font-bold text-primary focus:outline-none cursor-pointer"
-                    >
-                      <span className="pr-4 leading-normal">{faq.q}</span>
-                      <span className="text-rust text-lg font-bold shrink-0">{activeFaq === idx ? '−' : '+'}</span>
-                    </button>
-
-                    {activeFaq === idx && (
-                      <div className="px-5 pb-5 text-sm text-neutral-700 font-sans leading-relaxed border-t border-neutral-100 pt-3 animate-fade-in">
-                        {faq.a}
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
           </div>
+
         </div>
+      </section>
+
+      {/* NEWSLETTER ENROLLMENT */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-24">
+        <Newsletter />
       </section>
     </div>
   );

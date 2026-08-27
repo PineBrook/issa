@@ -1,5 +1,8 @@
 import { Metadata } from 'next';
 import PrivacyPolicyView from '@/components/PrivacyPolicyView';
+import { getLegalPage } from '@/lib/site-cms';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Terms & Conditions',
@@ -9,6 +12,11 @@ export const metadata: Metadata = {
   twitter: { card: 'summary_large_image', title: 'Terms & Conditions | ISSA Foundation', description: 'ISSA Foundation terms and conditions of use.', images: ['https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=1200'] },
 };
 
-export default function TermsPage() {
-  return <PrivacyPolicyView defaultSubTab="terms" />;
+export default async function TermsPage() {
+  const [privacyPage, termsPage] = await Promise.all([
+    getLegalPage('privacy').catch(() => null),
+    getLegalPage('terms').catch(() => null),
+  ]);
+
+  return <PrivacyPolicyView defaultSubTab="terms" privacyPage={privacyPage} termsPage={termsPage} />;
 }

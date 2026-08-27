@@ -1,14 +1,18 @@
 import { Metadata } from 'next';
-import ProgramsView from '@/components/ProgramsView';
+import EntrepreneurshipInitiativeView from '@/components/programs/EntrepreneurshipInitiativeView';
+import { getProgramsContent } from '@/lib/site-cms';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'Entrepreneurship Programs',
-  description: 'ISSA Foundation supports Uttarakhand entrepreneurs with mentorship, business training, market access, and sustainable livelihood opportunities.',
+  description: 'ISSA Foundation supports rural entrepreneurs with financial assistance, mentorship, technology, and market access in Uttarakhand.',
   alternates: { canonical: 'https://issafoundation.co.in/programs/entrepreneurship' },
-  openGraph: { type: 'website', url: 'https://issafoundation.co.in/programs/entrepreneurship', title: 'Entrepreneurship Programs | ISSA Foundation', description: 'Building sustainable businesses and livelihoods across Uttarakhand.' },
-  twitter: { card: 'summary', title: 'Entrepreneurship Programs | ISSA Foundation', description: 'Building sustainable businesses and livelihoods across Uttarakhand.' },
+  openGraph: { type: 'website', url: 'https://issafoundation.co.in/programs/entrepreneurship', title: 'Entrepreneurship Programs | ISSA Foundation', description: 'Growing local businesses and sustainable mountain livelihoods.' },
+  twitter: { card: 'summary', title: 'Entrepreneurship Programs | ISSA Foundation', description: 'Growing local businesses and sustainable mountain livelihoods.' },
 };
 
-export default function EntrepreneurshipProgramsPage() {
-  return <ProgramsView initialPillar="entrepreneurship" />;
+export default async function EntrepreneurshipProgramsPage() {
+  const content = await getProgramsContent('entrepreneurship');
+  return <EntrepreneurshipInitiativeView program={content.entrepreneurship} />;
 }

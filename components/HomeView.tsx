@@ -4,21 +4,49 @@ import React from 'react';
 import Link from 'next/link';
 import BlurImage from './BlurImage';
 import { ArrowRight, BookOpen, Stethoscope, Briefcase, Cpu, CheckCircle2, Calendar, Compass } from 'lucide-react';
-import HeroSlideshow, { HERO_SLIDES } from './HeroSlideshow';
+import HeroSlideshow, { HERO_SLIDES, type HeroSlide } from './HeroSlideshow';
 import type { BlogPost } from '@/lib/blog-types';
+import type { HeroSlideItem, HomeSectionsData, SiteSettings } from '@/lib/site-cms-types';
 import { submitContactAction } from '@/app/forms/actions';
 
-export default function HomeView({ stories }: { stories: BlogPost[] }) {
+export default function HomeView({
+  stories,
+  heroSlides,
+  homeSections,
+  settings,
+}: {
+  stories: BlogPost[];
+  heroSlides?: HeroSlideItem[];
+  homeSections?: HomeSectionsData;
+  settings?: SiteSettings;
+}) {
   const [activeSlide, setActiveSlide] = React.useState(0);
   const [isHeroPaused, setIsHeroPaused] = React.useState(false);
+
+  // Convert CMS hero slides to HeroSlide interface
+  const formattedSlides: HeroSlide[] = React.useMemo(() => {
+    if (heroSlides && heroSlides.length > 0) {
+      return heroSlides.map((s) => ({
+        id: s.slideKey,
+        eyebrow: s.eyebrow,
+        title: s.title,
+        highlight: s.highlight,
+        description: s.description,
+        image: s.image,
+        cta: { label: s.ctaLabel, href: s.ctaHref },
+        donate: { label: s.donateLabel || 'Support Our Mission', href: s.donateHref || '/contact' },
+      }));
+    }
+    return HERO_SLIDES;
+  }, [heroSlides]);
 
   React.useEffect(() => {
     if (isHeroPaused) return;
     const interval = setInterval(() => {
-      setActiveSlide((prev) => (prev + 1) % HERO_SLIDES.length);
+      setActiveSlide((prev) => (prev + 1) % formattedSlides.length);
     }, 6000);
     return () => clearInterval(interval);
-  }, [isHeroPaused]);
+  }, [isHeroPaused, formattedSlides.length]);
 
   const handleSelectSlide = (index: number) => {
     setActiveSlide(index);
@@ -47,11 +75,54 @@ export default function HomeView({ stories }: { stories: BlogPost[] }) {
     }
   };
 
+  // Section data with default fallbacks
+  const stats = homeSections?.stats || [
+    { value: '11+', label: 'Schools Adopted', order: 1 },
+    { value: '600+', label: 'Students Reached', order: 2 },
+    { value: '20+', label: 'Hospital Beds', order: 3 },
+    { value: '1,200+', label: 'Patients Cared For', order: 4 },
+    { value: '20+', label: 'Entrepreneurs', order: 5 },
+    { value: '6+', label: 'Districts', order: 6 },
+  ];
+
+  const philosophy = homeSections?.philosophy || {
+    heading: 'Development led by local communities',
+    image: '/isssa-school-community-v2.png',
+    imageAlt: 'Himalayan village children happily reading books in an Indian mountain community',
+    badgeTitle: 'Working with communities.',
+    badgeSub: 'Working closely with government departments and local communities on long-term programs.',
+    p1: 'ISSA Foundation was established to improve access to education and healthcare. We focus on practical support that helps communities become more independent.',
+    p2: 'We design programs with village elders, local leaders, and state authorities so they respond to local needs.',
+    bullet1Title: 'Integrated Education',
+    bullet1Sub: 'Merging digital literacy with traditional government curriculum.',
+    bullet2Title: 'Holistic Health',
+    bullet2Sub: 'Bringing specialist hospital care to remote hill districts.',
+    ctaLabel: 'LEARN ABOUT ISSA',
+    ctaHref: '/programs',
+  };
+
+  const interventions = homeSections?.strategicInterventions || {
+    heading: 'Targeted Work, Measurable Results',
+    items: [
+      { metric: '11+', desc: 'Smart boards and computers distributed across high-altitude government schools to improve classroom learning.' },
+      { metric: '11+', desc: 'Specialist teachers appointed to mentor rural students and provide ongoing digital training.' },
+      { metric: '20', desc: 'Hospital beds and high-tech equipment delivering critical, life-saving diagnostic care in Pauri Garhwal.' },
+    ],
+  };
+
+  const collaborate = homeSections?.collaborate || {
+    heading: 'Partner with us to Transform Lives',
+    desc: 'Volunteer, partner, or support the work bringing lasting opportunity and structural development to remote communities in Uttarakhand.',
+    phone: settings?.phone || '0135 430 8180',
+    email: settings?.email || 'career.issafoundation@gmail.com',
+  };
+
   return (
     <div className="bg-page" id="home-view">
-      {/* 1. HERO SECTION — full-viewport photo slideshow + light network overlay */}
+      {/* 1. HERO SECTION */}
       <section className="relative w-full text-white bg-ink overflow-hidden" id="home-hero" aria-label="Homepage hero">
         <HeroSlideshow
+          slides={formattedSlides}
           activeIndex={activeSlide}
           onSelect={handleSelectSlide}
           isPaused={isHeroPaused}
@@ -63,47 +134,14 @@ export default function HomeView({ stories }: { stories: BlogPost[] }) {
       <section className="bg-white border-b border-neutral-200" id="home-stats">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
           <div className="grid grid-cols-2 md:grid-cols-6 gap-6 md:gap-4 divide-y md:divide-y-0 md:divide-x divide-neutral-200">
-            <div className="text-center pt-4 md:pt-0">
-              <p className="text-4xl md:text-5xl font-serif font-bold text-primary tracking-tight">11+</p>
-              <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-neutral-600 font-sans mt-2">
-                Schools Adopted
-              </p>
-            </div>
-
-            <div className="text-center pt-4 md:pt-0">
-              <p className="text-4xl md:text-5xl font-serif font-bold text-primary tracking-tight">600+</p>
-              <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-neutral-600 font-sans mt-2">
-                Students Reached
-              </p>
-            </div>
-
-            <div className="text-center pt-4 md:pt-0">
-              <p className="text-4xl md:text-5xl font-serif font-bold text-primary tracking-tight">20+</p>
-              <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-neutral-600 font-sans mt-2">
-                Hospital Beds
-              </p>
-            </div>
-
-            <div className="text-center pt-4 md:pt-0">
-              <p className="text-4xl md:text-5xl font-serif font-bold text-primary tracking-tight">1,200+</p>
-              <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-neutral-600 font-sans mt-2">
-                Patients Cared For
-              </p>
-            </div>
-
-            <div className="text-center pt-4 md:pt-0">
-              <p className="text-4xl md:text-5xl font-serif font-bold text-primary tracking-tight">20+</p>
-              <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-neutral-600 font-sans mt-2">
-                Entrepreneurs
-              </p>
-            </div>
-
-            <div className="text-center pt-4 md:pt-0">
-              <p className="text-4xl md:text-5xl font-serif font-bold text-primary tracking-tight">6+</p>
-              <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-neutral-600 font-sans mt-2">
-                Districts
-              </p>
-            </div>
+            {stats.map((st, idx) => (
+              <div key={idx} className="text-center pt-4 md:pt-0">
+                <p className="text-4xl md:text-5xl font-serif font-bold text-primary tracking-tight">{st.value}</p>
+                <p className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-neutral-600 font-sans mt-2">
+                  {st.label}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -115,8 +153,8 @@ export default function HomeView({ stories }: { stories: BlogPost[] }) {
             <div className="lg:col-span-5 relative">
               <div className="aspect-[4/5] rounded-3xl overflow-hidden shadow-2xl relative border border-neutral-200/80">
                 <BlurImage 
-                  src="/isssa-school-community-v2.png"
-                  alt="Himalayan village children happily reading books in an Indian mountain community" 
+                  src={philosophy.image}
+                  alt={philosophy.imageAlt} 
                   fill
                   sizes="(max-width: 1024px) 100vw, 40vw"
                   className="object-cover"
@@ -125,9 +163,9 @@ export default function HomeView({ stories }: { stories: BlogPost[] }) {
                 <div className="absolute inset-0 bg-gradient-to-t from-primary/60 via-transparent to-transparent"></div>
               </div>
               <div className="absolute z-10 bottom-6 -right-6 md:-right-10 bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-xl border border-neutral-200/80 max-w-xs hidden sm:block">
-                <p className="text-primary font-serif font-semibold text-base mb-1">Working with communities.</p>
+                <p className="text-primary font-serif font-semibold text-base mb-1">{philosophy.badgeTitle}</p>
                 <p className="text-xs sm:text-sm text-neutral-700 leading-relaxed font-sans">
-                  Working closely with government departments and local communities on long-term programs.
+                  {philosophy.badgeSub}
                 </p>
               </div>
             </div>
@@ -135,17 +173,13 @@ export default function HomeView({ stories }: { stories: BlogPost[] }) {
             <div className="lg:col-span-7 space-y-8">
               <div className="space-y-3">
                 <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-primary tracking-tight leading-tight">
-                  Development led by local communities
+                  {philosophy.heading}
                 </h2>
               </div>
 
               <div className="space-y-6 text-neutral-700 leading-relaxed font-sans text-base sm:text-lg">
-                <p>
-                  ISSA Foundation was established to improve access to education and healthcare. We focus on practical support that helps communities become more independent.
-                </p>
-                <p>
-                  We design programs with village elders, local leaders, and state authorities so they respond to local needs.
-                </p>
+                <p>{philosophy.p1}</p>
+                <p>{philosophy.p2}</p>
               </div>
 
               <div className="space-y-5 pt-4 border-t border-neutral-200">
@@ -154,8 +188,8 @@ export default function HomeView({ stories }: { stories: BlogPost[] }) {
                     <CheckCircle2 className="w-4 h-4" />
                   </div>
                   <div>
-                    <h3 className="text-base font-bold text-primary">Integrated Education</h3>
-                    <p className="text-sm text-neutral-600 mt-0.5">Merging digital literacy with traditional government curriculum.</p>
+                    <h3 className="text-base font-bold text-primary">{philosophy.bullet1Title}</h3>
+                    <p className="text-sm text-neutral-600 mt-0.5">{philosophy.bullet1Sub}</p>
                   </div>
                 </div>
 
@@ -164,18 +198,18 @@ export default function HomeView({ stories }: { stories: BlogPost[] }) {
                     <CheckCircle2 className="w-4 h-4" />
                   </div>
                   <div>
-                    <h3 className="text-base font-bold text-primary">Holistic Health</h3>
-                    <p className="text-sm text-neutral-600 mt-0.5">Bringing specialist hospital care to remote hill districts.</p>
+                    <h3 className="text-base font-bold text-primary">{philosophy.bullet2Title}</h3>
+                    <p className="text-sm text-neutral-600 mt-0.5">{philosophy.bullet2Sub}</p>
                   </div>
                 </div>
               </div>
 
               <div className="pt-4">
                 <Link 
-                  href="/programs"
+                  href={philosophy.ctaHref}
                   className="inline-flex items-center gap-2 text-primary hover:text-rust font-bold text-sm sm:text-base transition-colors group cursor-pointer"
                 >
-                  LEARN ABOUT ISSA
+                  {philosophy.ctaLabel}
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </div>
@@ -283,17 +317,6 @@ export default function HomeView({ stories }: { stories: BlogPost[] }) {
                   <p className="text-xs sm:text-sm text-neutral-700 leading-relaxed font-sans">
                     Enabling people across Uttarakhand prepare for careers, access employment opportunities and build sustainable futures.
                   </p>
-                  {/* <div className="pt-2 flex flex-wrap gap-1.5">
-                    <span className="text-[10px] font-sans font-semibold bg-neutral-100 text-neutral-800 border border-neutral-200 px-2 py-0.5 rounded-full">
-                      Agniveer Preparation
-                    </span>
-                    <span className="text-[10px] font-sans font-semibold bg-neutral-100 text-neutral-800 border border-neutral-200 px-2 py-0.5 rounded-full">
-                      Career Coaching at Pauri
-                    </span>
-                    <span className="text-[10px] font-sans font-semibold bg-neutral-100 text-neutral-800 border border-neutral-200 px-2 py-0.5 rounded-full">
-                      IT Jobs via PineBrook
-                    </span>
-                  </div> */}
                 </div>
               </div>
               <Link 
@@ -350,29 +373,19 @@ export default function HomeView({ stories }: { stories: BlogPost[] }) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl space-y-4 mb-16">
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold text-white tracking-tight">
-              Targeted Work, Measurable Results
+              {interventions.heading}
             </h2>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 pt-8 border-t border-white/10">
-            <div className="space-y-4">
-              <p className="text-4xl font-serif font-bold text-accent">11+</p>
-              <p className="text-base sm:text-lg text-neutral-200 leading-relaxed">
-                Smart boards and computers distributed across high-altitude government schools to improve classroom learning.
-              </p>
-            </div>
-            <div className="space-y-4">
-              <p className="text-4xl font-serif font-bold text-accent">11+</p>
-              <p className="text-base sm:text-lg text-neutral-200 leading-relaxed">
-                Specialist teachers appointed to mentor rural students and provide ongoing digital training.
-              </p>
-            </div>
-            <div className="space-y-4">
-              <p className="text-4xl font-serif font-bold text-accent">20</p>
-              <p className="text-base sm:text-lg text-neutral-200 leading-relaxed">
-                Hospital beds and high-tech equipment delivering critical, life-saving diagnostic care in Pauri Garhwal.
-              </p>
-            </div>
+            {interventions.items.map((it, idx) => (
+              <div key={idx} className="space-y-4">
+                <p className="text-4xl font-serif font-bold text-accent">{it.metric}</p>
+                <p className="text-base sm:text-lg text-neutral-200 leading-relaxed">
+                  {it.desc}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -445,17 +458,17 @@ export default function HomeView({ stories }: { stories: BlogPost[] }) {
             <div className="lg:col-span-5 space-y-8">
               <div className="space-y-3">
                 <h2 className="text-3xl sm:text-4xl font-serif font-bold text-white tracking-tight">
-                  Partner with us to Transform Lives
+                  {collaborate.heading}
                 </h2>
               </div>
               <p className="text-sm text-neutral-300 leading-relaxed">
-                Volunteer, partner, or support the work bringing lasting opportunity and structural development to remote communities in Uttarakhand.
+                {collaborate.desc}
               </p>
               
               <div className="pt-6 border-t border-white/10 space-y-2">
                 <span className="text-xs text-neutral-400 block font-sans uppercase tracking-widest">Call Any Time</span>
-                <p className="text-3xl font-serif text-accent font-bold tracking-tight">0135 430 8180</p>
-                <p className="text-xs text-neutral-400 font-sans">career.issafoundation@gmail.com</p>
+                <p className="text-3xl font-serif text-accent font-bold tracking-tight">{collaborate.phone}</p>
+                <p className="text-xs text-neutral-400 font-sans">{collaborate.email}</p>
               </div>
             </div>
 
