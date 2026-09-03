@@ -3,13 +3,167 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { FileText, Lock, ChevronRight, Mail, Scale, CheckCircle2 } from 'lucide-react';
+import type { LegalPageItem } from '@/lib/site-cms-types';
 
 interface PrivacyPolicyViewProps {
   defaultSubTab?: 'privacy' | 'terms';
+  privacyPage?: LegalPageItem | null;
+  termsPage?: LegalPageItem | null;
   [key: string]: unknown;
 }
 
-export default function PrivacyPolicyView({ defaultSubTab = 'privacy' }: PrivacyPolicyViewProps) {
+function renderInline(text: string): React.ReactNode {
+  const regex = /(\*\*.*?\*\*|\*.*?\*|\[.*?\]\(.*?\))/g;
+  const parts = text.split(regex);
+  return parts.map((part, i) => {
+    if (part.startsWith('**') && part.endsWith('**') && part.length >= 4) {
+      return <strong key={i} className="font-semibold text-neutral-900">{part.slice(2, -2)}</strong>;
+    }
+    if (part.startsWith('*') && part.endsWith('*') && part.length >= 2 && !part.startsWith('**')) {
+      return <em key={i} className="italic">{part.slice(1, -1)}</em>;
+    }
+    const linkMatch = part.match(/^\[(.*?)\]\((.*?)\)$/);
+    if (linkMatch) {
+      return (
+        <a
+          key={i}
+          href={linkMatch[2]}
+          target={linkMatch[2].startsWith('http') ? '_blank' : undefined}
+          rel={linkMatch[2].startsWith('http') ? 'noopener noreferrer' : undefined}
+          className="text-primary hover:underline font-medium"
+        >
+          {linkMatch[1]}
+        </a>
+      );
+    }
+    return part;
+  });
+}
+
+function MarkdownRenderer({ content }: { content: string }) {
+  if (!content || !content.trim()) return null;
+
+  const lines = content.split(/\r?\n/);
+  const blocks: React.ReactNode[] = [];
+  let currentList: { type: 'ul' | 'ol'; items: string[] } | null = null;
+
+  const flushList = (key: string) => {
+    if (!currentList) return;
+    if (currentList.type === 'ul') {
+      blocks.push(
+        <ul key={key} className="my-3 space-y-1.5 list-disc list-inside text-neutral-700">
+          {currentList.items.map((item, idx) => (
+            <li key={idx}>{renderInline(item)}</li>
+          ))}
+        </ul>
+      );
+    } else {
+      blocks.push(
+        <ol key={key} className="my-3 space-y-1.5 list-decimal list-inside text-neutral-700">
+          {currentList.items.map((item, idx) => (
+            <li key={idx}>{renderInline(item)}</li>
+          ))}
+        </ol>
+      );
+    }
+    currentList = null;
+  };
+
+  lines.forEach((line, index) => {
+    const trimmed = line.trim();
+
+    if (!trimmed) {
+      flushList(`list-before-${index}`);
+      return;
+    }
+
+    if (trimmed.startsWith('# ')) {
+      flushList(`list-before-${index}`);
+      blocks.push(
+        <h1 key={`h1-${index}`} className="text-2xl sm:text-3xl font-serif font-bold text-primary mt-6 mb-3">
+          {renderInline(trimmed.slice(2))}
+        </h1>
+      );
+      return;
+    }
+
+    if (trimmed.startsWith('## ')) {
+      flushList(`list-before-${index}`);
+      blocks.push(
+        <h2 key={`h2-${index}`} className="text-xl sm:text-2xl font-serif font-bold text-primary mt-6 mb-3">
+          {renderInline(trimmed.slice(3))}
+        </h2>
+      );
+      return;
+    }
+
+    if (trimmed.startsWith('### ')) {
+      flushList(`list-before-${index}`);
+      blocks.push(
+        <h3 key={`h3-${index}`} className="text-lg sm:text-xl font-serif font-bold text-primary mt-4 mb-2">
+          {renderInline(trimmed.slice(4))}
+        </h3>
+      );
+      return;
+    }
+
+    if (trimmed.startsWith('#### ')) {
+      flushList(`list-before-${index}`);
+      blocks.push(
+        <h4 key={`h4-${index}`} className="text-base font-serif font-bold text-primary mt-3 mb-2">
+          {renderInline(trimmed.slice(5))}
+        </h4>
+      );
+      return;
+    }
+
+    if (trimmed.startsWith('- ') || trimmed.startsWith('* ')) {
+      if (!currentList || currentList.type !== 'ul') {
+        flushList(`list-switch-${index}`);
+        currentList = { type: 'ul', items: [] };
+      }
+      currentList.items.push(trimmed.slice(2));
+      return;
+    }
+
+    const olMatch = trimmed.match(/^(\d+)\.\s+(.*)$/);
+    if (olMatch) {
+      if (!currentList || currentList.type !== 'ol') {
+        flushList(`list-switch-${index}`);
+        currentList = { type: 'ol', items: [] };
+      }
+      currentList.items.push(olMatch[2]);
+      return;
+    }
+
+    if (trimmed.startsWith('> ')) {
+      flushList(`list-before-${index}`);
+      blocks.push(
+        <blockquote key={`quote-${index}`} className="border-l-4 border-accent pl-4 my-3 italic text-neutral-600">
+          {renderInline(trimmed.slice(2))}
+        </blockquote>
+      );
+      return;
+    }
+
+    flushList(`list-before-${index}`);
+    blocks.push(
+      <p key={`p-${index}`} className="my-3 leading-relaxed text-neutral-700">
+        {renderInline(trimmed)}
+      </p>
+    );
+  });
+
+  flushList('list-end');
+
+  return <div className="prose prose-neutral max-w-none text-neutral-800 leading-relaxed font-sans">{blocks}</div>;
+}
+
+export default function PrivacyPolicyView({
+  defaultSubTab = 'privacy',
+  privacyPage,
+  termsPage,
+}: PrivacyPolicyViewProps) {
   const [prevDefault, setPrevDefault] = useState(defaultSubTab);
   const [activeSubTab, setActiveSubTab] = useState<'privacy' | 'terms'>(defaultSubTab);
 
@@ -17,6 +171,24 @@ export default function PrivacyPolicyView({ defaultSubTab = 'privacy' }: Privacy
     setPrevDefault(defaultSubTab);
     setActiveSubTab(defaultSubTab);
   }
+
+  const activeTitle =
+    activeSubTab === 'privacy'
+      ? privacyPage?.title || 'Privacy Policy'
+      : termsPage?.title || 'Terms & Conditions';
+
+  const activeSubtitle =
+    activeSubTab === 'privacy'
+      ? privacyPage?.subtitle || 'ISSA Foundation is committed to complete transparency, donor data integrity, and responsible digital governance.'
+      : termsPage?.subtitle || 'Governing principles, transparency standards, and user obligations for all ISSA Foundation digital properties.';
+
+  const privacyUpdatedDate = privacyPage?.updatedAt
+    ? new Intl.DateTimeFormat('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(privacyPage.updatedAt))
+    : '23 July 2026';
+
+  const termsUpdatedDate = termsPage?.updatedAt
+    ? new Intl.DateTimeFormat('en-IN', { day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(termsPage.updatedAt))
+    : '23 July 2026';
 
   return (
     <div className="bg-neutral-50 min-h-screen pb-20">
@@ -79,8 +251,38 @@ export default function PrivacyPolicyView({ defaultSubTab = 'privacy' }: Privacy
       {/* Main Content Area */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
         {activeSubTab === 'privacy' ? (
-          /* PRIVACY POLICY CONTENT */
-          <div id="privacy-policy-section" className="bg-white rounded-3xl border border-neutral-200/80 shadow-sm p-6 sm:p-10 space-y-8 text-neutral-800 leading-relaxed font-sans">
+          privacyPage?.contentMarkdown ? (
+            /* DYNAMIC PRIVACY POLICY FROM CMS */
+            <div id="privacy-policy-section" className="bg-white rounded-3xl border border-neutral-200/80 shadow-sm p-6 sm:p-10 space-y-8 text-neutral-800 leading-relaxed font-sans">
+              <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-neutral-200/80">
+                <div className="flex items-center gap-2 text-xs font-sans text-neutral-500">
+                  <FileText className="w-4 h-4 text-primary" />
+                  <span>Document Reference: ISSA-PP-2026</span>
+                </div>
+                <span className="text-xs font-sans bg-neutral-100 text-neutral-600 px-3 py-1 rounded-full border border-neutral-200">
+                  Last updated: {privacyUpdatedDate}
+                </span>
+              </div>
+
+              <MarkdownRenderer content={privacyPage.contentMarkdown} />
+
+              <div className="bg-primary-dark text-white p-6 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-6">
+                <div>
+                  <h3 className="text-sm font-serif font-bold text-accent">Privacy Inquiries & Data Desk</h3>
+                  <p className="text-xs text-neutral-300 mt-1">If you have questions regarding personal data processing or wish to exercise your data rights:</p>
+                </div>
+                <a
+                  href="mailto:career.issafoundation@gmail.com"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-accent text-primary text-xs font-bold hover:bg-accent-dark transition-all shrink-0 cursor-pointer"
+                >
+                  <Mail className="w-4 h-4" />
+                  <span>career.issafoundation@gmail.com</span>
+                </a>
+              </div>
+            </div>
+          ) : (
+            /* FALLBACK HARDCODED PRIVACY POLICY */
+            <div id="privacy-policy-section" className="bg-white rounded-3xl border border-neutral-200/80 shadow-sm p-6 sm:p-10 space-y-8 text-neutral-800 leading-relaxed font-sans">
             {/* Meta Header */}
             <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-neutral-200/80">
               <div className="flex items-center gap-2 text-xs font-sans text-neutral-500">
@@ -264,9 +466,40 @@ export default function PrivacyPolicyView({ defaultSubTab = 'privacy' }: Privacy
               </div>
             </div>
           </div>
-        ) : (
-          /* TERMS & CONDITIONS CONTENT */
-          <div id="terms-conditions-section" className="bg-white rounded-3xl border border-neutral-200/80 shadow-sm p-6 sm:p-10 space-y-8 text-neutral-800 leading-relaxed font-sans">
+        )
+      ) : (
+          termsPage?.contentMarkdown ? (
+            /* DYNAMIC TERMS & CONDITIONS FROM CMS */
+            <div id="terms-conditions-section" className="bg-white rounded-3xl border border-neutral-200/80 shadow-sm p-6 sm:p-10 space-y-8 text-neutral-800 leading-relaxed font-sans">
+              <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-neutral-200/80">
+                <div className="flex items-center gap-2 text-xs font-sans text-neutral-500">
+                  <Scale className="w-4 h-4 text-primary" />
+                  <span>Document Reference: ISSA-TC-2026</span>
+                </div>
+                <span className="text-xs font-sans bg-neutral-100 text-neutral-600 px-3 py-1 rounded-full border border-neutral-200">
+                  Last updated: {termsUpdatedDate}
+                </span>
+              </div>
+
+              <MarkdownRenderer content={termsPage.contentMarkdown} />
+
+              <div className="bg-primary-dark text-white p-6 rounded-2xl flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mt-6">
+                <div>
+                  <h3 className="text-sm font-serif font-bold text-accent">Legal Inquiries</h3>
+                  <p className="text-xs text-neutral-300 mt-1">For questions regarding terms of use or governance policies:</p>
+                </div>
+                <a
+                  href="mailto:career.issafoundation@gmail.com"
+                  className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-accent text-primary text-xs font-bold hover:bg-accent-dark transition-all shrink-0 cursor-pointer"
+                >
+                  <Mail className="w-4 h-4" />
+                  <span>career.issafoundation@gmail.com</span>
+                </a>
+              </div>
+            </div>
+          ) : (
+            /* FALLBACK HARDCODED TERMS & CONDITIONS */
+            <div id="terms-conditions-section" className="bg-white rounded-3xl border border-neutral-200/80 shadow-sm p-6 sm:p-10 space-y-8 text-neutral-800 leading-relaxed font-sans">
             {/* Meta Header */}
             <div className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-neutral-200/80">
               <div className="flex items-center gap-2 text-xs font-sans text-neutral-500">
@@ -411,7 +644,8 @@ export default function PrivacyPolicyView({ defaultSubTab = 'privacy' }: Privacy
               </div>
             </div>
           </div>
-        )}
+        )
+      )}
       </div>
     </div>
   );

@@ -57,7 +57,6 @@ const SEARCH_ITEMS: SearchItem[] = [
   { id: 'impact-metrics-sec', label: 'Quantified Impact Metrics', description: '84% attendance surge, 72% reduced travel, 100% direct aid sourcing', category: 'Impact', href: '/impact', elementId: 'impact-metrics', keywords: '84 72 attendance travel sourcing accountability' },
   { id: 'impact-milestones-sec', label: 'Student Competency Growth', description: 'CIAS digital classroom competency trends: 35% → 60% → 88%', category: 'Impact', href: '/impact', elementId: 'impact-milestones', keywords: 'competency chart literacy coding terms cias' },
   { id: 'impact-highlights-sec', label: 'Key Impact Highlights', description: '3+ Edtech village labs, 15k+ lives impacted, 100% transparency audit', category: 'Impact', href: '/impact', elementId: 'impact-highlights', keywords: 'labs lives transparency audit edtech' },
-  { id: 'impact-stories-sec', label: 'Story of the Month', description: 'Meera’s cataract journey in Mana and Renu’s academic ascent in Pauri', category: 'Impact', href: '/impact', elementId: 'impact-story-month', keywords: 'meera renu mana cataract weaver computer' },
 
   // ── Stories ───────────────────────────────────────────────────────────
   { id: 'stories-root', label: 'Program Stories', description: 'Reports from educators, medical professionals, and community organizers', category: 'Stories', href: '/stories', elementId: 'stories-view', keywords: 'stories journals field reports dispatches' },
@@ -65,10 +64,7 @@ const SEARCH_ITEMS: SearchItem[] = [
   // ── Careers ───────────────────────────────────────────────────────────
   { id: 'careers-root', label: 'Careers & Field Opportunities', description: 'Purpose-led roles across Dehradun, Pauri, Srinagar, and field hubs', category: 'Careers', href: '/careers', elementId: 'careers-view', keywords: 'careers jobs hire join team work' },
   { id: 'careers-values', label: 'Why Work at ISSA', description: 'Fair pay, open communication, and work based in Uttarakhand', category: 'Careers', href: '/careers', elementId: 'careers-values', keywords: 'salary housing transparency values culture' },
-  { id: 'careers-list-sec', label: 'Open Staff Positions', description: 'Education Expert, Healthcare Camp Coordinator, Program Operations Manager', category: 'Careers', href: '/careers', elementId: 'careers-openings', keywords: 'openings vacancies positions hiring' },
-  { id: 'careers-edu', label: 'Senior Education Expert', description: 'Curriculum, smart boards, teacher evaluation — Srinagar Garhwal, full-time', category: 'Careers', href: '/careers', elementId: 'job-edu-expert', keywords: 'education expert teacher curriculum pauri chamoli' },
-  { id: 'careers-health', label: 'Healthcare Camp Coordinator', description: 'Mobile health camp logistics and specialist rosters — Pauri Garhwal', category: 'Careers', href: '/careers', elementId: 'job-health-practitioner', keywords: 'healthcare coordinator camp clinical outreach' },
-  { id: 'careers-ops', label: 'Program Operations Manager', description: 'Budgets, formal agreements, and program coordination — Dehradun / field hybrid', category: 'Careers', href: '/careers', elementId: 'job-program-manager', keywords: 'program manager operations mou budget admin' },
+  { id: 'careers-list-sec', label: 'Open Staff Positions', description: 'Active job openings and career opportunities in Uttarakhand', category: 'Careers', href: '/careers', elementId: 'careers-openings', keywords: 'openings vacancies positions hiring' },
   { id: 'careers-form-sec', label: 'Apply Online Form', description: 'Submit resume and statement of intent for open roles or volunteering', category: 'Careers', href: '/careers', elementId: 'application-form-card', keywords: 'apply application resume cv volunteer form' },
 
   // ── Contact ───────────────────────────────────────────────────────────
@@ -97,8 +93,25 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
   const router = useRouter();
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [dynamicItems, setDynamicItems] = useState<SearchItem[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Fetch live stories and jobs from DB
+  useEffect(() => {
+    let isMounted = true;
+    fetch('/api/search')
+      .then((res) => (res.ok ? res.json() : { items: [] }))
+      .then((data) => {
+        if (isMounted && Array.isArray(data.items)) {
+          setDynamicItems(data.items);
+        }
+      })
+      .catch(() => {});
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   // Focus input when modal opens
   useEffect(() => {
@@ -134,10 +147,14 @@ export default function SearchPalette({ isOpen, onClose }: SearchPaletteProps) {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
+  const allItems = React.useMemo(() => {
+    return [...dynamicItems, ...SEARCH_ITEMS];
+  }, [dynamicItems]);
+
   // Keep the complete site index searchable, but show only five suggestions at once.
   const matchingItems = query.trim() === ''
-    ? SEARCH_ITEMS
-    : SEARCH_ITEMS.filter(item => {
+    ? allItems
+    : allItems.filter(item => {
         const q = query.toLowerCase();
         return (
           item.label.toLowerCase().includes(q) ||

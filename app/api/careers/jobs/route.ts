@@ -33,8 +33,8 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const staff = await getCurrentStaff();
-    if (!staff || staff.role !== 'ADMIN') {
-      return NextResponse.json({ error: 'Unauthorized: Admin privileges required' }, { status: 403 });
+    if (!staff || (staff.role !== 'ADMIN' && staff.role !== 'CONTENT')) {
+      return NextResponse.json({ error: 'Unauthorized: Staff privileges required' }, { status: 403 });
     }
 
     const body = await req.json();

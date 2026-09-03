@@ -252,6 +252,16 @@ export const DEFAULT_IMPACT_CONTENT: ImpactContentData = {
       { label: 'Term 2 (CIAS)', value: 88, color: 'accent' },
     ],
   },
+  highlights: [
+    {
+      title: '3+ Edtech Village Labs',
+      desc: 'Computers and digital learning equipment maintained by trained local administrators.',
+    },
+    {
+      title: 'Zero Administrative Overhead',
+      desc: '100% of designated public contributions flow directly into verified ground intervention programs.',
+    },
+  ],
 };
 
 export const DEFAULT_FAQS: FaqItem[] = [
@@ -770,6 +780,7 @@ export async function getImpactContent(): Promise<ImpactContentData> {
       hero: map.hero || DEFAULT_IMPACT_CONTENT.hero,
       metrics: map.metrics || DEFAULT_IMPACT_CONTENT.metrics,
       milestones: map.milestones || DEFAULT_IMPACT_CONTENT.milestones,
+      highlights: map.highlights || DEFAULT_IMPACT_CONTENT.highlights,
     };
   } catch {
     return DEFAULT_IMPACT_CONTENT;
@@ -777,7 +788,7 @@ export async function getImpactContent(): Promise<ImpactContentData> {
 }
 
 export async function updateImpactSection(
-  sectionKey: 'hero' | 'metrics' | 'milestones',
+  sectionKey: 'hero' | 'metrics' | 'milestones' | 'highlights',
   data: any,
   staff?: StaffProfile | null
 ): Promise<void> {

@@ -63,6 +63,8 @@ import {
   X,
   ChevronRight,
   Trash2,
+  Archive,
+  ArchiveRestore,
   User,
   FileCode,
   Check,
@@ -219,6 +221,7 @@ export default function StaffPanel({
   const hasAuthorizedRole = staff && (staff.role === 'ADMIN' || staff.role === 'CONTENT');
   const isPendingAccess = !hasAuthorizedRole;
   const isAdmin = staff?.role === 'ADMIN';
+  const canManageJobs = isAdmin || staff?.role === 'CONTENT';
 
   useEffect(() => {
     const expiresAt = Number(document.cookie.match(/(?:^|; )issa_session_limit=(\d+)\./)?.[1]);
@@ -453,7 +456,9 @@ export default function StaffPanel({
         employmentType: jobToEdit.employmentType,
         salary: jobToEdit.salary || '',
         description: jobToEdit.description,
-        requirements: jobToEdit.requirements.join('\n'),
+        requirements: Array.isArray(jobToEdit.requirements)
+          ? jobToEdit.requirements.join('\n')
+          : (typeof jobToEdit.requirements === 'string' ? jobToEdit.requirements : ''),
         status: jobToEdit.status,
         displayOrder: jobToEdit.displayOrder,
         closingTime: jobToEdit.closingTime || null,
@@ -533,9 +538,12 @@ export default function StaffPanel({
         setJobs((prev) =>
           prev.map((j) => (j.id === job.id ? { ...j, status: newStatus } : j))
         );
+      } else {
+        const data = await res.json().catch(() => ({}));
+        alert(data.error || 'Failed to update job status');
       }
     } catch {
-      // error
+      alert('Network error updating job status');
     }
   }
 
@@ -547,9 +555,12 @@ export default function StaffPanel({
       });
       if (res.ok) {
         refreshJobsList();
+      } else {
+        const data = await res.json().catch(() => ({}));
+        alert(data.error || 'Failed to delete');
       }
     } catch {
-      // error
+      alert('Network error deleting job opening');
     }
   }
 
@@ -1486,7 +1497,7 @@ export default function StaffPanel({
                     Refresh
                   </button>
 
-                  {isAdmin && (
+                  {canManageJobs && (
                     <button
                       type="button"
                       onClick={() => handleOpenJobModal()}
@@ -1604,7 +1615,7 @@ export default function StaffPanel({
                           </td>
                           <td className="px-5 py-3.5 text-right">
                             <div className="inline-flex items-center gap-1.5 justify-end">
-                              {isAdmin && (
+                              {canManageJobs && (
                                 <>
                                   <button
                                     type="button"
@@ -1621,6 +1632,25 @@ export default function StaffPanel({
                                   >
                                     {job.status === 'active' ? 'Close' : 'Activate'}
                                   </button>
+                                  {job.status === 'archived' ? (
+                                    <button
+                                      type="button"
+                                      onClick={() => handleJobStatusQuickToggle(job, 'active')}
+                                      title="Unarchive job (set to active)"
+                                      className="inline-flex items-center gap-1 rounded-md border border-amber-300 bg-amber-50 px-2 py-1 text-xs font-medium text-amber-800 hover:bg-amber-100 transition cursor-pointer"
+                                    >
+                                      <ArchiveRestore className="h-3 w-3" /> Unarchive
+                                    </button>
+                                  ) : (
+                                    <button
+                                      type="button"
+                                      onClick={() => handleJobStatusQuickToggle(job, 'archived')}
+                                      title="Archive job"
+                                      className="inline-flex items-center gap-1 rounded-md border border-[#E5E0D8] bg-white px-2 py-1 text-xs font-medium text-neutral-700 hover:bg-[#F7F6F3] transition cursor-pointer"
+                                    >
+                                      <Archive className="h-3 w-3" /> Archive
+                                    </button>
+                                  )}
                                   <button
                                     type="button"
                                     onClick={() => handleDeleteJob(job.id)}

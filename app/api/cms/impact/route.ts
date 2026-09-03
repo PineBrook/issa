@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     }
 
     const { sectionKey, data } = await req.json();
-    if (!sectionKey || !['hero', 'metrics', 'milestones'].includes(sectionKey)) {
+    if (!sectionKey || !['hero', 'metrics', 'milestones', 'highlights'].includes(sectionKey)) {
       return NextResponse.json({ error: 'Invalid sectionKey' }, { status: 400 });
     }
 

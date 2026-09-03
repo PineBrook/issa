@@ -269,44 +269,57 @@ export default function EntrepreneurshipInitiativeView({ program }: { program?: 
       {/* SUGGESTED HOMEPAGE IMPACT COUNTERS / TILES BAR */}
       <div className="border-b border-neutral-200 bg-white shadow-sm">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 divide-y sm:divide-y-0 sm:divide-x divide-neutral-200">
-            <div className="text-center pt-2 sm:pt-0 sm:px-2">
-              <p className="font-serif text-3xl sm:text-4xl font-bold text-primary">20+</p>
-              <p className="mt-1 text-[11px] font-bold uppercase tracking-wider text-neutral-500 font-sans">
-                Entrepreneurs Supported
-              </p>
+          {program?.stats && program.stats.length > 0 ? (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 divide-y sm:divide-y-0 sm:divide-x divide-neutral-200">
+              {program.stats.map((st: any, idx: number) => (
+                <div key={idx} className="text-center pt-2 sm:pt-0 sm:px-2">
+                  <p className="font-serif text-3xl sm:text-4xl font-bold text-primary">{st.value}</p>
+                  <p className="mt-1 text-[11px] font-bold uppercase tracking-wider text-neutral-500 font-sans">
+                    {st.label}
+                  </p>
+                </div>
+              ))}
             </div>
-            <div className="text-center pt-2 sm:pt-0 sm:px-2">
-              <p className="font-serif text-3xl sm:text-4xl font-bold text-primary">6</p>
-              <p className="mt-1 text-[11px] font-bold uppercase tracking-wider text-neutral-500 font-sans">
-                Districts Covered
-              </p>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 divide-y sm:divide-y-0 sm:divide-x divide-neutral-200">
+              <div className="text-center pt-2 sm:pt-0 sm:px-2">
+                <p className="font-serif text-3xl sm:text-4xl font-bold text-primary">20+</p>
+                <p className="mt-1 text-[11px] font-bold uppercase tracking-wider text-neutral-500 font-sans">
+                  Entrepreneurs Supported
+                </p>
+              </div>
+              <div className="text-center pt-2 sm:pt-0 sm:px-2">
+                <p className="font-serif text-3xl sm:text-4xl font-bold text-primary">6</p>
+                <p className="mt-1 text-[11px] font-bold uppercase tracking-wider text-neutral-500 font-sans">
+                  Districts Covered
+                </p>
+              </div>
+              <div className="text-center pt-2 sm:pt-0 sm:px-2">
+                <p className="font-serif text-3xl sm:text-4xl font-bold text-primary">10+</p>
+                <p className="mt-1 text-[11px] font-bold uppercase tracking-wider text-neutral-500 font-sans">
+                  Sectors Supported
+                </p>
+              </div>
+              <div className="text-center pt-2 sm:pt-0 sm:px-2">
+                <p className="font-serif text-3xl sm:text-4xl font-bold text-primary">100+</p>
+                <p className="mt-1 text-[11px] font-bold uppercase tracking-wider text-neutral-500 font-sans">
+                  Jobs Targeted
+                </p>
+              </div>
+              <div className="text-center pt-2 sm:pt-0 sm:px-2">
+                <p className="font-serif text-3xl sm:text-4xl font-bold text-primary">100%</p>
+                <p className="mt-1 text-[11px] font-bold uppercase tracking-wider text-neutral-500 font-sans">
+                  Structured Mentorship
+                </p>
+              </div>
+              <div className="text-center pt-2 sm:pt-0 sm:px-2">
+                <p className="font-serif text-2xl sm:text-3xl font-bold text-rust">1 Mission</p>
+                <p className="mt-1 text-[11px] font-bold uppercase tracking-wider text-neutral-500 font-sans">
+                  Sustainable Livelihoods
+                </p>
+              </div>
             </div>
-            <div className="text-center pt-2 sm:pt-0 sm:px-2">
-              <p className="font-serif text-3xl sm:text-4xl font-bold text-primary">10+</p>
-              <p className="mt-1 text-[11px] font-bold uppercase tracking-wider text-neutral-500 font-sans">
-                Sectors Supported
-              </p>
-            </div>
-            <div className="text-center pt-2 sm:pt-0 sm:px-2">
-              <p className="font-serif text-3xl sm:text-4xl font-bold text-primary">100+</p>
-              <p className="mt-1 text-[11px] font-bold uppercase tracking-wider text-neutral-500 font-sans">
-                Jobs Targeted
-              </p>
-            </div>
-            <div className="text-center pt-2 sm:pt-0 sm:px-2">
-              <p className="font-serif text-3xl sm:text-4xl font-bold text-primary">100%</p>
-              <p className="mt-1 text-[11px] font-bold uppercase tracking-wider text-neutral-500 font-sans">
-                Structured Mentorship
-              </p>
-            </div>
-            <div className="text-center pt-2 sm:pt-0 sm:px-2">
-              <p className="font-serif text-2xl sm:text-3xl font-bold text-rust">1 Mission</p>
-              <p className="mt-1 text-[11px] font-bold uppercase tracking-wider text-neutral-500 font-sans">
-                Sustainable Livelihoods
-              </p>
-            </div>
-          </div>
+          )}
         </div>
       </div>
 
@@ -330,8 +343,25 @@ export default function EntrepreneurshipInitiativeView({ program }: { program?: 
               Building Sustainable Enterprises in Himalayan Communities
             </h3>
             <p className="text-sm leading-relaxed text-neutral-600">
-              The ISSA Entrepreneurship Development Program bridges this gap by providing structured support that enables entrepreneurs to build sustainable enterprises capable of creating long-term employment within their communities.
+              {program?.overviewP2 ||
+                'The ISSA Entrepreneurship Development Program bridges this gap by providing structured support that enables entrepreneurs to build sustainable enterprises capable of creating long-term employment within their communities.'}
             </p>
+            {(program?.vision || program?.mission) && (
+              <div className="grid sm:grid-cols-2 gap-4 pt-1">
+                {program.vision && (
+                  <div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-200/80">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-primary mb-1">Vision</h4>
+                    <p className="text-xs text-neutral-600 leading-relaxed">{program.vision}</p>
+                  </div>
+                )}
+                {program.mission && (
+                  <div className="p-4 rounded-2xl bg-neutral-50 border border-neutral-200/80">
+                    <h4 className="text-xs font-bold uppercase tracking-wider text-primary mb-1">Mission</h4>
+                    <p className="text-xs text-neutral-600 leading-relaxed">{program.mission}</p>
+                  </div>
+                )}
+              </div>
+            )}
             <div className="p-5 rounded-2xl bg-amber-50/60 border border-amber-200/60 flex items-center gap-4">
               <div className="w-10 h-10 rounded-xl bg-rust text-white flex items-center justify-center shrink-0 font-bold">
                 <ShieldCheck className="w-5 h-5" />
@@ -381,32 +411,66 @@ export default function EntrepreneurshipInitiativeView({ program }: { program?: 
           <div>
             <SectionLabel>Portfolio Diversity</SectionLabel>
             <h2 className="mt-2 font-serif text-3xl sm:text-4xl font-bold text-primary">
-              Supporting 10+ Diverse Business Sectors
+              {program?.approachTitle || 'Supporting 10+ Diverse Business Sectors'}
             </h2>
             <p className="mt-3 text-sm text-neutral-600 max-w-2xl leading-relaxed">
-              This diverse portfolio promotes balanced economic growth while leveraging the unique geographic and cultural strengths of Uttarakhand.
+              {program?.approachDesc ||
+                'This diverse portfolio promotes balanced economic growth while leveraging the unique geographic and cultural strengths of Uttarakhand.'}
             </p>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-            {edpSectors.map((sector) => {
-              const IconComp = sector.icon;
-              return (
+            {program?.programmes && program.programmes.length > 0 ? (
+              program.programmes.map((progItem: any) => (
                 <div
-                  key={sector.title}
+                  key={progItem.title}
                   className="bg-white rounded-2xl p-5 border border-neutral-200 hover:border-accent transition-all shadow-sm hover:shadow-md flex flex-col justify-between space-y-4"
                 >
                   <div className="space-y-3">
                     <div className="w-10 h-10 rounded-xl bg-neutral-100 text-primary flex items-center justify-center">
-                      <IconComp className="w-5 h-5" />
+                      <Briefcase className="w-5 h-5" />
                     </div>
-                    <h3 className="font-serif text-base font-bold text-primary leading-snug">{sector.title}</h3>
+                    <h3 className="font-serif text-base font-bold text-primary leading-snug">{progItem.title}</h3>
                   </div>
-                  <p className="text-xs text-neutral-600 leading-relaxed">{sector.desc}</p>
+                  <p className="text-xs text-neutral-600 leading-relaxed">{progItem.description}</p>
                 </div>
-              );
-            })}
+              ))
+            ) : (
+              edpSectors.map((sector) => {
+                const IconComp = sector.icon;
+                return (
+                  <div
+                    key={sector.title}
+                    className="bg-white rounded-2xl p-5 border border-neutral-200 hover:border-accent transition-all shadow-sm hover:shadow-md flex flex-col justify-between space-y-4"
+                  >
+                    <div className="space-y-3">
+                      <div className="w-10 h-10 rounded-xl bg-neutral-100 text-primary flex items-center justify-center">
+                        <IconComp className="w-5 h-5" />
+                      </div>
+                      <h3 className="font-serif text-base font-bold text-primary leading-snug">{sector.title}</h3>
+                    </div>
+                    <p className="text-xs text-neutral-600 leading-relaxed">{sector.desc}</p>
+                  </div>
+                );
+              })
+            )}
           </div>
+
+          {program?.skills && program.skills.length > 0 && (
+            <div className="pt-4">
+              <p className="text-xs font-bold uppercase tracking-wider text-neutral-500 mb-3">Enterprise Core Capabilities</p>
+              <div className="flex flex-wrap gap-2">
+                {program.skills.map((skill: string, sIdx: number) => (
+                  <span
+                    key={sIdx}
+                    className="px-3 py-1.5 rounded-xl bg-white border border-neutral-200 text-xs font-semibold text-primary shadow-xs"
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
         </section>
 
         {/* OUR ENTREPRENEUR JOURNEY (7 STEPS) */}
@@ -420,18 +484,32 @@ export default function EntrepreneurshipInitiativeView({ program }: { program?: 
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-7 gap-4">
-            {edpSteps.map((step) => (
-              <div
-                key={step.num}
-                className="bg-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/15 flex flex-col justify-between space-y-4 hover:bg-white/15 transition-all"
-              >
-                <div>
-                  <span className="text-2xl font-serif font-bold text-accent">{step.num}</span>
-                  <h3 className="mt-2 font-serif text-sm font-bold text-white leading-snug">{step.title}</h3>
+            {program?.roadmap && program.roadmap.length > 0 ? (
+              program.roadmap.map((stepItem: string, sIndex: number) => (
+                <div
+                  key={sIndex}
+                  className="bg-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/15 flex flex-col justify-between space-y-4 hover:bg-white/15 transition-all"
+                >
+                  <div>
+                    <span className="text-2xl font-serif font-bold text-accent">0{sIndex + 1}</span>
+                    <h3 className="mt-2 font-serif text-sm font-bold text-white leading-snug">{stepItem}</h3>
+                  </div>
                 </div>
-                <p className="text-xs text-neutral-300 leading-relaxed">{step.desc}</p>
-              </div>
-            ))}
+              ))
+            ) : (
+              edpSteps.map((step) => (
+                <div
+                  key={step.num}
+                  className="bg-white/10 backdrop-blur-md rounded-2xl p-5 border border-white/15 flex flex-col justify-between space-y-4 hover:bg-white/15 transition-all"
+                >
+                  <div>
+                    <span className="text-2xl font-serif font-bold text-accent">{step.num}</span>
+                    <h3 className="mt-2 font-serif text-sm font-bold text-white leading-snug">{step.title}</h3>
+                  </div>
+                  <p className="text-xs text-neutral-300 leading-relaxed">{step.desc}</p>
+                </div>
+              ))
+            )}
           </div>
         </section>
 
@@ -548,61 +626,82 @@ export default function EntrepreneurshipInitiativeView({ program }: { program?: 
           </div>
 
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-            <a
-              href="mailto:career.issafoundation@gmail.com?subject=EDP%20Entrepreneur%20Application"
-              className="group rounded-2xl border border-white/15 bg-white/5 p-6 transition-all hover:border-accent hover:bg-white/10"
-            >
-              <Rocket className="h-6 w-6 text-accent" />
-              <h3 className="mt-4 font-serif text-lg font-bold">Apply as Entrepreneur</h3>
-              <p className="mt-2 text-xs leading-relaxed text-neutral-300">
-                Are you an aspiring or existing entrepreneur in Uttarakhand? Submit your business profile to join our upcoming cohort.
-              </p>
-              <span className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-accent">
-                Apply to IEDP <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </span>
-            </a>
+            {program?.involvement && program.involvement.length > 0 ? (
+              program.involvement.map((inv: any, iIdx: number) => (
+                <a
+                  key={iIdx}
+                  href="mailto:career.issafoundation@gmail.com"
+                  className="group rounded-2xl border border-white/15 bg-white/5 p-6 transition-all hover:border-accent hover:bg-white/10"
+                >
+                  <Handshake className="h-6 w-6 text-accent" />
+                  <h3 className="mt-4 font-serif text-lg font-bold">{inv.title}</h3>
+                  <p className="mt-2 text-xs leading-relaxed text-neutral-300">
+                    {inv.description}
+                  </p>
+                  <span className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-accent">
+                    Learn More <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </span>
+                </a>
+              ))
+            ) : (
+              <>
+                <a
+                  href="mailto:career.issafoundation@gmail.com?subject=EDP%20Entrepreneur%20Application"
+                  className="group rounded-2xl border border-white/15 bg-white/5 p-6 transition-all hover:border-accent hover:bg-white/10"
+                >
+                  <Rocket className="h-6 w-6 text-accent" />
+                  <h3 className="mt-4 font-serif text-lg font-bold">Apply as Entrepreneur</h3>
+                  <p className="mt-2 text-xs leading-relaxed text-neutral-300">
+                    Are you an aspiring or existing entrepreneur in Uttarakhand? Submit your business profile to join our upcoming cohort.
+                  </p>
+                  <span className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-accent">
+                    Apply to IEDP <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </span>
+                </a>
 
-            <a
-              href="mailto:career.issafoundation@gmail.com?subject=EDP%20Partnership"
-              className="group rounded-2xl border border-white/15 bg-white/5 p-6 transition-all hover:border-accent hover:bg-white/10"
-            >
-              <Handshake className="h-6 w-6 text-accent" />
-              <h3 className="mt-4 font-serif text-lg font-bold">Become a Partner</h3>
-              <p className="mt-2 text-xs leading-relaxed text-neutral-300">
-                Partner across government, corporate, academic, technology, and market channels to support rural entrepreneurs.
-              </p>
-              <span className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-accent">
-                Partner with ISSA <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </span>
-            </a>
+                <a
+                  href="mailto:career.issafoundation@gmail.com?subject=EDP%20Partnership"
+                  className="group rounded-2xl border border-white/15 bg-white/5 p-6 transition-all hover:border-accent hover:bg-white/10"
+                >
+                  <Handshake className="h-6 w-6 text-accent" />
+                  <h3 className="mt-4 font-serif text-lg font-bold">Become a Partner</h3>
+                  <p className="mt-2 text-xs leading-relaxed text-neutral-300">
+                    Partner across government, corporate, academic, technology, and market channels to support rural entrepreneurs.
+                  </p>
+                  <span className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-accent">
+                    Partner with ISSA <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </span>
+                </a>
 
-            <a
-              href="mailto:career.issafoundation@gmail.com?subject=EDP%20Mentor%20Network"
-              className="group rounded-2xl border border-white/15 bg-white/5 p-6 transition-all hover:border-accent hover:bg-white/10"
-            >
-              <Users className="h-6 w-6 text-accent" />
-              <h3 className="mt-4 font-serif text-lg font-bold">Join Mentor Network</h3>
-              <p className="mt-2 text-xs leading-relaxed text-neutral-300">
-                Share your expertise as an industry specialist, domain expert, or experienced business leader.
-              </p>
-              <span className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-accent">
-                Become a Mentor <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </span>
-            </a>
+                <a
+                  href="mailto:career.issafoundation@gmail.com?subject=EDP%20Mentor%20Network"
+                  className="group rounded-2xl border border-white/15 bg-white/5 p-6 transition-all hover:border-accent hover:bg-white/10"
+                >
+                  <Users className="h-6 w-6 text-accent" />
+                  <h3 className="mt-4 font-serif text-lg font-bold">Join Mentor Network</h3>
+                  <p className="mt-2 text-xs leading-relaxed text-neutral-300">
+                    Share your expertise as an industry specialist, domain expert, or experienced business leader.
+                  </p>
+                  <span className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-accent">
+                    Become a Mentor <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </span>
+                </a>
 
-            <a
-              href="mailto:career.issafoundation@gmail.com?subject=EDP%20Support%20Enquiry"
-              className="group rounded-2xl border border-white/15 bg-white/5 p-6 transition-all hover:border-accent hover:bg-white/10"
-            >
-              <PiggyBank className="h-6 w-6 text-accent" />
-              <h3 className="mt-4 font-serif text-lg font-bold">Support & Fund</h3>
-              <p className="mt-2 text-xs leading-relaxed text-neutral-300">
-                Contribute capital, technology enablement, equipment, market access, or training infrastructure.
-              </p>
-              <span className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-accent" id="partner-edp">
-                Contribute Support <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-              </span>
-            </a>
+                <a
+                  href="mailto:career.issafoundation@gmail.com?subject=EDP%20Support%20Enquiry"
+                  className="group rounded-2xl border border-white/15 bg-white/5 p-6 transition-all hover:border-accent hover:bg-white/10"
+                >
+                  <PiggyBank className="h-6 w-6 text-accent" />
+                  <h3 className="mt-4 font-serif text-lg font-bold">Support & Fund</h3>
+                  <p className="mt-2 text-xs leading-relaxed text-neutral-300">
+                    Contribute capital, technology enablement, equipment, market access, or training infrastructure.
+                  </p>
+                  <span className="mt-6 inline-flex items-center gap-2 text-xs font-bold text-accent" id="partner-edp">
+                    Contribute Support <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  </span>
+                </a>
+              </>
+            )}
           </div>
 
           <p className="text-xs text-neutral-400 border-t border-white/15 pt-6">

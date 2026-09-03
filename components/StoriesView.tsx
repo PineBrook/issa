@@ -10,6 +10,14 @@ export default function StoriesView({ journals }: { journals: BlogPost[] }) {
   const [searchQuery, setSearchQuery] = React.useState('');
   const [readingStory, setReadingStory] = React.useState<any | null>(null);
 
+  const categories = React.useMemo(() => {
+    const cats = new Set<string>();
+    journals.forEach((j) => {
+      if (j.category && j.category.trim()) cats.add(j.category.trim().toLowerCase());
+    });
+    return ['all', ...Array.from(cats)];
+  }, [journals]);
+
   const filteredJournals = journals.filter((item) => {
     const matchesCategory = activeCategory === 'all' || item.category.toLowerCase() === activeCategory.toLowerCase();
     const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
@@ -41,7 +49,7 @@ export default function StoriesView({ journals }: { journals: BlogPost[] }) {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 border-b border-neutral-200 pb-6">
           {/* Category Tabs */}
           <div className="flex flex-wrap gap-2">
-            {['all', 'education', 'healthcare', 'skills', 'communities'].map((cat) => (
+            {categories.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}

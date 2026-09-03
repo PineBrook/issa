@@ -4,6 +4,7 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import BackToTop from '@/components/BackToTop';
 import { ToastProvider } from '@/components/Toast';
+import { getSiteSettings, DEFAULT_SITE_SETTINGS } from '@/lib/site-cms';
 import './globals.css';
 
 /* Source Sans 3 pairs with Lora better than Inter for editorial NGO surfaces */
@@ -83,18 +84,21 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const settings = await getSiteSettings().catch(() => DEFAULT_SITE_SETTINGS);
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': ['Organization', 'NGO'],
-    name: 'ISSA Foundation',
+    name: settings.siteName || 'ISSA Foundation',
     url: 'https://issafoundation.co.in',
-    logo: 'https://issafoundation.co.in/ISSA.svg',
-    description: 'A grassroots non-profit committed to strengthening education, healthcare, and sustainable development across remote Himalayan communities.',
-    telephone: '+91-0135-430-8180',
-    email: 'career.issafoundation@gmail.com',
+    logo: settings.logoUrl || 'https://issafoundation.co.in/logo_new.png',
+    description: settings.siteTagline || settings.footerTagline,
+    telephone: settings.phone || '+91-0135-430-8180',
+    email: settings.email || 'career.issafoundation@gmail.com',
     address: {
       '@type': 'PostalAddress',
+      streetAddress: settings.headOfficeAddress || 'Dehradun',
       addressLocality: 'Pauri Garhwal',
       addressRegion: 'Uttarakhand',
       addressCountry: 'IN',
@@ -112,10 +116,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="font-sans text-charcoal bg-page selection:bg-accent selection:text-primary antialiased flex flex-col min-h-screen" suppressHydrationWarning>
         <ToastProvider>
-          <Navbar />
+          <Navbar settings={settings} />
           <BackToTop />
           <main className="flex-grow animate-fade-in">{children}</main>
-          <Footer />
+          <Footer settings={settings} />
         </ToastProvider>
       </body>
     </html>

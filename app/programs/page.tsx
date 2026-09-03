@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import ProgramsView from '@/components/ProgramsView';
+import { getProgramsContent } from '@/lib/site-cms';
 
 export const metadata: Metadata = {
   title: 'Core Programs & Pillars',
@@ -29,5 +30,11 @@ export default async function ProgramsPage({ searchParams }: ProgramsPageProps) 
   if (params.pillar === 'careers' || params.pillar === 'career') {
     redirect('/careers');
   }
-  return <><script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, '\\u003c') }} /><ProgramsView view="overview" /></>;
+  const programs = await getProgramsContent().catch(() => ({}));
+  return (
+    <>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd).replace(/</g, '\\u003c') }} />
+      <ProgramsView view="overview" programs={programs} />
+    </>
+  );
 }

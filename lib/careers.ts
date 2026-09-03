@@ -578,8 +578,8 @@ export async function createJobOpening(
   input: JobOpeningInput,
   actorStaff: StaffProfile
 ): Promise<JobOpening> {
-  if (!actorStaff || actorStaff.role !== 'ADMIN') {
-    throw new CareerForbiddenError('Only administrators can create job openings.');
+  if (!actorStaff || (actorStaff.role !== 'ADMIN' && actorStaff.role !== 'CONTENT')) {
+    throw new CareerForbiddenError('Unauthorized: Insufficient permissions to create job openings.');
   }
 
   const title = input.title?.trim();
@@ -603,26 +603,33 @@ export async function createJobOpening(
     throw new CareerValidationError('Description must be at least 10 characters long.');
   }
 
-  let slug = input.slug?.trim() ? slugify(input.slug.trim()) : slugify(title);
-  if (!slug || slug.length < 2) {
-    slug = `job-${Date.now()}`;
+  let baseSlug = input.slug?.trim() ? slugify(input.slug.trim()) : slugify(title);
+  if (!baseSlug || baseSlug.length < 2) {
+    baseSlug = `job-${Date.now().toString(36)}`;
   }
 
   const reqs = parseRequirements(input.requirements);
   const status: JobStatus = input.status ?? 'active';
   const displayOrder = typeof input.displayOrder === 'number' ? input.displayOrder : 10;
   const salary = input.salary?.trim() || null;
-  const closingTime = input.closingTime ? new Date(input.closingTime).toISOString() : null;
+  const closingTime = input.closingTime
+    ? (!isNaN(new Date(input.closingTime).getTime()) ? new Date(input.closingTime).toISOString() : null)
+    : null;
 
   const sql = getDb();
   if (!sql) {
     throw new Error('Database connection unavailable.');
   }
 
-  // Slug collision check
+  // Ensure slug uniqueness by appending suffix if collision exists
+  let slug = baseSlug;
   const existing = await sql`SELECT id FROM job_openings WHERE slug = ${slug} LIMIT 1`;
   if (existing && existing.length > 0) {
-    throw new CareerValidationError(`A job opening with slug "${slug}" already exists.`);
+    slug = `${baseSlug}-${Date.now().toString(36)}`;
+    const secondCheck = await sql`SELECT id FROM job_openings WHERE slug = ${slug} LIMIT 1`;
+    if (secondCheck && secondCheck.length > 0) {
+      slug = `${baseSlug}-${crypto.randomBytes(3).toString('hex')}`;
+    }
   }
 
   const rows = await sql`
@@ -681,8 +688,8 @@ export async function updateJobOpening(
   input: Partial<JobOpeningInput>,
   actorStaff: StaffProfile
 ): Promise<JobOpening> {
-  if (!actorStaff || actorStaff.role !== 'ADMIN') {
-    throw new CareerForbiddenError('Only administrators can update job openings.');
+  if (!actorStaff || (actorStaff.role !== 'ADMIN' && actorStaff.role !== 'CONTENT')) {
+    throw new CareerForbiddenError('Unauthorized: Insufficient permissions to update job openings.');
   }
 
   const sql = getDb();
@@ -723,7 +730,18 @@ export async function updateJobOpening(
   const newReqs = input.requirements !== undefined ? parseRequirements(input.requirements) : parseRequirements(current.requirements);
   const newStatus = input.status !== undefined ? input.status : current.status;
   const newDisplayOrder = input.displayOrder !== undefined ? input.displayOrder : current.display_order;
-  const newClosingTime = input.closingTime !== undefined ? (input.closingTime ? new Date(input.closingTime).toISOString() : null) : (current.closing_time ? new Date(current.closing_time).toISOString() : null);
+
+  let newClosingTime: string | null = null;
+  if (input.closingTime !== undefined) {
+    if (input.closingTime) {
+      const parsedDate = new Date(input.closingTime);
+      newClosingTime = !isNaN(parsedDate.getTime()) ? parsedDate.toISOString() : null;
+    } else {
+      newClosingTime = null;
+    }
+  } else {
+    newClosingTime = current.closing_time ? new Date(current.closing_time).toISOString() : null;
+  }
 
   const updatedRows = await sql`
     UPDATE job_openings
@@ -761,12 +779,42 @@ export async function updateJobOpening(
   return mapJobRow(updatedRows[0] as JobRow);
 }
 
+export async function archiveJobOpening(
+  id: number,
+  actorStaff: StaffProfile
+): Promise<JobOpening> {
+  if (!actorStaff || (actorStaff.role !== 'ADMIN' && actorStaff.role !== 'CONTENT')) {
+    throw new CareerForbiddenError('Unauthorized: Insufficient permissions to archive job opening.');
+  }
+
+  const sql = getDb();
+  if (!sql) {
+    throw new Error('Database connection unavailable.');
+  }
+
+  const rows = await sql`
+    UPDATE job_openings
+    SET status = 'archived', updated_at = NOW()
+    WHERE id = ${id}
+    RETURNING
+      id, slug, title, department, location, employment_type, salary,
+      description, requirements, status, closing_time, display_order,
+      created_at, updated_at
+  `;
+
+  if (!rows || rows.length === 0) {
+    throw new CareerValidationError('Job opening not found.');
+  }
+
+  return mapJobRow(rows[0] as JobRow);
+}
+
 export async function deleteJobOpening(
   id: number,
   actorStaff: StaffProfile
 ): Promise<{ success: boolean; action: 'deleted' | 'archived' }> {
-  if (!actorStaff || actorStaff.role !== 'ADMIN') {
-    throw new CareerForbiddenError('Only administrators can delete or archive job openings.');
+  if (!actorStaff || (actorStaff.role !== 'ADMIN' && actorStaff.role !== 'CONTENT')) {
+    throw new CareerForbiddenError('Unauthorized: Insufficient permissions to delete or archive job openings.');
   }
 
   const sql = getDb();

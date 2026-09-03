@@ -7,6 +7,7 @@ import { Menu, X, ArrowRight, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Logo from './Logo';
 import SearchPalette from './SearchPalette';
+import type { SiteSettings } from '@/lib/site-cms-types';
 
 interface MenuItem {
   href: string;
@@ -47,11 +48,13 @@ function NavItem({
  * Charcoal glass nav — complements warm ivory page surfaces and gold accents
  * without flooding the UI in forest green.
  */
-export default function Navbar() {
+export default function Navbar({ settings }: { settings?: SiteSettings } = {}) {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = React.useState(false);
   const [isSearchOpen, setIsSearchOpen] = React.useState(false);
   const [isScrolled, setIsScrolled] = React.useState(false);
+
+  const hasAnnouncement = Boolean(settings?.announcementEnabled && settings?.announcementText?.trim());
 
   React.useEffect(() => {
     const handleScroll = () => {
@@ -86,11 +89,26 @@ export default function Navbar() {
 
   return (
     <>
+      {hasAnnouncement && (
+        <div className="fixed top-0 left-0 right-0 z-50 bg-[#0D311F] text-white text-xs py-1.5 px-4 text-center flex items-center justify-center gap-2 border-b border-white/10 shadow-sm">
+          <span>{settings?.announcementText}</span>
+          {settings?.announcementLink && (
+            <Link
+              href={settings.announcementLink}
+              className="underline font-semibold hover:text-accent ml-1 inline-flex items-center gap-0.5"
+            >
+              {settings?.announcementButtonText || 'Learn More'} <ArrowRight className="w-3 h-3" />
+            </Link>
+          )}
+        </div>
+      )}
       <nav
         className={`fixed z-50 left-1/2 -translate-x-1/2 transition-[top,background-color,border-color,box-shadow,border-radius,padding] duration-400 ease-out ${
           isScrolled
             ? 'top-4 w-[calc(100%-2rem)] md:w-auto max-w-[calc(100%-2rem)] p-1.5 rounded-full border border-white/15 bg-[#1a1714]/92 text-white backdrop-blur-xl backdrop-saturate-150 shadow-[0_12px_40px_rgba(18,16,14,0.45)]'
-            : 'top-0 w-full rounded-none border-b border-white/70 bg-white/68 text-primary backdrop-blur-md backdrop-saturate-150 shadow-[0_6px_24px_rgba(13,49,31,0.08)] px-6 sm:px-6 lg:px-8'
+            : hasAnnouncement
+              ? 'top-8 w-full rounded-none border-b border-white/70 bg-white/68 text-primary backdrop-blur-md backdrop-saturate-150 shadow-[0_6px_24px_rgba(13,49,31,0.08)] px-6 sm:px-6 lg:px-8'
+              : 'top-0 w-full rounded-none border-b border-white/70 bg-white/68 text-primary backdrop-blur-md backdrop-saturate-150 shadow-[0_6px_24px_rgba(13,49,31,0.08)] px-6 sm:px-6 lg:px-8'
         }`}
       >
         {isScrolled ? (
@@ -124,7 +142,7 @@ export default function Navbar() {
                 onClick={() => setIsOpen(false)}
                 className="cursor-pointer group transition-opacity duration-200 shrink-0"
               >
-                <Logo className="h-[3.75rem]" iconOnly={true} />
+                <Logo className="h-[3.75rem]" iconOnly={true} logoUrl={settings?.logoUrl} />
               </Link>
               <div className="flex items-center gap-1">
                 <button
@@ -155,7 +173,7 @@ export default function Navbar() {
                 onClick={() => setIsOpen(false)}
                 className="cursor-pointer group transition-opacity duration-200 whitespace-nowrap shrink-0"
               >
-                <Logo className="h-[5.25rem] text-accent" />
+                <Logo className="h-[5.25rem] text-accent" logoUrl={settings?.logoUrl} />
               </Link>
             </div>
 
@@ -231,7 +249,7 @@ export default function Navbar() {
                     onClick={() => setIsOpen(false)}
                     className="flex items-center gap-2 cursor-pointer"
                   >
-                    <Logo className="h-[4.5rem]" />
+                    <Logo className="h-[4.5rem]" logoUrl={settings?.logoUrl} />
                   </Link>
                   <button
                     type="button"

@@ -113,10 +113,17 @@ export interface MilestonesData {
   bars: CompetencyBar[];
 }
 
+export interface ImpactHighlightItem {
+  title: string;
+  desc: string;
+  icon?: string;
+}
+
 export interface ImpactContentData {
   hero: ImpactHeroData;
   metrics: ImpactMetricCard[];
   milestones: MilestonesData;
+  highlights?: ImpactHighlightItem[];
 }
 
 export interface ProgramFeatureItem {

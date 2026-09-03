@@ -80,6 +80,9 @@ export default function HealthcareInitiativeView({ program }: { program?: Progra
         'AI-assisted Community Health Monitoring',
       ];
 
+  const approachTitle = program?.approachTitle || 'Multi-Tier Healthcare Infrastructure';
+  const approachDesc = program?.approachDesc || 'Bringing hospital care, mobile medical clinics, and digital consultations together.';
+
   return (
     <main id="healthcare-initiative" className="bg-neutral-50 font-sans text-neutral-800">
       <section className="relative overflow-hidden bg-primary py-20 text-white sm:py-28">
@@ -125,8 +128,8 @@ export default function HealthcareInitiativeView({ program }: { program?: Progra
       <section className="mx-auto max-w-7xl px-4 pb-16 sm:px-6 lg:px-8 lg:pb-24">
         <div className="mb-10 max-w-2xl space-y-3">
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">Connected Network</p>
-          <h2 className="font-serif text-3xl font-bold text-primary sm:text-4xl">Multi-Tier Healthcare Infrastructure</h2>
-          <p className="leading-7 text-neutral-600">Bringing hospital care, mobile medical clinics, and digital consultations together.</p>
+          <h2 className="font-serif text-3xl font-bold text-primary sm:text-4xl">{approachTitle}</h2>
+          <p className="leading-7 text-neutral-600">{approachDesc}</p>
         </div>
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-2">
           {programmes.map((p) => (

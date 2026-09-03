@@ -4,13 +4,15 @@ import React from 'react';
 import Link from 'next/link';
 import BlurImage from './BlurImage';
 import { BookOpen, Stethoscope, Briefcase, Compass, CheckCircle2, ArrowRight, Sparkles, GraduationCap, Laptop, ShieldCheck } from 'lucide-react';
+import type { ProgramContentData } from '@/lib/site-cms-types';
 
 interface ProgramsViewProps {
   initialPillar?: 'education' | 'healthcare' | 'entrepreneurship' | 'careers';
   view?: 'overview' | 'detail';
+  programs?: Record<string, ProgramContentData>;
 }
 
-export default function ProgramsView({ initialPillar = 'education', view = 'detail' }: ProgramsViewProps) {
+export default function ProgramsView({ initialPillar = 'education', view = 'detail', programs }: ProgramsViewProps) {
   const [activePillar, setActivePillar] = React.useState<'education' | 'healthcare' | 'entrepreneurship' | 'careers'>(initialPillar);
 
   React.useEffect(() => {
@@ -25,10 +27,30 @@ export default function ProgramsView({ initialPillar = 'education', view = 'deta
 
   if (view === 'overview') {
     const pillars = [
-      { href: '/programs/education', title: 'Education', description: 'Empowering every learner through stronger schools, digital access, and future-ready skills.', Icon: BookOpen },
-      { href: '/programs/healthcare', title: 'Healthcare', description: 'Bringing connected, affordable healthcare closer to rural communities across Uttarakhand.', Icon: Stethoscope },
-      { href: '/programs/entrepreneurship', title: 'Entrepreneurship', description: 'Helping local entrepreneurs build sustainable businesses, jobs, and livelihoods.', Icon: Briefcase },
-      { href: '/careers', title: 'Career & Opportunities', description: 'Enabling youth across Uttarakhand prepare for careers, Agniveer, and IT job pathways.', Icon: Compass },
+      {
+        href: '/programs/education',
+        title: programs?.education?.title || 'Education',
+        description: programs?.education?.overviewP1 || 'Empowering every learner through stronger schools, digital access, and future-ready skills.',
+        Icon: BookOpen,
+      },
+      {
+        href: '/programs/healthcare',
+        title: programs?.healthcare?.title || 'Healthcare',
+        description: programs?.healthcare?.overviewP1 || 'Bringing connected, affordable healthcare closer to rural communities across Uttarakhand.',
+        Icon: Stethoscope,
+      },
+      {
+        href: '/programs/entrepreneurship',
+        title: programs?.entrepreneurship?.title || 'Entrepreneurship',
+        description: programs?.entrepreneurship?.overviewP1 || 'Helping local entrepreneurs build sustainable businesses, jobs, and livelihoods.',
+        Icon: Briefcase,
+      },
+      {
+        href: '/careers',
+        title: programs?.careers?.title || 'Career & Opportunities',
+        description: programs?.careers?.overviewP1 || 'Enabling youth across Uttarakhand prepare for careers, Agniveer, and IT job pathways.',
+        Icon: Compass,
+      },
     ];
 
     return (

@@ -144,25 +144,41 @@ export default function ImpactView({
             <span className="text-sm uppercase tracking-wider text-neutral-700 block border-b border-neutral-100 pb-2 font-sans font-bold">Key Highlights</span>
 
             <div className="space-y-6">
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center text-primary shrink-0">
-                  <Award className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className="text-base font-bold text-primary">3+ Edtech Village Labs</h4>
-                  <p className="text-sm text-neutral-700 leading-relaxed mt-1 font-sans">Computers and digital learning equipment maintained by trained local administrators.</p>
-                </div>
-              </div>
+              {impactContent?.highlights && impactContent.highlights.length > 0 ? (
+                impactContent.highlights.map((h, i) => (
+                  <div key={i} className="flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center text-primary shrink-0">
+                      {i % 2 === 0 ? <Award className="w-5 h-5" /> : <TrendingUp className="w-5 h-5" />}
+                    </div>
+                    <div>
+                      <h4 className="text-base font-bold text-primary">{h.title}</h4>
+                      <p className="text-sm text-neutral-700 leading-relaxed mt-1 font-sans">{h.desc}</p>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <>
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center text-primary shrink-0">
+                      <Award className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="text-base font-bold text-primary">3+ Edtech Village Labs</h4>
+                      <p className="text-sm text-neutral-700 leading-relaxed mt-1 font-sans">Computers and digital learning equipment maintained by trained local administrators.</p>
+                    </div>
+                  </div>
 
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center text-primary shrink-0">
-                  <TrendingUp className="w-5 h-5" />
-                </div>
-                <div>
-                  <h4 className="text-base font-bold text-primary">Zero Administrative Overhead</h4>
-                  <p className="text-sm text-neutral-700 leading-relaxed mt-1 font-sans">100% of designated public contributions flow directly into verified ground intervention programs.</p>
-                </div>
-              </div>
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-xl bg-accent/20 flex items-center justify-center text-primary shrink-0">
+                      <TrendingUp className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <h4 className="text-base font-bold text-primary">Zero Administrative Overhead</h4>
+                      <p className="text-sm text-neutral-700 leading-relaxed mt-1 font-sans">100% of designated public contributions flow directly into verified ground intervention programs.</p>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
