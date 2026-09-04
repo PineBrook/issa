@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import type { AuditEventRecord } from '@/lib/audit';
-import { ShieldCheck, Download, Search, RefreshCw, ChevronDown, ChevronRight, Sliders, Globe } from 'lucide-react';
+import { ShieldCheck, Download, Search, RefreshCw, ChevronDown, ChevronRight, Sliders, Globe, Radio, Zap } from 'lucide-react';
 
 export default function AuditLogTab({
   initialEvents = [],
@@ -15,6 +15,52 @@ export default function AuditLogTab({
   const [entityFilter, setEntityFilter] = useState('all');
   const [expandedId, setExpandedId] = useState<number | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [isLiveAsync, setIsLiveAsync] = useState(true);
+  const [lastSyncedIST, setLastSyncedIST] = useState<string>(
+    new Date().toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour12: true })
+  );
+
+  const fetchLatestEvents = useCallback(async (silent = false) => {
+    if (!silent) setIsRefreshing(true);
+    try {
+      const res = await fetch('/api/cms/audit-log?limit=100');
+      if (res.ok) {
+        const data = await res.json();
+        if (data.events) {
+          setEvents(data.events);
+          setLastSyncedIST(new Date().toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour12: true }));
+        }
+      }
+    } catch {
+      // silent
+    } finally {
+      if (!silent) setIsRefreshing(false);
+    }
+  }, []);
+
+  // Live async background synchronization loop
+  useEffect(() => {
+    if (!isLiveAsync) return;
+    const timer = setInterval(() => {
+      fetchLatestEvents(true);
+    }, 3000);
+    return () => clearInterval(timer);
+  }, [isLiveAsync, fetchLatestEvents]);
+
+  const handleSyncToDbNow = async () => {
+    setIsSyncing(true);
+    try {
+      const res = await fetch('/api/cms/audit-log/sync', { method: 'POST' });
+      if (res.ok) {
+        await fetchLatestEvents(true);
+      }
+    } catch {
+      // ignore
+    } finally {
+      setIsSyncing(false);
+    }
+  };
 
   const filteredEvents = events.filter((e) => {
     let matchesAction = true;
@@ -34,18 +80,7 @@ export default function AuditLogTab({
   });
 
   const handleRefresh = async () => {
-    setIsRefreshing(true);
-    try {
-      const res = await fetch('/api/cms/audit-log');
-      if (res.ok) {
-        const data = await res.json();
-        if (data.events) setEvents(data.events);
-      }
-    } catch {
-      // ignore
-    } finally {
-      setIsRefreshing(false);
-    }
+    await fetchLatestEvents(false);
   };
 
   const handleExportCSV = async () => {
@@ -101,7 +136,7 @@ export default function AuditLogTab({
     if (action.includes('delete') || action.includes('archive') || action.includes('suspend')) {
       return <span className="bg-rose-100 text-rose-800 text-[10px] font-bold px-2 py-0.5 rounded font-mono">{action}</span>;
     }
-    if (action.includes('create') || action.includes('publish') || action.includes('login') || action.includes('update')) {
+    if (action.includes('create') || action.includes('publish') || action.includes('login') || action.includes('update') || action.includes('apply') || action.includes('submit')) {
       return <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded font-mono">{action}</span>;
     }
     return <span className="bg-blue-100 text-blue-800 text-[10px] font-bold px-2 py-0.5 rounded font-mono">{action}</span>;
@@ -111,34 +146,74 @@ export default function AuditLogTab({
     <div className="space-y-6 max-w-6xl">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-neutral-200 pb-5">
         <div>
-          <div className="flex items-center gap-2">
-            <h2 className="text-2xl font-serif font-bold text-neutral-900">Website & Settings Change Audit Log</h2>
+          <div className="flex flex-wrap items-center gap-2">
+            <h2 className="text-2xl font-serif font-bold text-neutral-900">Website & User Operations Audit Log</h2>
             <span className="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1">
               <ShieldCheck className="w-3.5 h-3.5" /> IST Timestamp Only
             </span>
+            {isLiveAsync ? (
+              <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-semibold px-2.5 py-0.5 rounded-full flex items-center gap-1.5 animate-pulse">
+                <span className="w-2 h-2 rounded-full bg-emerald-500"></span> Live Async Active (3s)
+              </span>
+            ) : (
+              <span className="bg-neutral-100 text-neutral-600 text-xs font-semibold px-2.5 py-0.5 rounded-full flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-neutral-400"></span> Live Sync Paused
+              </span>
+            )}
           </div>
           <p className="text-sm text-neutral-600 mt-1">
-            Append-only audit trail of all ISSA website modifications, global settings, branding, hero slides, program updates, and staff access changes. Strictly visible only to Admin.
+            Real-time append-only audit trail of user operations, applications, inquiries, CMS content modifications, and staff actions. Synced to database.
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setIsLiveAsync(!isLiveAsync)}
+            className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-2 text-xs font-medium transition cursor-pointer ${
+              isLiveAsync
+                ? 'border-emerald-300 bg-emerald-50 text-emerald-800 hover:bg-emerald-100'
+                : 'border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50'
+            }`}
+            title="Toggle real-time live background synchronization"
+          >
+            <Radio className={`w-3.5 h-3.5 ${isLiveAsync ? 'text-emerald-600 animate-pulse' : 'text-neutral-400'}`} />
+            {isLiveAsync ? 'Live Async: ON' : 'Live Async: OFF'}
+          </button>
+
+          <button
+            type="button"
+            onClick={handleSyncToDbNow}
+            disabled={isSyncing}
+            className="inline-flex items-center gap-1.5 rounded-xl border border-primary/30 bg-primary/5 px-3 py-2 text-xs font-medium text-primary hover:bg-primary/10 transition cursor-pointer disabled:opacity-60"
+            title="Synchronize pending in-memory and background events into DB now"
+          >
+            <Zap className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin' : ''}`} />
+            {isSyncing ? 'Syncing...' : 'Sync to DB'}
+          </button>
+
           <button
             type="button"
             onClick={handleRefresh}
             disabled={isRefreshing}
-            className="inline-flex items-center gap-1.5 rounded-xl border border-neutral-200 bg-white px-3.5 py-2 text-xs font-medium text-neutral-700 hover:bg-neutral-50 transition cursor-pointer"
+            className="inline-flex items-center gap-1.5 rounded-xl border border-neutral-200 bg-white px-3 py-2 text-xs font-medium text-neutral-700 hover:bg-neutral-50 transition cursor-pointer"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${isRefreshing ? 'animate-spin' : ''}`} /> Refresh
           </button>
+
           <button
             type="button"
             onClick={handleExportCSV}
-            className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-4 py-2 text-xs font-bold text-white hover:bg-primary-dark transition cursor-pointer shadow-xs"
+            className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-3.5 py-2 text-xs font-bold text-white hover:bg-primary-dark transition cursor-pointer shadow-xs"
           >
-            <Download className="w-3.5 h-3.5" /> Export CSV (IST)
+            <Download className="w-3.5 h-3.5" /> Export CSV
           </button>
         </div>
+      </div>
+
+      <div className="flex items-center justify-between text-xs text-neutral-500 px-1 -mt-2">
+        <span>Showing {filteredEvents.length} recorded events</span>
+        <span>Last synced: <span className="font-mono font-medium text-neutral-700">{lastSyncedIST}</span></span>
       </div>
 
       {/* FILTERS */}

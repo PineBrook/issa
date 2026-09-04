@@ -381,6 +381,17 @@ export async function createBlogPost(
     );
   }
 
+  const { recordAuditEvent } = await import('@/lib/audit');
+  await recordAuditEvent({
+    actorId: String(currentStaff.id),
+    actorEmail: currentStaff.email,
+    action: targetStatus === 'published' ? 'blog.publish' : targetStatus === 'scheduled' ? 'blog.schedule' : 'blog.create',
+    entityType: 'blog_post',
+    entityId: String(createdPost.id),
+    afterState: { title: createdPost.title, slug: createdPost.slug, status: createdPost.status },
+    metadata: { authorName: createdPost.authorName },
+  });
+
   return createdPost;
 }
 
@@ -505,7 +516,20 @@ export async function updateBlogPost(
     throw new CmsConcurrencyConflictError();
   }
 
-  return mapBlogRow(updateRows[0]);
+  const updatedPost = mapBlogRow(updateRows[0]);
+
+  const { recordAuditEvent } = await import('@/lib/audit');
+  await recordAuditEvent({
+    actorId: String(currentStaff.id),
+    actorEmail: currentStaff.email,
+    action: 'blog.update',
+    entityType: 'blog_post',
+    entityId: String(id),
+    afterState: { title: updatedPost.title, slug: updatedPost.slug, status: updatedPost.status, version: updatedPost.version },
+    metadata: { authorName: updatedPost.authorName },
+  });
+
+  return updatedPost;
 }
 
 /**
@@ -618,6 +642,17 @@ export async function transitionPostStatus(
     const revisionNumber = await getNextRevisionNumber(id);
     await createPostRevision(id, revisionNumber, updatedPost, currentStaff, revisionReason);
   }
+
+  const { recordAuditEvent } = await import('@/lib/audit');
+  await recordAuditEvent({
+    actorId: String(currentStaff.id),
+    actorEmail: currentStaff.email,
+    action: `blog.${action}`,
+    entityType: 'blog_post',
+    entityId: String(id),
+    afterState: { status: updatedPost.status, version: updatedPost.version },
+    metadata: { action, summary: options?.summary },
+  });
 
   return updatedPost;
 }
@@ -763,6 +798,17 @@ export async function restoreBlogPostRevision(
     currentStaff,
     `Restored from revision #${rev.revision_number} (${dateFormatter.format(new Date(rev.created_at))})`,
   );
+
+  const { recordAuditEvent } = await import('@/lib/audit');
+  await recordAuditEvent({
+    actorId: String(currentStaff.id),
+    actorEmail: currentStaff.email,
+    action: 'blog.restore',
+    entityType: 'blog_post',
+    entityId: String(postId),
+    afterState: { title: restoredPost.title, version: restoredPost.version },
+    metadata: { restoredRevisionId: revisionId },
+  });
 
   return restoredPost;
 }

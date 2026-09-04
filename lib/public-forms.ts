@@ -31,7 +31,23 @@ export async function saveContactSubmission(input: { name: string; email: string
   if (Object.keys(errors).length) return { success: false, message: 'Please correct the highlighted fields.', errors };
   const sql = getDb();
   if (!sql) return { success: false, message: 'We cannot accept messages right now. Please try again later.' };
-  await sql`INSERT INTO contact_submissions (full_name, email, inquiry_type, message) VALUES (${name}, ${email}, ${subject}, ${message})`;
+  const rows = await sql`INSERT INTO contact_submissions (full_name, email, inquiry_type, message) VALUES (${name}, ${email}, ${subject}, ${message}) RETURNING id`;
+  const insertedId = rows[0]?.id ? String(rows[0].id) : undefined;
+
+  const { recordAuditEvent } = await import('@/lib/audit');
+  await recordAuditEvent({
+    actorId: 'public_user',
+    actorEmail: email,
+    action: 'public.contact_submit',
+    entityType: 'contact_submission',
+    entityId: insertedId,
+    metadata: {
+      fullName: name,
+      inquiryType: subject,
+      messageLength: message.length,
+    },
+  });
+
   return { success: true, message: 'Thank you. Your inquiry has been received.' };
 }
 
@@ -47,5 +63,18 @@ export async function saveNewsletterSubscription(input: { email: string; honeypo
     ON CONFLICT (email) DO UPDATE SET
       status = 'active', subscribed_at = NOW(), unsubscribed_at = NULL, updated_at = NOW()
   `;
+
+  const { recordAuditEvent } = await import('@/lib/audit');
+  await recordAuditEvent({
+    actorId: 'public_user',
+    actorEmail: email,
+    action: 'public.newsletter_subscribe',
+    entityType: 'newsletter_subscription',
+    entityId: email,
+    metadata: {
+      source: input.source,
+    },
+  });
+
   return { success: true, message: 'Thank you for subscribing.' };
 }

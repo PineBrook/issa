@@ -8,3 +8,4 @@ coverage/
 .impeccable
 .qwen
 *.md
+*.tsbuildinfo

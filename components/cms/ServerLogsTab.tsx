@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import type { ServerLogItem, ServerHealthOverview } from '@/lib/server-logger';
 import {
   Activity,
@@ -10,6 +10,7 @@ import {
   Database,
   Globe,
   Loader2,
+  Radio,
   RefreshCw,
   Search,
   Server,
@@ -43,8 +44,57 @@ export default function ServerLogsTab({
   const [typeFilter, setTypeFilter] = useState<'all' | '4xx' | '5xx' | 'suspension' | 'heartbeat'>('all');
   const [search, setSearch] = useState('');
   const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
   const [isRunningPing, setIsRunningPing] = useState(false);
+  const [isLiveAsync, setIsLiveAsync] = useState(true);
   const [expandedId, setExpandedId] = useState<number | null>(null);
+  const [lastSyncedIST, setLastSyncedIST] = useState<string>(
+    new Date().toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour12: true })
+  );
+
+  const fetchLatestLogs = useCallback(async (silent = false) => {
+    if (!silent) setIsRefreshing(true);
+    try {
+      const res = await fetch('/api/cms/server-logs');
+      if (res.ok) {
+        const data = await res.json();
+        if (data.logs) setLogs(data.logs);
+        if (data.overview) setOverview(data.overview);
+        setLastSyncedIST(new Date().toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour12: true }));
+      }
+    } catch {
+      // silent
+    } finally {
+      if (!silent) setIsRefreshing(false);
+    }
+  }, []);
+
+  // Live async background synchronization loop (every 5 seconds)
+  useEffect(() => {
+    if (!isLiveAsync) return;
+    const timer = setInterval(() => {
+      fetchLatestLogs(true);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [isLiveAsync, fetchLatestLogs]);
+
+  const handleRefresh = async () => {
+    await fetchLatestLogs(false);
+  };
+
+  const handleSyncLogsToDb = async () => {
+    setIsSyncing(true);
+    try {
+      const res = await fetch('/api/cms/server-logs/sync', { method: 'POST' });
+      if (res.ok) {
+        await fetchLatestLogs(true);
+      }
+    } catch {
+      // silent
+    } finally {
+      setIsSyncing(false);
+    }
+  };
 
   const filteredLogs = logs.filter((log) => {
     let matchesType = true;
@@ -63,22 +113,6 @@ export default function ServerLogsTab({
     return matchesType && matchesSearch;
   });
 
-  const handleRefresh = async () => {
-    setIsRefreshing(true);
-    try {
-      const res = await fetch('/api/cms/server-logs');
-      if (res.ok) {
-        const data = await res.json();
-        if (data.logs) setLogs(data.logs);
-        if (data.overview) setOverview(data.overview);
-      }
-    } catch {
-      // silent
-    } finally {
-      setIsRefreshing(false);
-    }
-  };
-
   const handleRunTelemetryPing = async () => {
     setIsRunningPing(true);
     try {
@@ -87,6 +121,7 @@ export default function ServerLogsTab({
         const data = await res.json();
         if (data.entry) setLogs([data.entry, ...logs]);
         if (data.overview) setOverview(data.overview);
+        setLastSyncedIST(new Date().toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour12: true }));
       }
     } catch {
       // silent
@@ -133,18 +168,52 @@ export default function ServerLogsTab({
       {/* HEADER */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-neutral-200 pb-5">
         <div>
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
             <h2 className="text-2xl font-serif font-bold text-neutral-900">Server Health & Issue Monitoring</h2>
             <span className="bg-primary/10 text-primary text-xs font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1">
               <Clock className="w-3.5 h-3.5" /> 15-Min Telemetry
             </span>
+            {isLiveAsync ? (
+              <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-semibold px-2.5 py-0.5 rounded-full flex items-center gap-1.5 animate-pulse">
+                <span className="w-2 h-2 rounded-full bg-emerald-500"></span> Live Async Active (5s)
+              </span>
+            ) : (
+              <span className="bg-neutral-100 text-neutral-600 text-xs font-semibold px-2.5 py-0.5 rounded-full flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-neutral-400"></span> Live Sync Paused
+              </span>
+            )}
           </div>
           <p className="text-sm text-neutral-600 mt-1">
             Logs every 15 minutes database & endpoint performance, catching strictly 4xx, 5xx issues, and regional suspensions.
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={() => setIsLiveAsync(!isLiveAsync)}
+            className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-2 text-xs font-medium transition cursor-pointer ${
+              isLiveAsync
+                ? 'border-emerald-300 bg-emerald-50 text-emerald-800 hover:bg-emerald-100'
+                : 'border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50'
+            }`}
+            title="Toggle real-time live background synchronization"
+          >
+            <Radio className={`w-3.5 h-3.5 ${isLiveAsync ? 'text-emerald-600 animate-pulse' : 'text-neutral-400'}`} />
+            {isLiveAsync ? 'Live Async: ON' : 'Live Async: OFF'}
+          </button>
+
+          <button
+            type="button"
+            onClick={handleSyncLogsToDb}
+            disabled={isSyncing}
+            className="inline-flex items-center gap-1.5 rounded-xl border border-primary/30 bg-primary/5 px-3 py-2 text-xs font-medium text-primary hover:bg-primary/10 transition cursor-pointer disabled:opacity-60"
+            title="Synchronize pending in-memory and background server logs into DB now"
+          >
+            <Zap className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin' : ''}`} />
+            {isSyncing ? 'Syncing...' : 'Sync Logs to DB'}
+          </button>
+
           <button
             type="button"
             onClick={handleRefresh}
@@ -163,6 +232,11 @@ export default function ServerLogsTab({
             {isRunningPing ? 'Testing...' : 'Run 15-Min Health Ping'}
           </button>
         </div>
+      </div>
+
+      <div className="flex items-center justify-between text-xs text-neutral-500 px-1 -mt-4">
+        <span>Showing {filteredLogs.length} recorded issues & telemetry pings</span>
+        <span>Last synced: <span className="font-mono font-medium text-neutral-700">{lastSyncedIST}</span></span>
       </div>
 
       {/* METRIC OVERVIEW CARDS */}

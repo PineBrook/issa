@@ -50,7 +50,31 @@ export async function POST(request: Request, { params }: { params: Promise<Param
       }
     }
     const response = await handler.POST(request, { params: Promise.resolve(result.path) });
+    if (path === 'sign-out' && response.ok) {
+      const { recordAuditEvent } = await import('@/lib/audit');
+      await recordAuditEvent({
+        actorId: 'staff',
+        actorEmail: 'staff@pinebrooktechnologies.com',
+        action: 'auth.sign_out',
+        entityType: 'auth_session',
+        metadata: { path, timestamp: new Date().toISOString() },
+      });
+    }
+
     if (path !== 'sign-in/email-otp' || !response.ok) return response;
+
+    const body = await request.clone().json().catch(() => null) as { email?: unknown } | null;
+    const userEmail = typeof body?.email === 'string' ? body.email : 'staff@pinebrooktechnologies.com';
+
+    const { recordAuditEvent } = await import('@/lib/audit');
+    await recordAuditEvent({
+      actorId: userEmail,
+      actorEmail: userEmail,
+      action: 'auth.login_success',
+      entityType: 'auth_session',
+      entityId: userEmail,
+      metadata: { path, timestamp: new Date().toISOString() },
+    });
 
     const limited = new Response(response.body, response);
     limited.headers.append(

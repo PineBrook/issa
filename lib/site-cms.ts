@@ -544,7 +544,21 @@ export async function updateSiteSettings(
       updated_at = NOW()
   `;
 
-  return getSiteSettings();
+  const updatedSettings = await getSiteSettings();
+
+  const { recordAuditEvent } = await import('@/lib/audit');
+  await recordAuditEvent({
+    actorId: String(currentStaff.id),
+    actorEmail: currentStaff.email,
+    action: 'settings.update',
+    entityType: 'site_setting',
+    entityId: '1',
+    beforeState: current,
+    afterState: updatedSettings,
+    metadata: { updatedBy: currentStaff.fullName },
+  });
+
+  return updatedSettings;
 }
 
 // ---------------------------------------------------------------------------
@@ -678,7 +692,7 @@ export async function saveHeroSlide(
     RETURNING *
   `;
   const r = rows[0];
-  return {
+  const slideResult: HeroSlideItem = {
     id: Number(r.id),
     slideKey: String(r.slide_key),
     eyebrow: String(r.eyebrow),
@@ -695,6 +709,19 @@ export async function saveHeroSlide(
     createdAt: new Date(r.created_at).toISOString(),
     updatedAt: new Date(r.updated_at).toISOString(),
   };
+
+  const { recordAuditEvent } = await import('@/lib/audit');
+  await recordAuditEvent({
+    actorId: String(currentStaff.id),
+    actorEmail: currentStaff.email,
+    action: slide.id ? 'cms.hero_slide_update' : 'cms.hero_slide_create',
+    entityType: 'hero_slide',
+    entityId: String(slideResult.id),
+    afterState: slideResult as any,
+    metadata: { slideKey: slideResult.slideKey },
+  });
+
+  return slideResult;
 }
 
 export async function deleteHeroSlide(id: number, staff?: StaffProfile | null): Promise<void> {
@@ -707,6 +734,16 @@ export async function deleteHeroSlide(id: number, staff?: StaffProfile | null): 
   if (!sql) throw new Error('Database connection is not configured.');
 
   await sql`DELETE FROM hero_slides WHERE id = ${id}`;
+
+  const { recordAuditEvent } = await import('@/lib/audit');
+  await recordAuditEvent({
+    actorId: String(currentStaff.id),
+    actorEmail: currentStaff.email,
+    action: 'cms.hero_slide_delete',
+    entityType: 'hero_slide',
+    entityId: String(id),
+    metadata: { deletedBy: currentStaff.fullName },
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -757,6 +794,16 @@ export async function updateHomeSection(
       data = EXCLUDED.data,
       updated_at = NOW()
   `;
+
+  const { recordAuditEvent } = await import('@/lib/audit');
+  await recordAuditEvent({
+    actorId: String(currentStaff.id),
+    actorEmail: currentStaff.email,
+    action: 'cms.home_sections_update',
+    entityType: 'home_sections',
+    entityId: sectionKey,
+    metadata: { sectionKey, updatedBy: currentStaff.fullName },
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -807,6 +854,16 @@ export async function updateImpactSection(
       data = EXCLUDED.data,
       updated_at = NOW()
   `;
+
+  const { recordAuditEvent } = await import('@/lib/audit');
+  await recordAuditEvent({
+    actorId: String(currentStaff.id),
+    actorEmail: currentStaff.email,
+    action: 'cms.impact_update',
+    entityType: 'impact_content',
+    entityId: sectionKey,
+    metadata: { sectionKey, updatedBy: currentStaff.fullName },
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -919,7 +976,20 @@ export async function saveProgramContent(
   `;
 
   const updated = await getProgramsContent(program.slug);
-  return updated[program.slug];
+  const result = updated[program.slug];
+
+  const { recordAuditEvent } = await import('@/lib/audit');
+  await recordAuditEvent({
+    actorId: String(currentStaff.id),
+    actorEmail: currentStaff.email,
+    action: 'cms.program_update',
+    entityType: 'program_content',
+    entityId: program.slug,
+    afterState: result as any,
+    metadata: { programSlug: program.slug, updatedBy: currentStaff.fullName },
+  });
+
+  return result;
 }
 
 // ---------------------------------------------------------------------------
@@ -985,7 +1055,7 @@ export async function saveFaq(
       RETURNING *
     `;
     const r = rows[0];
-    return {
+    const result: FaqItem = {
       id: Number(r.id),
       category: String(r.category),
       question: String(r.question),
@@ -995,6 +1065,19 @@ export async function saveFaq(
       createdAt: new Date(r.created_at).toISOString(),
       updatedAt: new Date(r.updated_at).toISOString(),
     };
+
+    const { recordAuditEvent } = await import('@/lib/audit');
+    await recordAuditEvent({
+      actorId: String(currentStaff.id),
+      actorEmail: currentStaff.email,
+      action: 'cms.faq_update',
+      entityType: 'faq',
+      entityId: String(result.id),
+      afterState: result as any,
+      metadata: { question: result.question, updatedBy: currentStaff.fullName },
+    });
+
+    return result;
   }
 
   const rows = await sql`
@@ -1003,7 +1086,7 @@ export async function saveFaq(
     RETURNING *
   `;
   const r = rows[0];
-  return {
+  const result: FaqItem = {
     id: Number(r.id),
     category: String(r.category),
     question: String(r.question),
@@ -1013,6 +1096,19 @@ export async function saveFaq(
     createdAt: new Date(r.created_at).toISOString(),
     updatedAt: new Date(r.updated_at).toISOString(),
   };
+
+  const { recordAuditEvent } = await import('@/lib/audit');
+  await recordAuditEvent({
+    actorId: String(currentStaff.id),
+    actorEmail: currentStaff.email,
+    action: 'cms.faq_create',
+    entityType: 'faq',
+    entityId: String(result.id),
+    afterState: result as any,
+    metadata: { question: result.question, updatedBy: currentStaff.fullName },
+  });
+
+  return result;
 }
 
 export async function deleteFaq(id: number, staff?: StaffProfile | null): Promise<void> {
@@ -1025,6 +1121,16 @@ export async function deleteFaq(id: number, staff?: StaffProfile | null): Promis
   if (!sql) throw new Error('Database connection is not configured.');
 
   await sql`DELETE FROM faqs WHERE id = ${id}`;
+
+  const { recordAuditEvent } = await import('@/lib/audit');
+  await recordAuditEvent({
+    actorId: String(currentStaff.id),
+    actorEmail: currentStaff.email,
+    action: 'cms.faq_delete',
+    entityType: 'faq',
+    entityId: String(id),
+    metadata: { deletedBy: currentStaff.fullName },
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -1087,7 +1193,7 @@ export async function saveOfficeLocation(
       RETURNING *
     `;
     const r = rows[0];
-    return {
+    const result: OfficeLocationItem = {
       id: Number(r.id),
       city: String(r.city),
       role: String(r.role),
@@ -1099,6 +1205,19 @@ export async function saveOfficeLocation(
       createdAt: new Date(r.created_at).toISOString(),
       updatedAt: new Date(r.updated_at).toISOString(),
     };
+
+    const { recordAuditEvent } = await import('@/lib/audit');
+    await recordAuditEvent({
+      actorId: String(currentStaff.id),
+      actorEmail: currentStaff.email,
+      action: 'cms.office_update',
+      entityType: 'office_location',
+      entityId: String(result.id),
+      afterState: result as any,
+      metadata: { city: result.city, role: result.role, updatedBy: currentStaff.fullName },
+    });
+
+    return result;
   }
 
   const rows = await sql`
@@ -1107,7 +1226,7 @@ export async function saveOfficeLocation(
     RETURNING *
   `;
   const r = rows[0];
-  return {
+  const result: OfficeLocationItem = {
     id: Number(r.id),
     city: String(r.city),
     role: String(r.role),
@@ -1119,6 +1238,19 @@ export async function saveOfficeLocation(
     createdAt: new Date(r.created_at).toISOString(),
     updatedAt: new Date(r.updated_at).toISOString(),
   };
+
+  const { recordAuditEvent } = await import('@/lib/audit');
+  await recordAuditEvent({
+    actorId: String(currentStaff.id),
+    actorEmail: currentStaff.email,
+    action: 'cms.office_create',
+    entityType: 'office_location',
+    entityId: String(result.id),
+    afterState: result as any,
+    metadata: { city: result.city, role: result.role, updatedBy: currentStaff.fullName },
+  });
+
+  return result;
 }
 
 export async function deleteOfficeLocation(id: number, staff?: StaffProfile | null): Promise<void> {
@@ -1131,6 +1263,16 @@ export async function deleteOfficeLocation(id: number, staff?: StaffProfile | nu
   if (!sql) throw new Error('Database connection is not configured.');
 
   await sql`DELETE FROM office_locations WHERE id = ${id}`;
+
+  const { recordAuditEvent } = await import('@/lib/audit');
+  await recordAuditEvent({
+    actorId: String(currentStaff.id),
+    actorEmail: currentStaff.email,
+    action: 'cms.office_delete',
+    entityType: 'office_location',
+    entityId: String(id),
+    metadata: { deletedBy: currentStaff.fullName },
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -1204,7 +1346,7 @@ export async function saveMediaAsset(
     WHERE id = ${assetId}
   `;
 
-  return {
+  const assetResult: MediaAssetItem = {
     id: assetId,
     filename: String(rows[0].filename),
     contentType: String(rows[0].content_type),
@@ -1213,6 +1355,19 @@ export async function saveMediaAsset(
     altText: String(rows[0].alt_text || ''),
     createdAt: new Date(rows[0].created_at).toISOString(),
   };
+
+  const { recordAuditEvent } = await import('@/lib/audit');
+  await recordAuditEvent({
+    actorId: String(currentStaff.id),
+    actorEmail: currentStaff.email,
+    action: 'cms.media_upload',
+    entityType: 'media_asset',
+    entityId: String(assetId),
+    afterState: assetResult as any,
+    metadata: { filename: assetResult.filename, sizeBytes: assetResult.sizeBytes, updatedBy: currentStaff.fullName },
+  });
+
+  return assetResult;
 }
 
 export async function getMediaAssetData(id: number): Promise<{ contentType: string; buffer: Buffer; filename: string } | null> {
@@ -1259,6 +1414,16 @@ export async function deleteMediaAsset(id: number, staff?: StaffProfile | null):
   if (!sql) throw new Error('Database connection is not configured.');
 
   await sql`DELETE FROM media_assets WHERE id = ${id}`;
+
+  const { recordAuditEvent } = await import('@/lib/audit');
+  await recordAuditEvent({
+    actorId: String(currentStaff.id),
+    actorEmail: currentStaff.email,
+    action: 'cms.media_delete',
+    entityType: 'media_asset',
+    entityId: String(id),
+    metadata: { deletedBy: currentStaff.fullName },
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -1307,13 +1472,26 @@ export async function saveLegalPage(
     RETURNING *
   `;
 
-  return {
+  const legalResult: LegalPageItem = {
     slug: String(rows[0].slug),
     title: String(rows[0].title),
     subtitle: String(rows[0].subtitle || ''),
     contentMarkdown: String(rows[0].content_markdown),
     updatedAt: new Date(rows[0].updated_at).toISOString(),
   };
+
+  const { recordAuditEvent } = await import('@/lib/audit');
+  await recordAuditEvent({
+    actorId: String(currentStaff.id),
+    actorEmail: currentStaff.email,
+    action: 'cms.legal_page_update',
+    entityType: 'legal_page',
+    entityId: legalResult.slug,
+    afterState: { title: legalResult.title, slug: legalResult.slug },
+    metadata: { updatedBy: currentStaff.fullName },
+  });
+
+  return legalResult;
 }
 
 // ---------------------------------------------------------------------------
@@ -1394,6 +1572,17 @@ export async function updateContactSubmissionStatus(
     SET status = ${status}, updated_at = NOW()
     WHERE id = ${id}
   `;
+
+  const { recordAuditEvent } = await import('@/lib/audit');
+  await recordAuditEvent({
+    actorId: String(currentStaff.id),
+    actorEmail: currentStaff.email,
+    action: 'cms.inquiry_status_update',
+    entityType: 'inquiry',
+    entityId: String(id),
+    afterState: { status },
+    metadata: { updatedBy: currentStaff.fullName },
+  });
 }
 
 export async function getNewsletterSubscribers(): Promise<NewsletterSubscriberItem[]> {

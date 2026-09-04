@@ -445,6 +445,22 @@ export async function submitCareerApplication(
       )
     `;
 
+    const { recordAuditEvent } = await import('@/lib/audit');
+    await recordAuditEvent({
+      actorId: 'applicant',
+      actorEmail: email,
+      action: 'public.career_apply',
+      entityType: 'career_application',
+      entityId: String(applicationId),
+      metadata: {
+        fullName,
+        role,
+        experience: input.experience,
+        resumeFilename: resume.originalFilename,
+        resumeSize: resume.buffer.length,
+      },
+    });
+
     return {
       success: true,
       message: 'Application received successfully! Our team will review your qualifications and contact you.',
@@ -680,7 +696,25 @@ export async function createJobOpening(
       updated_at
   `;
 
-  return mapJobRow(rows[0] as JobRow);
+  const createdJob = mapJobRow(rows[0] as JobRow);
+
+  const { recordAuditEvent } = await import('@/lib/audit');
+  await recordAuditEvent({
+    actorId: String(actorStaff.id),
+    actorEmail: actorStaff.email,
+    action: 'job.create',
+    entityType: 'job_opening',
+    entityId: String(createdJob.id),
+    afterState: {
+      title: createdJob.title,
+      slug: createdJob.slug,
+      department: createdJob.department,
+      status: createdJob.status,
+    },
+    metadata: { createdBy: actorStaff.fullName },
+  });
+
+  return createdJob;
 }
 
 export async function updateJobOpening(
@@ -776,7 +810,25 @@ export async function updateJobOpening(
       updated_at
   `;
 
-  return mapJobRow(updatedRows[0] as JobRow);
+  const updatedJob = mapJobRow(updatedRows[0] as JobRow);
+
+  const { recordAuditEvent } = await import('@/lib/audit');
+  await recordAuditEvent({
+    actorId: String(actorStaff.id),
+    actorEmail: actorStaff.email,
+    action: 'job.update',
+    entityType: 'job_opening',
+    entityId: String(updatedJob.id),
+    afterState: {
+      title: updatedJob.title,
+      slug: updatedJob.slug,
+      department: updatedJob.department,
+      status: updatedJob.status,
+    },
+    metadata: { updatedBy: actorStaff.fullName },
+  });
+
+  return updatedJob;
 }
 
 export async function archiveJobOpening(
@@ -806,7 +858,20 @@ export async function archiveJobOpening(
     throw new CareerValidationError('Job opening not found.');
   }
 
-  return mapJobRow(rows[0] as JobRow);
+  const archivedJob = mapJobRow(rows[0] as JobRow);
+
+  const { recordAuditEvent } = await import('@/lib/audit');
+  await recordAuditEvent({
+    actorId: String(actorStaff.id),
+    actorEmail: actorStaff.email,
+    action: 'job.archive',
+    entityType: 'job_opening',
+    entityId: String(archivedJob.id),
+    afterState: { status: 'archived', title: archivedJob.title },
+    metadata: { archivedBy: actorStaff.fullName },
+  });
+
+  return archivedJob;
 }
 
 export async function deleteJobOpening(
@@ -829,6 +894,8 @@ export async function deleteJobOpening(
 
   const hasApps = Number(appCount[0]?.count || 0) > 0;
 
+  const { recordAuditEvent } = await import('@/lib/audit');
+
   if (hasApps) {
     // If applications are attached, archive instead of deleting to preserve referral history
     await sql`
@@ -836,9 +903,25 @@ export async function deleteJobOpening(
       SET status = 'archived', updated_at = NOW()
       WHERE id = ${id}
     `;
+    await recordAuditEvent({
+      actorId: String(actorStaff.id),
+      actorEmail: actorStaff.email,
+      action: 'job.archive',
+      entityType: 'job_opening',
+      entityId: String(id),
+      metadata: { deletedBy: actorStaff.fullName, convertedToArchive: true },
+    });
     return { success: true, action: 'archived' };
   } else {
     await sql`DELETE FROM job_openings WHERE id = ${id}`;
+    await recordAuditEvent({
+      actorId: String(actorStaff.id),
+      actorEmail: actorStaff.email,
+      action: 'job.delete',
+      entityType: 'job_opening',
+      entityId: String(id),
+      metadata: { deletedBy: actorStaff.fullName },
+    });
     return { success: true, action: 'deleted' };
   }
 }
@@ -1008,6 +1091,21 @@ export async function updateCareerApplicationStatus(
   if (!updated) {
     throw new CareerValidationError('Application not found after update.');
   }
+
+  const { recordAuditEvent } = await import('@/lib/audit');
+  await recordAuditEvent({
+    actorId: actorStaff ? String(actorStaff.id) : 'system',
+    actorEmail: actorStaff ? actorStaff.email : 'system@issafoundation.co.in',
+    action: 'application.status_update',
+    entityType: 'career_application',
+    entityId: String(id),
+    afterState: { status, assignedTo: assignedTo || null },
+    metadata: {
+      updatedBy: actorStaff?.fullName || 'system',
+      candidateName: updated.fullName,
+      role: updated.roleSlug,
+    },
+  });
 
   return updated;
 }

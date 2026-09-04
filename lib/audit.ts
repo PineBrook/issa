@@ -73,13 +73,135 @@ function getDatabaseClient() {
 }
 
 /**
- * Append-only audit logger.
+ * In-memory buffer for live async logging and reliable syncing to Postgres DB.
+ */
+const auditQueue: AuditEventInput[] = [];
+let isSyncingAuditEvents = false;
+
+export function getAuditQueueStatus(): { queueLength: number; isSyncing: boolean } {
+  return {
+    queueLength: auditQueue.length,
+    isSyncing: isSyncingAuditEvents,
+  };
+}
+
+/**
+ * Explicitly syncs all pending in-memory audit events to the database.
+ * Returns the number of events successfully synchronized to PostgreSQL.
+ */
+export async function syncAuditEvents(): Promise<number> {
+  if (auditQueue.length === 0 || isSyncingAuditEvents) return 0;
+
+  const sql = getDatabaseClient();
+  if (!sql) return 0;
+
+  isSyncingAuditEvents = true;
+  let syncedCount = 0;
+
+  try {
+    while (auditQueue.length > 0) {
+      const batch = auditQueue.splice(0, 25);
+      for (const item of batch) {
+        try {
+          const actorId = item.actorId || 'system';
+          const actorEmail = item.actorEmail || 'system@issafoundation.co.in';
+          const action = item.action;
+          const entityType = item.entityType;
+          const entityId = item.entityId ? String(item.entityId) : null;
+          const correlationId = item.correlationId || null;
+
+          const beforeState = item.beforeState ? JSON.stringify(redactSensitiveData(item.beforeState)) : null;
+          const afterState = item.afterState ? JSON.stringify(redactSensitiveData(item.afterState)) : null;
+          const metadata = item.metadata ? JSON.stringify(redactSensitiveData(item.metadata)) : null;
+
+          await sql`
+            INSERT INTO audit_events (
+              actor_id,
+              actor_email,
+              action,
+              entity_type,
+              entity_id,
+              request_correlation_id,
+              before_state,
+              after_state,
+              metadata,
+              created_at
+            )
+            VALUES (
+              ${actorId},
+              ${actorEmail},
+              ${action},
+              ${entityType},
+              ${entityId},
+              ${correlationId},
+              ${beforeState}::jsonb,
+              ${afterState}::jsonb,
+              ${metadata}::jsonb,
+              NOW()
+            )
+          `;
+          syncedCount++;
+        } catch (itemErr) {
+          console.error('Failed to sync individual audit event, discarding corrupted event:', itemErr);
+        }
+      }
+    }
+  } catch (err) {
+    console.error('Audit events synchronization error:', err);
+  } finally {
+    isSyncingAuditEvents = false;
+  }
+
+  return syncedCount;
+}
+
+/**
+ * Live async trigger: schedules a background sync to DB without blocking caller.
+ */
+function triggerLiveAsyncSync(): void {
+  if (typeof queueMicrotask === 'function') {
+    queueMicrotask(() => {
+      syncAuditEvents().catch((err) => console.error('Live async background sync error:', err));
+    });
+  } else {
+    setTimeout(() => {
+      syncAuditEvents().catch((err) => console.error('Live async background sync error:', err));
+    }, 10);
+  }
+}
+
+/**
+ * Asynchronously queues an audit event and enables live async syncing to DB.
+ * Guaranteed not to block the caller execution thread.
+ */
+export function recordAuditEventAsync(input: AuditEventInput): void {
+  try {
+    auditQueue.push(input);
+    triggerLiveAsyncSync();
+  } catch (err) {
+    console.error('Failed to enqueue async audit event:', err);
+  }
+}
+
+/**
+ * Synchronous audit logger that directly awaits DB persistence.
+ */
+export async function recordAuditEventSync(input: AuditEventInput): Promise<number | null> {
+  return recordAuditEvent(input);
+}
+
+/**
+ * Append-only audit logger with direct persistence and fallback sync queue.
  * Never throws to avoid blocking core user business transactions.
  */
 export async function recordAuditEvent(input: AuditEventInput): Promise<number | null> {
   try {
     const sql = getDatabaseClient();
-    if (!sql) return null;
+    if (!sql) {
+      // Buffer in queue if DB client temporarily not available
+      auditQueue.push(input);
+      return null;
+    }
 
     const actorId = input.actorId || 'system';
     const actorEmail = input.actorEmail || 'system@issafoundation.co.in';
@@ -120,9 +242,17 @@ export async function recordAuditEvent(input: AuditEventInput): Promise<number |
       RETURNING id
     `;
 
+    // Also trigger live sync of any previously buffered items in background
+    if (auditQueue.length > 0) {
+      triggerLiveAsyncSync();
+    }
+
     return result[0]?.id ? Number(result[0].id) : null;
   } catch (err) {
-    console.error('Audit logging failure (non-blocking):', err);
+    console.error('Audit logging failure (buffering into live async queue):', err);
+    // On transient DB failure, push to queue so it can be synced later
+    auditQueue.push(input);
+    triggerLiveAsyncSync();
     return null;
   }
 }
@@ -134,31 +264,60 @@ export async function getAuditEvents(options: {
   entityType?: string;
   actorEmail?: string;
   search?: string;
+  afterId?: number;
+  since?: string;
 } = {}): Promise<AuditEventRecord[]> {
   try {
+    // Flush any pending queued events before reading to guarantee up-to-date data
+    if (auditQueue.length > 0) {
+      await syncAuditEvents();
+    }
+
     const sql = getDatabaseClient();
     if (!sql) return [];
 
     const limit = Math.min(options.limit || 100, 200);
     const offset = Math.max(options.offset || 0, 0);
 
-    const rows = await sql`
-      SELECT 
-        id,
-        actor_id AS "actorId",
-        actor_email AS "actorEmail",
-        action,
-        entity_type AS "entityType",
-        entity_id AS "entityId",
-        request_correlation_id AS "requestCorrelationId",
-        before_state AS "beforeState",
-        after_state AS "afterState",
-        metadata,
-        created_at AS "createdAt"
-      FROM audit_events
-      ORDER BY created_at DESC
-      LIMIT ${limit} OFFSET ${offset}
-    `;
+    let rows;
+    if (options.afterId && options.afterId > 0) {
+      rows = await sql`
+        SELECT 
+          id,
+          actor_id AS "actorId",
+          actor_email AS "actorEmail",
+          action,
+          entity_type AS "entityType",
+          entity_id AS "entityId",
+          request_correlation_id AS "requestCorrelationId",
+          before_state AS "beforeState",
+          after_state AS "afterState",
+          metadata,
+          created_at AS "createdAt"
+        FROM audit_events
+        WHERE id > ${options.afterId}
+        ORDER BY id DESC
+        LIMIT ${limit}
+      `;
+    } else {
+      rows = await sql`
+        SELECT 
+          id,
+          actor_id AS "actorId",
+          actor_email AS "actorEmail",
+          action,
+          entity_type AS "entityType",
+          entity_id AS "entityId",
+          request_correlation_id AS "requestCorrelationId",
+          before_state AS "beforeState",
+          after_state AS "afterState",
+          metadata,
+          created_at AS "createdAt"
+        FROM audit_events
+        ORDER BY created_at DESC, id DESC
+        LIMIT ${limit} OFFSET ${offset}
+      `;
+    }
 
     return rows.map((r: any) => ({
       id: Number(r.id),

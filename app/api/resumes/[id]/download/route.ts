@@ -52,6 +52,20 @@ export async function GET(
 
   const sanitizedFilename = record.originalFilename.replace(/[^a-zA-Z0-9._-]/g, '_');
 
+  const { recordAuditEvent } = await import('@/lib/audit');
+  await recordAuditEvent({
+    actorId: 'authorized_user',
+    actorEmail: 'staff/applicant',
+    action: 'resume.download',
+    entityType: 'resume_file',
+    entityId: String(fileId),
+    metadata: {
+      filename: sanitizedFilename,
+      sizeBytes: fileBuffer.length,
+      storageKey: record.storageKey,
+    },
+  });
+
   return new NextResponse(new Uint8Array(fileBuffer), {
     status: 200,
     headers: {

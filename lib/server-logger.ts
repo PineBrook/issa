@@ -35,6 +35,115 @@ function getDatabaseClient() {
   return neon(connectionString);
 }
 
+const serverLogQueue: Array<{
+  statusCode: number;
+  logType: 'ERROR_4XX' | 'ERROR_5XX' | 'REGIONAL_SUSPENSION' | 'HEALTH_HEARTBEAT';
+  region?: string;
+  endpoint?: string;
+  method?: string;
+  responseTimeMs?: number;
+  errorMessage?: string;
+  clientIpHash?: string;
+  metadata?: Record<string, any>;
+}> = [];
+let isSyncingServerLogs = false;
+
+/**
+ * Flush all pending server logs in memory to the Postgres database.
+ */
+export async function syncServerLogs(): Promise<number> {
+  if (serverLogQueue.length === 0 || isSyncingServerLogs) return 0;
+
+  const sql = getDatabaseClient();
+  if (!sql) return 0;
+
+  isSyncingServerLogs = true;
+  let synced = 0;
+
+  try {
+    while (serverLogQueue.length > 0) {
+      const batch = serverLogQueue.splice(0, 25);
+      for (const item of batch) {
+        try {
+          const region = item.region || 'Neon Postgres / Edge Gateway';
+          const endpoint = item.endpoint || '/';
+          const method = item.method || 'GET';
+          const responseTimeMs = item.responseTimeMs || 0;
+          const errorMessage = item.errorMessage || null;
+          const clientIpHash = item.clientIpHash || null;
+          const metadata = item.metadata ? JSON.stringify(item.metadata) : null;
+
+          await sql`
+            INSERT INTO server_logs (
+              timestamp,
+              status_code,
+              log_type,
+              region,
+              endpoint,
+              method,
+              response_time_ms,
+              error_message,
+              client_ip_hash,
+              metadata
+            )
+            VALUES (
+              NOW(),
+              ${item.statusCode},
+              ${item.logType},
+              ${region},
+              ${endpoint},
+              ${method},
+              ${responseTimeMs},
+              ${errorMessage},
+              ${clientIpHash},
+              ${metadata}::jsonb
+            )
+          `;
+          synced++;
+        } catch (itemErr) {
+          console.error('Failed to sync server log entry:', itemErr);
+        }
+      }
+    }
+  } catch (err) {
+    console.error('Server logs sync error:', err);
+  } finally {
+    isSyncingServerLogs = false;
+  }
+
+  return synced;
+}
+
+function triggerLiveAsyncServerLogSync(): void {
+  if (typeof queueMicrotask === 'function') {
+    queueMicrotask(() => {
+      syncServerLogs().catch((err) => console.error('Live async server log sync error:', err));
+    });
+  } else {
+    setTimeout(() => {
+      syncServerLogs().catch((err) => console.error('Live async server log sync error:', err));
+    }, 10);
+  }
+}
+
+/**
+ * Log server issues asynchronously without blocking request cycles.
+ */
+export function logServerIssueAsync(options: {
+  statusCode: number;
+  logType: 'ERROR_4XX' | 'ERROR_5XX' | 'REGIONAL_SUSPENSION' | 'HEALTH_HEARTBEAT';
+  region?: string;
+  endpoint?: string;
+  method?: string;
+  responseTimeMs?: number;
+  errorMessage?: string;
+  clientIpHash?: string;
+  metadata?: Record<string, any>;
+}): void {
+  serverLogQueue.push(options);
+  triggerLiveAsyncServerLogSync();
+}
+
 /**
  * Log server issues: strictly 4xx, 5xx, or regional suspensions.
  * Never throws to avoid interrupting request cycles.
@@ -52,7 +161,10 @@ export async function logServerIssue(options: {
 }): Promise<void> {
   try {
     const sql = getDatabaseClient();
-    if (!sql) return;
+    if (!sql) {
+      serverLogQueue.push(options);
+      return;
+    }
 
     // Only record 4xx, 5xx, suspensions, or intentional 15-min health heartbeats
     if (
@@ -97,8 +209,14 @@ export async function logServerIssue(options: {
         ${metadata}::jsonb
       )
     `;
+
+    if (serverLogQueue.length > 0) {
+      triggerLiveAsyncServerLogSync();
+    }
   } catch (err) {
-    console.error('Server issue logger non-blocking error:', err);
+    console.error('Server issue logger non-blocking error (buffering):', err);
+    serverLogQueue.push(options);
+    triggerLiveAsyncServerLogSync();
   }
 }
 

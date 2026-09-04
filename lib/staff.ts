@@ -162,6 +162,17 @@ export async function updateStaffUserRole(targetUserId: number, newRole: StaffRo
     WHERE id = ${targetUserId} AND email LIKE '%@pinebrooktechnologies.com'
   `;
 
+  const { recordAuditEvent } = await import('@/lib/audit');
+  await recordAuditEvent({
+    actorId: String(currentStaff.id),
+    actorEmail: currentStaff.email,
+    action: 'staff.role_update',
+    entityType: 'staff',
+    entityId: String(targetUserId),
+    afterState: { role: newRole },
+    metadata: { updatedBy: currentStaff.fullName },
+  });
+
   return { success: true, message: 'User role updated successfully.' };
 }
 
@@ -185,6 +196,17 @@ export async function updateStaffUserStatus(targetUserId: number, newStatus: 'ac
     WHERE id = ${targetUserId} AND email LIKE '%@pinebrooktechnologies.com'
   `;
 
+  const { recordAuditEvent } = await import('@/lib/audit');
+  await recordAuditEvent({
+    actorId: String(currentStaff.id),
+    actorEmail: currentStaff.email,
+    action: 'staff.status_update',
+    entityType: 'staff',
+    entityId: String(targetUserId),
+    afterState: { status: newStatus },
+    metadata: { updatedBy: currentStaff.fullName },
+  });
+
   return { success: true, message: `User status set to ${newStatus}.` };
 }
 
@@ -206,6 +228,16 @@ export async function deleteStaffUser(targetUserId: number): Promise<{ success: 
     DELETE FROM staff_profiles
     WHERE id = ${targetUserId} AND email LIKE '%@pinebrooktechnologies.com'
   `;
+
+  const { recordAuditEvent } = await import('@/lib/audit');
+  await recordAuditEvent({
+    actorId: String(currentStaff.id),
+    actorEmail: currentStaff.email,
+    action: 'staff.user_delete',
+    entityType: 'staff',
+    entityId: String(targetUserId),
+    metadata: { deletedBy: currentStaff.fullName },
+  });
 
   return { success: true, message: 'User request/account removed successfully.' };
 }
