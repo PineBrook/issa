@@ -37,11 +37,11 @@ function resolveCookieSecret(): string {
 
 function resolveBaseUrl(): string {
   const customUrl = process.env.NEON_AUTH_BASE_URL?.trim();
-  if (customUrl) return customUrl;
+  if (customUrl) return customUrl.replace(/\/+$/, '');
 
   const dbUrl = process.env.DATABASE_URL ?? process.env.DB_CONN_KEY ?? process.env.POSTGRES_URL;
   const derived = deriveNeonAuthBaseUrl(dbUrl);
-  if (derived) return derived;
+  if (derived) return derived.replace(/\/+$/, '');
 
   return 'https://ep-falling-cell-b3uyu248.neonauth.c-4.ap-southeast-1.aws.neon.tech/neondb/auth';
 }

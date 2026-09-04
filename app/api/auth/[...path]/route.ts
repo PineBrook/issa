@@ -27,6 +27,7 @@ export async function GET(request: Request, { params }: { params: Promise<Params
     const result = await resolvePath(params);
     return result.allowed ? handler.GET(request, { params: Promise.resolve(result.path) }) : new Response(null, { status: 404 });
   } catch (err: any) {
+    console.error('[auth-route] GET error:', err);
     return Response.json({ error: err.message || 'Authentication service temporarily unavailable' }, { status: 503 });
   }
 }
@@ -36,8 +37,17 @@ export async function POST(request: Request, { params }: { params: Promise<Param
     const result = await resolvePath(params);
     if (!result.allowed) return new Response(null, { status: 404 });
     const path = result.path.path.join('/');
+
+    // Read body text once so the stream is never disturbed or consumed twice
+    const rawBody = await request.text().catch(() => '');
+    let body: { email?: unknown; otp?: unknown; type?: unknown } | null = null;
+    if (rawBody) {
+      try {
+        body = JSON.parse(rawBody);
+      } catch {}
+    }
+
     if (path === 'email-otp/send-verification-otp' || path === 'sign-in/email-otp') {
-      const body = await request.clone().json().catch(() => null) as { email?: unknown; otp?: unknown; type?: unknown } | null;
       if (!isCompanyEmail(body?.email)) {
         return Response.json({ error: 'Only Pinebrook Technologies email addresses are allowed.' }, { status: 403 });
       }
@@ -49,32 +59,47 @@ export async function POST(request: Request, { params }: { params: Promise<Param
         return Response.json({ error: 'Enter the six-digit code.' }, { status: 400 });
       }
     }
-    const response = await handler.POST(request, { params: Promise.resolve(result.path) });
+
+    const proxyRequest = new Request(request.url, {
+      method: request.method,
+      headers: request.headers,
+      body: rawBody ? rawBody : undefined,
+    });
+
+    const response = await handler.POST(proxyRequest, { params: Promise.resolve(result.path) });
+
     if (path === 'sign-out' && response.ok) {
-      const { recordAuditEvent } = await import('@/lib/audit');
-      await recordAuditEvent({
-        actorId: 'staff',
-        actorEmail: 'staff@pinebrooktechnologies.com',
-        action: 'auth.sign_out',
-        entityType: 'auth_session',
-        metadata: { path, timestamp: new Date().toISOString() },
-      });
+      try {
+        const { recordAuditEvent } = await import('@/lib/audit');
+        await recordAuditEvent({
+          actorId: 'staff',
+          actorEmail: 'staff@pinebrooktechnologies.com',
+          action: 'auth.sign_out',
+          entityType: 'auth_session',
+          metadata: { path, timestamp: new Date().toISOString() },
+        });
+      } catch (auditErr) {
+        console.warn('Sign-out audit non-blocking error:', auditErr);
+      }
     }
 
     if (path !== 'sign-in/email-otp' || !response.ok) return response;
 
-    const body = await request.clone().json().catch(() => null) as { email?: unknown } | null;
     const userEmail = typeof body?.email === 'string' ? body.email : 'staff@pinebrooktechnologies.com';
 
-    const { recordAuditEvent } = await import('@/lib/audit');
-    await recordAuditEvent({
-      actorId: userEmail,
-      actorEmail: userEmail,
-      action: 'auth.login_success',
-      entityType: 'auth_session',
-      entityId: userEmail,
-      metadata: { path, timestamp: new Date().toISOString() },
-    });
+    try {
+      const { recordAuditEvent } = await import('@/lib/audit');
+      await recordAuditEvent({
+        actorId: userEmail,
+        actorEmail: userEmail,
+        action: 'auth.login_success',
+        entityType: 'auth_session',
+        entityId: userEmail,
+        metadata: { path, timestamp: new Date().toISOString() },
+      });
+    } catch (auditErr) {
+      console.warn('Login success audit non-blocking error:', auditErr);
+    }
 
     const limited = new Response(response.body, response);
     limited.headers.append(
@@ -83,6 +108,17 @@ export async function POST(request: Request, { params }: { params: Promise<Param
     );
     return limited;
   } catch (err: any) {
+    console.error('[auth-route] POST error:', err);
+    try {
+      const { logServerIssue } = await import('@/lib/server-logger');
+      await logServerIssue({
+        statusCode: 503,
+        logType: 'ERROR_5XX',
+        endpoint: '/api/auth/email-otp',
+        errorMessage: err.message || 'Authentication service temporarily unavailable',
+        metadata: { error: String(err), stack: err.stack },
+      });
+    } catch {}
     return Response.json({ error: err.message || 'Authentication service temporarily unavailable' }, { status: 503 });
   }
 }
