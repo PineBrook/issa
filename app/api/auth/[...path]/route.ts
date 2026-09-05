@@ -68,6 +68,23 @@ export async function POST(request: Request, { params }: { params: Promise<Param
 
     const response = await handler.POST(proxyRequest, { params: Promise.resolve(result.path) });
 
+    if (path === 'email-otp/send-verification-otp' && response.ok) {
+      try {
+        const userEmail = typeof body?.email === 'string' ? body.email : 'staff@pinebrooktechnologies.com';
+        const { recordAuditEvent } = await import('@/lib/audit');
+        await recordAuditEvent({
+          actorId: userEmail,
+          actorEmail: userEmail,
+          action: 'auth.otp_requested',
+          entityType: 'auth_session',
+          entityId: userEmail,
+          metadata: { path, timestamp: new Date().toISOString() },
+        });
+      } catch (auditErr) {
+        console.warn('OTP request audit non-blocking error:', auditErr);
+      }
+    }
+
     if (path === 'sign-out' && response.ok) {
       try {
         const { recordAuditEvent } = await import('@/lib/audit');

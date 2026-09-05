@@ -1260,7 +1260,7 @@ export default function StaffPanel({
                     </div>
                     <div className="flex justify-between items-center py-1">
                       <span className="text-neutral-500">Audit Logging:</span>
-                      <strong className="text-[#0D311F]">Append-Only (UTC)</strong>
+                      <strong className="text-[#0D311F]">Active (IST)</strong>
                     </div>
                   </div>
                 </div>

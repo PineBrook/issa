@@ -194,15 +194,22 @@ export default async function PostPreviewPage(props: { params: Promise<{ id: str
 
           {/* Cover Image */}
           {post.coverImagePath && (
-            <div className="relative aspect-[16/9] w-full overflow-hidden rounded-2xl bg-neutral-100 border border-[#E5E0D8]">
-              <BlurImage
-                src={post.coverImagePath}
-                alt={post.title}
-                fill
-                sizes="(max-width: 1024px) 100vw, 80vw"
-                className="object-cover"
-                referrerPolicy="no-referrer"
+            <div className="relative min-h-[260px] max-h-[500px] w-full overflow-hidden rounded-2xl bg-neutral-900/5 border border-[#E5E0D8] flex items-center justify-center">
+              <div
+                className="absolute inset-0 bg-cover bg-center blur-2xl opacity-20 scale-110 pointer-events-none"
+                style={{ backgroundImage: `url(${post.coverImagePath})` }}
+                aria-hidden="true"
               />
+              <div className="relative w-full h-[320px] sm:h-[400px]">
+                <BlurImage
+                  src={post.coverImagePath}
+                  alt={post.title}
+                  fill
+                  sizes="(max-width: 1024px) 100vw, 80vw"
+                  className="object-contain"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
             </div>
           )}
 

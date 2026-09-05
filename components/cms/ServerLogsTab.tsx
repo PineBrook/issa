@@ -169,22 +169,18 @@ export default function ServerLogsTab({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-neutral-200 pb-5">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <h2 className="text-2xl font-serif font-bold text-neutral-900">Server Health & Issue Monitoring</h2>
-            <span className="bg-primary/10 text-primary text-xs font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1">
-              <Clock className="w-3.5 h-3.5" /> 15-Min Telemetry
+            <h2 className="text-2xl font-serif font-bold text-neutral-900">Server Logs & Health</h2>
+            <span className="bg-primary/10 text-primary text-xs font-semibold px-2.5 py-0.5 rounded-full flex items-center gap-1">
+              <Clock className="w-3.5 h-3.5" /> 15-Min Checks
             </span>
-            {isLiveAsync ? (
-              <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-semibold px-2.5 py-0.5 rounded-full flex items-center gap-1.5 animate-pulse">
-                <span className="w-2 h-2 rounded-full bg-emerald-500"></span> Live Async Active (5s)
-              </span>
-            ) : (
-              <span className="bg-neutral-100 text-neutral-600 text-xs font-semibold px-2.5 py-0.5 rounded-full flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-neutral-400"></span> Live Sync Paused
+            {isLiveAsync && (
+              <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-medium px-2.5 py-0.5 rounded-full flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Live (5s)
               </span>
             )}
           </div>
           <p className="text-sm text-neutral-600 mt-1">
-            Logs every 15 minutes database & endpoint performance, catching strictly 4xx, 5xx issues, and regional suspensions.
+            Endpoint latency, 4xx/5xx HTTP errors, and regional connectivity.
           </p>
         </div>
 
@@ -197,10 +193,10 @@ export default function ServerLogsTab({
                 ? 'border-emerald-300 bg-emerald-50 text-emerald-800 hover:bg-emerald-100'
                 : 'border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50'
             }`}
-            title="Toggle real-time live background synchronization"
+            title="Toggle live sync"
           >
-            <Radio className={`w-3.5 h-3.5 ${isLiveAsync ? 'text-emerald-600 animate-pulse' : 'text-neutral-400'}`} />
-            {isLiveAsync ? 'Live Async: ON' : 'Live Async: OFF'}
+            <Radio className={`w-3.5 h-3.5 ${isLiveAsync ? 'text-emerald-600' : 'text-neutral-400'}`} />
+            {isLiveAsync ? 'Auto-refresh: On' : 'Auto-refresh: Off'}
           </button>
 
           <button
@@ -208,10 +204,10 @@ export default function ServerLogsTab({
             onClick={handleSyncLogsToDb}
             disabled={isSyncing}
             className="inline-flex items-center gap-1.5 rounded-xl border border-primary/30 bg-primary/5 px-3 py-2 text-xs font-medium text-primary hover:bg-primary/10 transition cursor-pointer disabled:opacity-60"
-            title="Synchronize pending in-memory and background server logs into DB now"
+            title="Sync pending logs to database"
           >
             <Zap className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin' : ''}`} />
-            {isSyncing ? 'Syncing...' : 'Sync Logs to DB'}
+            {isSyncing ? 'Syncing...' : 'Sync Logs'}
           </button>
 
           <button
@@ -229,13 +225,13 @@ export default function ServerLogsTab({
             className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-4 py-2 text-xs font-bold text-white hover:bg-primary-dark transition cursor-pointer shadow-xs disabled:opacity-60"
           >
             {isRunningPing ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Zap className="w-3.5 h-3.5" />}
-            {isRunningPing ? 'Testing...' : 'Run 15-Min Health Ping'}
+            {isRunningPing ? 'Testing...' : 'Health Ping'}
           </button>
         </div>
       </div>
 
       <div className="flex items-center justify-between text-xs text-neutral-500 px-1 -mt-4">
-        <span>Showing {filteredLogs.length} recorded issues & telemetry pings</span>
+        <span>{filteredLogs.length} logs recorded</span>
         <span>Last synced: <span className="font-mono font-medium text-neutral-700">{lastSyncedIST}</span></span>
       </div>
 

@@ -748,15 +748,22 @@ export default function PostEditor({
 
             {/* Preview Selected Image */}
             {coverImagePath && (
-              <div className="relative aspect-[16/9] w-full overflow-hidden rounded-xl bg-neutral-100 border border-[#E5E0D8]">
-                <BlurImage
-                  src={coverImagePath}
-                  alt="Cover Preview"
-                  fill
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  className="object-cover"
-                  referrerPolicy="no-referrer"
+              <div className="relative min-h-[180px] max-h-[280px] w-full overflow-hidden rounded-xl bg-neutral-900/5 border border-[#E5E0D8] flex items-center justify-center">
+                <div
+                  className="absolute inset-0 bg-cover bg-center blur-xl opacity-20 scale-110 pointer-events-none"
+                  style={{ backgroundImage: `url(${coverImagePath})` }}
+                  aria-hidden="true"
                 />
+                <div className="relative w-full h-[200px]">
+                  <BlurImage
+                    src={coverImagePath}
+                    alt="Cover Preview"
+                    fill
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                    className="object-contain"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
               </div>
             )}
 

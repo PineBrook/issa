@@ -94,16 +94,23 @@ export default function StoriesView({ journals }: { journals: BlogPost[] }) {
               className="bg-white rounded-3xl overflow-hidden border border-neutral-200/60 shadow-sm hover:shadow-lg transition-all duration-300 flex flex-col justify-between group"
             >
               <div>
-                <div className="relative aspect-[16/9] overflow-hidden bg-neutral-100">
-                  <BlurImage 
-                    src={story.coverImagePath}
-                    alt={story.title} 
-                    fill
-                    sizes="(max-width: 768px) 100vw, 50vw"
-                    className="object-cover"
-                    referrerPolicy="no-referrer"
+                <div className="relative min-h-[220px] max-h-[460px] flex items-center justify-center overflow-hidden bg-neutral-900/5">
+                  <div
+                    className="absolute inset-0 bg-cover bg-center blur-2xl opacity-25 scale-110 pointer-events-none"
+                    style={{ backgroundImage: `url(${story.coverImagePath})` }}
+                    aria-hidden="true"
                   />
-                  <span className="absolute top-4 left-4 bg-primary text-white text-[9px] font-sans uppercase tracking-widest px-3 py-1.5 rounded-full font-bold">
+                  <div className="relative w-full h-[260px] sm:h-[300px]">
+                    <BlurImage 
+                      src={story.coverImagePath}
+                      alt={story.title} 
+                      fill
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                      className="object-contain"
+                      referrerPolicy="no-referrer"
+                    />
+                  </div>
+                  <span className="absolute top-4 left-4 z-10 bg-primary/90 backdrop-blur-xs text-white text-[9px] font-sans uppercase tracking-widest px-3 py-1.5 rounded-full font-bold shadow-xs">
                     {story.category}
                   </span>
                 </div>
@@ -177,15 +184,22 @@ export default function StoriesView({ journals }: { journals: BlogPost[] }) {
                 <span>Report by: {readingStory.authorName}</span>
               </div>
 
-              <div className="aspect-[16/9] rounded-2xl overflow-hidden relative">
-                <BlurImage 
-                  src={readingStory.coverImagePath}
-                  alt={readingStory.title} 
-                  fill
-                  sizes="(max-width: 1024px) 100vw, 80vw"
-                  className="object-cover"
-                  referrerPolicy="no-referrer"
+              <div className="relative min-h-[260px] max-h-[500px] w-full rounded-2xl overflow-hidden bg-neutral-900/5 flex items-center justify-center">
+                <div
+                  className="absolute inset-0 bg-cover bg-center blur-2xl opacity-20 scale-110 pointer-events-none"
+                  style={{ backgroundImage: `url(${readingStory.coverImagePath})` }}
+                  aria-hidden="true"
                 />
+                <div className="relative w-full h-[320px] sm:h-[400px]">
+                  <BlurImage 
+                    src={readingStory.coverImagePath}
+                    alt={readingStory.title} 
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 80vw"
+                    className="object-contain"
+                    referrerPolicy="no-referrer"
+                  />
+                </div>
               </div>
 
               <div className="text-sm text-neutral-700 leading-relaxed font-sans space-y-4 pt-2">

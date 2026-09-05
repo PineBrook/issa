@@ -147,22 +147,18 @@ export default function AuditLogTab({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-neutral-200 pb-5">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <h2 className="text-2xl font-serif font-bold text-neutral-900">Website & User Operations Audit Log</h2>
-            <span className="bg-emerald-100 text-emerald-800 text-xs font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1">
-              <ShieldCheck className="w-3.5 h-3.5" /> IST Timestamp Only
+            <h2 className="text-2xl font-serif font-bold text-neutral-900">Audit Logs</h2>
+            <span className="bg-neutral-100 text-neutral-700 text-xs font-semibold px-2.5 py-0.5 rounded-full flex items-center gap-1">
+              <ShieldCheck className="w-3.5 h-3.5" /> IST
             </span>
-            {isLiveAsync ? (
-              <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-semibold px-2.5 py-0.5 rounded-full flex items-center gap-1.5 animate-pulse">
-                <span className="w-2 h-2 rounded-full bg-emerald-500"></span> Live Async Active (3s)
-              </span>
-            ) : (
-              <span className="bg-neutral-100 text-neutral-600 text-xs font-semibold px-2.5 py-0.5 rounded-full flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-neutral-400"></span> Live Sync Paused
+            {isLiveAsync && (
+              <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-medium px-2.5 py-0.5 rounded-full flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Live (3s)
               </span>
             )}
           </div>
           <p className="text-sm text-neutral-600 mt-1">
-            Real-time append-only audit trail of user operations, applications, inquiries, CMS content modifications, and staff actions. Synced to database.
+            User operations, applications, inquiries, and staff actions.
           </p>
         </div>
 
@@ -175,10 +171,10 @@ export default function AuditLogTab({
                 ? 'border-emerald-300 bg-emerald-50 text-emerald-800 hover:bg-emerald-100'
                 : 'border-neutral-200 bg-white text-neutral-700 hover:bg-neutral-50'
             }`}
-            title="Toggle real-time live background synchronization"
+            title="Toggle live sync"
           >
-            <Radio className={`w-3.5 h-3.5 ${isLiveAsync ? 'text-emerald-600 animate-pulse' : 'text-neutral-400'}`} />
-            {isLiveAsync ? 'Live Async: ON' : 'Live Async: OFF'}
+            <Radio className={`w-3.5 h-3.5 ${isLiveAsync ? 'text-emerald-600' : 'text-neutral-400'}`} />
+            {isLiveAsync ? 'Auto-refresh: On' : 'Auto-refresh: Off'}
           </button>
 
           <button
@@ -186,10 +182,10 @@ export default function AuditLogTab({
             onClick={handleSyncToDbNow}
             disabled={isSyncing}
             className="inline-flex items-center gap-1.5 rounded-xl border border-primary/30 bg-primary/5 px-3 py-2 text-xs font-medium text-primary hover:bg-primary/10 transition cursor-pointer disabled:opacity-60"
-            title="Synchronize pending in-memory and background events into DB now"
+            title="Sync pending events to database"
           >
             <Zap className={`w-3.5 h-3.5 ${isSyncing ? 'animate-spin' : ''}`} />
-            {isSyncing ? 'Syncing...' : 'Sync to DB'}
+            {isSyncing ? 'Syncing...' : 'Sync DB'}
           </button>
 
           <button
@@ -212,7 +208,7 @@ export default function AuditLogTab({
       </div>
 
       <div className="flex items-center justify-between text-xs text-neutral-500 px-1 -mt-2">
-        <span>Showing {filteredEvents.length} recorded events</span>
+        <span>{filteredEvents.length} events</span>
         <span>Last synced: <span className="font-mono font-medium text-neutral-700">{lastSyncedIST}</span></span>
       </div>
 
