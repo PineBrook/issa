@@ -411,16 +411,23 @@ export default function HomeView({
             {stories.map((story) => (
               <div key={story.slug} className="bg-neutral-50 rounded-2xl overflow-hidden border border-neutral-200/80 shadow-sm flex flex-col justify-between group hover:shadow-lg transition-all duration-300">
                 <div>
-                  <div className="relative aspect-[16/10] overflow-hidden">
-                    <BlurImage 
-                      src={story.coverImagePath}
-                      alt={story.title} 
-                      fill
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                      className="object-cover" 
-                      referrerPolicy="no-referrer"
+                  <div className="relative min-h-[200px] max-h-[360px] flex items-center justify-center overflow-hidden bg-neutral-900/5">
+                    <div 
+                      className="absolute inset-0 bg-cover bg-center blur-2xl opacity-25 scale-110 pointer-events-none"
+                      style={{ backgroundImage: `url(${story.coverImagePath})` }}
+                      aria-hidden="true"
                     />
-                    <span className="absolute top-4 left-4 bg-primary text-white text-xs font-semibold uppercase tracking-wider px-3.5 py-1.5 rounded-full shadow-sm">
+                    <div className="relative w-full h-[220px] sm:h-[250px]">
+                      <BlurImage 
+                        src={story.coverImagePath}
+                        alt={story.title} 
+                        fill
+                        sizes="(max-width: 768px) 100vw, 33vw"
+                        className="object-contain" 
+                        referrerPolicy="no-referrer"
+                      />
+                    </div>
+                    <span className="absolute top-4 left-4 z-10 bg-primary/90 backdrop-blur-xs text-white text-xs font-semibold uppercase tracking-wider px-3.5 py-1.5 rounded-full shadow-xs">
                       {story.category}
                     </span>
                   </div>
